@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Biblioteca - Aluno</title>
-    <link rel="stylesheet" href="../../styles/studentRegisterPage.css">
-    <script src="../../scripts/studentProgram.js"></script>
+    <link rel="stylesheet" href="../../styles/studentProgramPages/studentRegister.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="../../scripts/studentRegister.js"></script>
 </head>
 
 <body>
@@ -15,7 +18,19 @@
     </div>
 
     <div id="containerPrincipal">
-        <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234vw" height="111vh" id="img">
+        <div id="containerLogoEBotaoVoltar">
+            <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234vw" height="111vh"
+                id="img">
+
+            <div id="containerBotaoVoltar">
+                <i class="fa-solid fa-backward"></i>
+                <button id="botaoVoltarPagina">
+                    <a href="./loginPage.html">
+                        <p id="textoBotaoVoltar">Voltar</p>
+                    </a>
+                </button>
+            </div>
+        </div>
 
         <div id="containerFormulario">
             <h1>Cadastre-se</h1>
@@ -36,13 +51,15 @@
                 <input class="inputsFormulario" placeholder="(11) 1 1111 - 1111" type="text" required>
 
                 <label class="labelsFormulario" for="">E-MAIL</label>
-                <input class="inputsFormulario" placeholder="mariafernanda01@puccampinas.edu.br (exemplo)" type="text" required>
+                <input class="inputsFormulario" placeholder="mariafernanda01@puccampinas.edu.br (exemplo)" type="text"
+                    required>
 
                 <label class="labelsFormulario" for="">CURSO</label>
                 <input class="inputsFormulario" placeholder="sistemas de informação (exemplo)" type="text" required>
 
                 <label class="labelsFormulario" for="">ENDEREÇO</label>
-                <input class="inputsFormulario" placeholder="Rua Joaquim Alves 21 - Campinas SP (exemplo)" type="text" required>
+                <input class="inputsFormulario" placeholder="Rua Joaquim Alves 21 - Campinas SP (exemplo)" type="text"
+                    required>
                 <br>
                 <br>
 

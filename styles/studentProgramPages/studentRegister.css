@@ -21,8 +21,63 @@
     display: flex;
 }
 
+#containerLogoEBotaoVoltar {
+    display: flex;
+    flex-direction: column;
+}
+
 #img {
     margin: 1rem;
+}
+
+#containerBotaoVoltar {
+    display: flex;
+    margin: 2%;
+    margin-left: 10%;
+    width: 3vw;
+}
+
+#containerBotaoVoltar:hover {
+    display: flex;
+    margin: 2%;
+    margin-left: 10%;
+    width: 3vw;
+    color: #1c4cff;
+}
+
+i {
+    margin: 4px;
+}
+
+#botaoVoltarPagina {
+    background-color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#botaoVoltarPagina a {
+    text-decoration: none;
+}
+
+#botaoVoltarPagina a:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#textoBotaoVoltar {
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    font-size: 1.1rem;
+    color: black;
+    text-decoration: none; 
+}
+
+#textoBotaoVoltar:hover {
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: #1c4cff;
 }
 
 #containerFormulario {
@@ -33,6 +88,7 @@
     align-items: center;
     justify-content: center;
     justify-items: center;
+    height: calc(85vh - 40px);
 }
 
 h1 {
@@ -81,17 +137,10 @@ h4 {
     font-family: "Public Sans", sans-serif;
     border: none;
     background-color: #1c4cff;
+    transition: background-color 0.5s ease;
 }
 
-#botaoFormulario2 {
-    margin: 2%;
-    width: 45%;
-    height: 4vh;
-    border-radius: 0%;
-    border: 1px solid black;
-    color: whitesmoke;
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
-    border: none;
-    background-color: #2289e6;
+#botaoFormulario:hover {
+    cursor: pointer;
+    background-color: #3863ff;
 }

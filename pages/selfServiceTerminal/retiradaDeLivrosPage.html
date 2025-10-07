@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Biblioteca - Aluno</title>
+    <link rel="stylesheet" href="../../styles/selfServiceTerminal/retiradaDeLivros.css">
+    <script src="../../scripts/retiradaDeLivros.js" defer></script>
+</head>
+
+<script>
+
+    //Olá Emely favor revisar essa função que voce fez porque está dando erro, agradeço João Pedro.
+    
+    async function pesquisar() {
+        const termo = document.getElementById("pesquisa").value;
+        try {
+            const resposta = await fetch(/pesquisar?q=${encodeURIComponent(termo)});
+            const livros = await resposta.json();
+
+            const tabela = document.getElementById("resultado");
+            tabela.innerHTML = "";
+
+            livros.forEach(livro => {
+                const tr = document.createElement("tr");
+
+                const tdCodigo = document.createElement("td");
+                tdCodigo.textContent = livro.codigo;
+
+                const tdTitulo = document.createElement("td");
+                tdTitulo.textContent = livro.titulo;
+
+                tr.appendChild(tdCodigo);
+                tr.appendChild(tdTitulo);
+                tabela.appendChild(tr);
+            });
+        } catch (error) {
+            console.error("Erro ao pesquisar livros:", error);
+        }
+    }
+</script>
+
+<body>
+    <!-- Faixa azul superior -->
+    <div id="containerFaixaAzul">
+        <p id="textContainerFaixaAzul">O O O</p>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div id="containerPrincipal">
+
+        <!-- Logo da PUC -->
+        <div id="containerLogoPuc">
+            <img src="../../images/puc-campinas-logo.jpg" alt="Logo da PUC Campinas" width="234vw" height="111vh">
+        </div>
+
+        <h1>Retirar livros</h1>
+
+        <!-- Pesquisa de livros -->
+        <div id="PesquisaDelivros">
+            <form method="GET" action="">
+                <input type="text" id="pesquisa" name="busca" placeholder="Digite o nome ou código do livro" required>
+                <button type="submit" onclick="pesquisar(); return false;">Pesquisar</button>
+            </form>
+
+            <!-- Tabela de resultados da pesquisa -->
+            <table id="tabelaLivros">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Título</th>
+                    </tr>
+                </thead>
+                <tbody id="resultado">
+                    <!-- Resultados serão inseridos aqui via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Formulário de retirada -->
+        <div id="formulario">
+            <h2>Formulário de Retirada</h2>
+            <form method="POST" action="">
+                <div id="dadospararetirada">
+                    <label class="labelsFormulario" for="ra">RA</label>
+                    <input class="inputsFormulario" type="text" id="ra" name="ra" placeholder="25111111 (exemplo)"
+                        required>
+
+                    <label class="labelsFormulario" for="codigoLivro">Código do Livro</label>
+                    <input class="inputsFormulario" type="text" id="codigoLivro" name="codigoLivro" placeholder="[nº]"
+                        required>
+
+                    <button type="submit">Retirar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</body>
+
+</html>

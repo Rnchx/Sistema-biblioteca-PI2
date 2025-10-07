@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0%;
+}
+
+#containerFaixaAzul {
+    background-color: #1c4cff;
+    padding: 10px;
+}
+
+#textContainerFaixaAzul {
+    font-size: 10px;
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.7rem;
+    margin-left: 5vw;
+}
+
+#containerPrincipal {
+    display: flex;
+}
+
+#img {
+    margin: 1rem;
+}
+
+#containerFormulario {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    height: calc(60vh - 40px);
+}
+
+h1 {
+    font-family: "Public Sans", sans-serif;
+    font-size: 3rem;
+}
+
+h4 {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 400;
+}
+
+#containerLabelsInputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.labelsFormulario {
+    width: 50%;
+    margin: 0.3rem;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.8rem;
+}
+
+.inputsFormulario {
+    width: 20vw;
+    height: 20px;
+    padding: 10px;
+}
+
+#containerBotao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#botaoFormulario {
+    margin: 2%;
+    width: 50%;
+    height: 5vh;
+    border-radius: 0%;
+    border: 1px solid black;
+    color: whitesmoke;
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    border: none;
+    background-color: #1c4cff;
+    transition: background-color 0.5s ease;
+}
+
+#botaoFormulario:hover {
+    cursor: pointer;
+    background-color: #3863ff;
+}
+
+#botaoFormulario2 {
+    margin: 2%;
+    width: 45%;
+    height: 4vh;
+    border-radius: 0%;
+    border: 1px solid black;
+    color: whitesmoke;
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    border: none;
+    background-color: #2289e6;
+    transition: background-color 0.5s ease;
+}
+
+#botaoFormulario2:hover {
+    cursor: pointer;
+    background-color: #46a9ff;
+}
+
+#textoBotaoCadastro {
+    text-decoration: none;
+    color: white;
+}

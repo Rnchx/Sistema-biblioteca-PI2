@@ -1,0 +1,20 @@
+#opcoestoten {
+    display: flex;
+    justify-content: center; 
+    gap: 10px;
+    margin-top: 100px; 
+}
+
+#opcoestoten button {
+    background-color: #1c4cff; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#opcoestoten button:hover {
+    background-color: #0056b3;
+}
