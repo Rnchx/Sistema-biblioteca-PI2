@@ -16,7 +16,7 @@
     async function pesquisar() {
         const termo = document.getElementById("pesquisa").value;
         try {
-            const resposta = await fetch(/pesquisar?q=${encodeURIComponent(termo)});
+            const resposta = await fetch('/pesquisar?q=${encodeURIComponent(termo)}');
             const livros = await resposta.json();
 
             const tabela = document.getElementById("resultado");
