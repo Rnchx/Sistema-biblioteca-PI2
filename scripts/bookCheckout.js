@@ -1,3 +1,4 @@
+//Pesquisa de livros, verifique se vai alterar algo por causa do backend
 async function pesquisar() {
   try {
     const termo = document.getElementById("pesquisa").value;
@@ -28,3 +29,6 @@ async function pesquisar() {
     console.error("Erro ao pesquisar livros:", error);
   }
 }
+
+
+//Falta um script para o formulário de retirada

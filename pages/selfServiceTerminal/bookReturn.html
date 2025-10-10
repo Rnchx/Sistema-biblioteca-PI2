@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Biblioteca - Aluno</title>
+    <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookreturn.css">
+    <link rel="stylesheet" href="../../styles/selfServiceTerminal/generalSSTpage.css">
+    <script src="../../scripts/bookreturn.js" defer></script>
+</head>
+
+<body>
+    <!-- Faixa azul superior -->
+    <div id="containerFaixaAzul">
+        <p id="textContainerFaixaAzul">O O O</p>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div id="containerPrincipal">
+
+        <!-- Logo da PUC -->
+        <div id="containerLogoPuc">
+            <img src="../../images/puc-campinas-logo.jpg" alt="Logo da PUC Campinas" width="234vw" height="111vh">
+        </div>
+
+        <h1>Meus livros alugados</h1>
+
+        <!-- Pesquisa de livros -->
+        <div id="PesquisaDelivros">
+        <!--preencher de acordo com o backend-->
+            <form method="GET" action="">
+                <input type="text" id="pesquisa" name="busca" placeholder="Digite o nome ou código do livro" required>
+                <button type="submit" onclick="pesquisar(); return false;">Pesquisar</button>
+            </form>
+
+            <!-- Tabela de resultados da pesquisa -->
+            <table id="tabelaLivros">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Título</th>
+                    </tr>
+                </thead>
+                <tbody id="resultado">
+                    <!-- Resultados aparecerão aqui -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Formulário de retirada -->
+        <div id="formulario">
+            <h2>Formulário de Devolução</h2>
+            <!--preencher de acordo com o backend-->
+            <form method="POST" action="">
+                <div id="dadosparadevolucao">
+                    <label class="labelsFormulario" for="ra">RA</label>
+                    <input class="inputsFormulario" type="text" id="ra" name="ra" placeholder="25111111 (exemplo)"
+                        required>
+
+                    <label class="labelsFormulario" for="codigoLivro">Código do Livro</label>
+                    <input class="inputsFormulario" type="text" id="codigoLivro" name="codigoLivro" placeholder="[nº]"
+                        required>
+
+                    <button type="submit">Devolver</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</body>
+
+</html>

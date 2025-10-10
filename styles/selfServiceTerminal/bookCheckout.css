@@ -1,42 +1,26 @@
-/* Faixa azul superior */
-#containerFaixaAzul {
-  background-color:  #1c4cff;
-  color: white;
-  padding: 10px 20px;
-  text-align: right;
+#botaoVoltarPagina a {
+    text-decoration: none;
 }
 
-#textContainerFaixaAzul {
-  font-size: 18px;
-  font-weight: bold;
+#botaoVoltarPagina a:hover {
+    text-decoration: none;
+    cursor: pointer;
 }
 
-/* Container principal */
-#containerPrincipal {
-  max-width: 800px;
-  margin: 30px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+#textoBotaoVoltar {
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    font-size: 1.1rem;
+    color: black;
+    text-decoration: none; 
 }
 
-/* Logo da PUC */
-#containerLogoPuc {
-  text-align: left;
-  margin-bottom: 20px;
-}
-
-#containerLogoPuc img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Título principal */
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #003366;
+#textoBotaoVoltar:hover {
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: #1c4cff;
 }
 
 /* Pesquisa de livros */

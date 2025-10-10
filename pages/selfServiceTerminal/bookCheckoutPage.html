@@ -5,41 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Biblioteca - Aluno</title>
-    <link rel="stylesheet" href="../../styles/selfServiceTerminal/retiradaDeLivros.css">
-    <script src="../../scripts/retiradaDeLivros.js" defer></script>
+    <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookCheckout.css">
+    <link rel="stylesheet" href="../../styles/selfServiceTerminal/generalSSTpage.css">
+    <script src="../../scripts/bookCheckout.js" defer></script>
 </head>
-
-<script>
-
-    //Olá Emely favor revisar essa função que voce fez porque está dando erro, agradeço João Pedro.
-    
-    async function pesquisar() {
-        const termo = document.getElementById("pesquisa").value;
-        try {
-            const resposta = await fetch('/pesquisar?q=${encodeURIComponent(termo)}');
-            const livros = await resposta.json();
-
-            const tabela = document.getElementById("resultado");
-            tabela.innerHTML = "";
-
-            livros.forEach(livro => {
-                const tr = document.createElement("tr");
-
-                const tdCodigo = document.createElement("td");
-                tdCodigo.textContent = livro.codigo;
-
-                const tdTitulo = document.createElement("td");
-                tdTitulo.textContent = livro.titulo;
-
-                tr.appendChild(tdCodigo);
-                tr.appendChild(tdTitulo);
-                tabela.appendChild(tr);
-            });
-        } catch (error) {
-            console.error("Erro ao pesquisar livros:", error);
-        }
-    }
-</script>
 
 <body>
     <!-- Faixa azul superior -->
@@ -50,6 +19,15 @@
     <!-- Conteúdo principal -->
     <div id="containerPrincipal">
 
+     <div id="containerBotaoVoltar">
+                <i class="fa-solid fa-backward"></i>
+                <button id="botaoVoltarPagina">
+                    <a href="./booksSSTPage.html">
+                        <p id="textoBotaoVoltar">Voltar</p>
+                    </a>
+                </button>
+            </div>
+
         <!-- Logo da PUC -->
         <div id="containerLogoPuc">
             <img src="../../images/puc-campinas-logo.jpg" alt="Logo da PUC Campinas" width="234vw" height="111vh">
@@ -59,6 +37,8 @@
 
         <!-- Pesquisa de livros -->
         <div id="PesquisaDelivros">
+
+            <!--preencher de acordo com o backend-->
             <form method="GET" action="">
                 <input type="text" id="pesquisa" name="busca" placeholder="Digite o nome ou código do livro" required>
                 <button type="submit" onclick="pesquisar(); return false;">Pesquisar</button>
@@ -73,7 +53,7 @@
                     </tr>
                 </thead>
                 <tbody id="resultado">
-                    <!-- Resultados serão inseridos aqui via JavaScript -->
+                    <!-- Resultados aparecerão aqui -->
                 </tbody>
             </table>
         </div>
@@ -81,6 +61,7 @@
         <!-- Formulário de retirada -->
         <div id="formulario">
             <h2>Formulário de Retirada</h2>
+        <!--preencher de acordo com o backend-->
             <form method="POST" action="">
                 <div id="dadospararetirada">
                     <label class="labelsFormulario" for="ra">RA</label>
