@@ -1,43 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* Faixa azul superior */
 #containerFaixaAzul {
-  background-color:  #1c4cff;
-  color: white;
-  padding: 10px 20px;
-  text-align: right;
+  background-color: #1c4cff;
+  padding: 10px;
 }
 
 #textContainerFaixaAzul {
-  font-size: 18px;
+  font-family: "Public Sans", sans-serif;
+  font-size: 0.7rem;
   font-weight: bold;
+  margin-left: 5vw;
 }
 
 /* Container principal */
 #containerPrincipal {
-  max-width: 800px;
-  margin: 30px auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-#containerLogoEBotaoVoltar {
-    display: flex;
-    flex-direction: column;
-}
-/* Logo da PUC */
-#containerLogoPuc {
-  text-align: left;
-  margin-bottom: 20px;
-}
-
-#containerLogoPuc img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Título principal */
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #003366;
 }

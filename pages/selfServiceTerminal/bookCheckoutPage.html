@@ -7,6 +7,7 @@
     <title>Sistema Biblioteca - Aluno</title>
     <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookCheckout.css">
     <link rel="stylesheet" href="../../styles/selfServiceTerminal/generalSSTpage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
     <script src="../../scripts/bookCheckout.js" defer></script>
 </head>
 
@@ -18,11 +19,10 @@
 
     <!-- Conteúdo principal -->
     <div id="containerPrincipal">
-
-     <div id="containerBotaoVoltar">
+         <div id="containerBotaoVoltar">
                 <i class="fa-solid fa-backward"></i>
                 <button id="botaoVoltarPagina">
-                    <a href="./booksSSTPage.html">
+                    <a href="./loginPage.html">
                         <p id="textoBotaoVoltar">Voltar</p>
                     </a>
                 </button>
@@ -30,7 +30,7 @@
 
         <!-- Logo da PUC -->
         <div id="containerLogoPuc">
-            <img src="../../images/puc-campinas-logo.jpg" alt="Logo da PUC Campinas" width="234vw" height="111vh">
+            <img src="../../images/puc-campinas-logo.jpg" alt="logo da PUC Campinas" width="234vw" height="111vh">
         </div>
 
         <h1>Retirar livros</h1>
@@ -60,19 +60,19 @@
 
         <!-- Formulário de retirada -->
         <div id="formulario">
-            <h2>Formulário de Retirada</h2>
+            <h2>Formulário de Retirada</h2><br>
         <!--preencher de acordo com o backend-->
             <form method="POST" action="">
                 <div id="dadospararetirada">
                     <label class="labelsFormulario" for="ra">RA</label>
                     <input class="inputsFormulario" type="text" id="ra" name="ra" placeholder="25111111 (exemplo)"
                         required>
-
+                    <br>
                     <label class="labelsFormulario" for="codigoLivro">Código do Livro</label>
                     <input class="inputsFormulario" type="text" id="codigoLivro" name="codigoLivro" placeholder="[nº]"
                         required>
 
-                    <button type="submit">Retirar</button>
+                    <button id="botaoFormulario" type="submit">Retirar</button>
                 </div>
             </form>
         </div>
