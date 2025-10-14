@@ -1,4 +1,5 @@
 //Pesquisa de livros, verifique se vai alterar algo por causa do backend
+//formulario de retirada -> vai enviar o cód do livro para os livros alugados daquele RA
 async function pesquisar() {
   try {
     const termo = document.getElementById("pesquisa").value;
@@ -30,5 +31,9 @@ async function pesquisar() {
   }
 }
 
-
-//Falta um script para o formulário de retirada
+//script para o botão voltar
+window.onload = function() {
+document.getElementById("botaoVoltarPagina").onclick = function() {
+    window.location.href="bookCheckoutPage.html";
+    };
+};

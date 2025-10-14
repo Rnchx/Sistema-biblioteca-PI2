@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Biblioteca - Aluno</title>
-    <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookreturn.css">
+    <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookCheckout&Return.css">
     <link rel="stylesheet" href="../../styles/selfServiceTerminal/generalSSTpage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <script src="../../scripts/bookreturn.js" defer></script>
 </head>
 
@@ -16,13 +17,21 @@
         <p id="textContainerFaixaAzul">O O O</p>
     </div>
 
-    <!-- Conteúdo principal -->
+   <!-- Conteúdo principal -->
     <div id="containerPrincipal">
-
         <!-- Logo da PUC -->
         <div id="containerLogoPuc">
             <img src="../../images/puc-campinas-logo.jpg" alt="Logo da PUC Campinas" width="234vw" height="111vh">
         </div>
+
+         <div id="containerBotaoVoltar">
+                <i class="fa-solid fa-backward"></i>
+                <button id="botaoVoltarPagina">
+                    <a href="./loginPage.html">
+                        <p id="textoBotaoVoltar">Voltar</p>
+                    </a>
+                </button>
+            </div>
 
         <h1>Meus livros alugados</h1>
 
@@ -50,19 +59,19 @@
 
         <!-- Formulário de retirada -->
         <div id="formulario">
-            <h2>Formulário de Devolução</h2>
+            <h2>Formulário de Devolução</h2><br>
             <!--preencher de acordo com o backend-->
             <form method="POST" action="">
                 <div id="dadosparadevolucao">
                     <label class="labelsFormulario" for="ra">RA</label>
                     <input class="inputsFormulario" type="text" id="ra" name="ra" placeholder="25111111 (exemplo)"
                         required>
-
+                    <br>
                     <label class="labelsFormulario" for="codigoLivro">Código do Livro</label>
                     <input class="inputsFormulario" type="text" id="codigoLivro" name="codigoLivro" placeholder="[nº]"
                         required>
 
-                    <button type="submit">Devolver</button>
+                    <button type="submit" id="botaoFormulario">Devolver</button>
                 </div>
             </form>
         </div>
