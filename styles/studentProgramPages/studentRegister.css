@@ -88,7 +88,7 @@ i {
     align-items: center;
     justify-content: center;
     justify-items: center;
-    height: calc(85vh - 40px);
+    height: calc(100vh - 40px);
 }
 
 h1 {
