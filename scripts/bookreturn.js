@@ -2,9 +2,9 @@
 
 //falta script para formulário de devolução
 
-//script para o botão voltar
+//script para o botão voltar (corrigir)
 window.onload = function() {
 document.getElementById("botaoVoltarPagina").onclick = function() {
-    window.location.href="bookReturn.html";
+    window.location.href='/';
     };
 };

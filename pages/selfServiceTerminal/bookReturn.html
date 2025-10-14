@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookCheckout&Return.css">
     <link rel="stylesheet" href="../../styles/selfServiceTerminal/generalSSTpage.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <script src="../../scripts/bookreturn.js" defer></script>
+    <script src="../../scripts/bookReturn.js" defer></script>
 </head>
 
 <body>
@@ -63,12 +63,13 @@
             <!--preencher de acordo com o backend-->
             <form method="POST" action="">
                 <div id="dadosparadevolucao">
-                    <label class="labelsFormulario" for="ra">RA</label>
-                    <input class="inputsFormulario" type="text" id="ra" name="ra" placeholder="25111111 (exemplo)"
+                    <label class="labelsFormulario" for="ra" id="ra">RA</label><br>
+                    <input class="inputsFormulario" type="text" name="ra" placeholder="25111111 (exemplo)"
                         required>
                     <br>
-                    <label class="labelsFormulario" for="codigoLivro">Código do Livro</label>
-                    <input class="inputsFormulario" type="text" id="codigoLivro" name="codigoLivro" placeholder="[nº]"
+                    <br>
+                    <label class="labelsFormulario" for="codigoLivro" id="codigoLivro">Código do Livro</label><br>
+                    <input class="inputsFormulario" type="text" name="codigoLivro" placeholder="[nº]"
                         required>
 
                     <button type="submit" id="botaoFormulario">Devolver</button>

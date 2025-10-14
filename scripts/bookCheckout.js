@@ -31,9 +31,8 @@ async function pesquisar() {
   }
 }
 
-//script para o botão voltar
-window.onload = function() {
-document.getElementById("botaoVoltarPagina").onclick = function() {
-    window.location.href="bookCheckoutPage.html";
-    };
-};
+//script para o botão voltar (corrigir)
+document.getElementById("botaoVoltarPagina").addEventListener('click', function() {
+    window.location.href='booksSSTPage.html';
+});
+
