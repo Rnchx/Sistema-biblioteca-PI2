@@ -27,7 +27,7 @@
          <div id="containerBotaoVoltar">
                 <i class="fa-solid fa-backward"></i>
                 <button id="botaoVoltarPagina">
-                    <a href="./loginPage.html">
+                    <a href="./booksSSTPage.html">
                         <p id="textoBotaoVoltar">Voltar</p>
                     </a>
                 </button>
@@ -37,8 +37,7 @@
 
         <!-- Pesquisa de livros -->
         <div id="PesquisaDelivros">
-        <!--preencher de acordo com o backend-->
-            <form method="GET" action="">
+            <form onsubmit="formulario(); return false;">
                 <input type="text" id="pesquisa" name="busca" placeholder="Digite o nome ou código do livro" required>
                 <button type="submit" onclick="pesquisar(); return false;">Pesquisar</button>
             </form>
@@ -63,12 +62,12 @@
             <!--preencher de acordo com o backend-->
             <form method="POST" action="">
                 <div id="dadosparadevolucao">
-                    <label class="labelsFormulario" for="ra" id="ra">RA</label><br>
+                    <label class="labelsFormulario" for="ra" id="labelRa">RA</label><br>
                     <input class="inputsFormulario" type="text" name="ra" placeholder="25111111 (exemplo)"
                         required>
                     <br>
                     <br>
-                    <label class="labelsFormulario" for="codigoLivro" id="codigoLivro">Código do Livro</label><br>
+                    <label class="labelsFormulario" for="codigoLivro" id="labelCodigoLivro">Código do Livro</label><br>
                     <input class="inputsFormulario" type="text" name="codigoLivro" placeholder="[nº]"
                         required>
 

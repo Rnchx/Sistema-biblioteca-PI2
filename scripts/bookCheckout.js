@@ -1,10 +1,10 @@
-//Pesquisa de livros, verifique se vai alterar algo por causa do backend
-//formulario de retirada -> vai enviar o cód do livro para os livros alugados daquele RA
+//Pesquisa de livros para retirar
+
 async function pesquisar() {
   try {
     const termo = document.getElementById("pesquisa").value;
 
-    const resposta = await fetch(`/pesquisar?q=${encodeURIComponent(termo)}`);
+    const resposta = await fetch(`/pesquisar-livros?q=${encodeURIComponent(termo)}`);
     const livros = (await resposta.json()).filter(livro =>
       livro.titulo.toLowerCase().includes(termo.toLowerCase()) ||
       livro.codigo.includes(termo)
@@ -31,8 +31,37 @@ async function pesquisar() {
   }
 }
 
-//script para o botão voltar (corrigir)
-document.getElementById("botaoVoltarPagina").addEventListener('click', function() {
-    window.location.href='booksSSTPage.html';
-});
+/*app.get('/pesquisar', (req, res) => {
+  const termo = req.query.q.toLowerCase();
+  BACKEND PRECISA TER ESSES PARâMETROS P/ FUNÇÃO ACIMA*/ 
+
+
+//Formulario de retirada 
+async function formulario() {
+  try {
+    const ra = document.getElementById("ra").value;
+    const codigo = document.getElementById("codigoLivro").value;
+
+    const resposta = await fetch("http://localhost:3000/NOME_DA_TABELA", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ra, codigoLivro: codigo })
+    });
+
+    const resultado = await resposta.json();
+
+    if (resposta.ok) {
+      alert("Livro alugado com sucesso!");
+    } else {
+      alert("Erro: " + resultado.mensagem);
+    }
+  } catch (erro) {
+    console.error("Erro:", erro);
+    alert("Erro ao enviar dados.");
+  }
+}
+    
+
 

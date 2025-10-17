@@ -4,6 +4,6 @@ document.getElementById("botaoRetirada").onclick = function() {
     window.location.href="bookCheckoutPage.html";
     };
 document.getElementById("botaoDevolucao").onclick = function() {
-    window.location.href="/";
+    window.location.href="bookReturn.html";
     };
 };
