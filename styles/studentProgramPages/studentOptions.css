@@ -30,6 +30,13 @@
     margin: 1rem;
 }
 
+#containerBotaoVoltar {
+    display: flex;
+    margin: 2%;
+    margin-left: 10%;
+    width: 3vw;
+}
+
 #containerBotaoVoltar:hover {
     display: flex;
     margin: 2%;
