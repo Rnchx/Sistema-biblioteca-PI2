@@ -1,10 +1,12 @@
 const mysql = require('mysql2/promise');
+require('dotenv').config();
 
 const connection = mysql.createPool({
-    host: 'localhost',
-    user: 'root', 
-    password: '', // colocar senha do banco que estiver usando
-    database: 'pi2', // nome padrao do banco para nosso projeto
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root', 
+    password: process.env.DB_PASSWORD || '', // senha que estiver usando no banco
+    database: process.env.DB_NAME || 'pi2', // depende do nome do banco que estiver usando
+    port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -13,13 +15,18 @@ const connection = mysql.createPool({
 async function testConnection() {
     try {
         const conn = await connection.getConnection();
-        console.log('Conectado ao MySQL com sucesso!');
+        console.log('✅ Conectado ao MySQL com sucesso!');
+        console.log(`📊 Banco: ${process.env.DB_NAME || 'pi2'}`);
         conn.release();
         return true;
     } catch (error) {
-        console.error('Erro ao conectar com MySQL:', error.message);
+        console.error('❌ Erro ao conectar com MySQL:', error.message);
+        console.log('🔧 Verifique suas credenciais no arquivo .env');
         return false;
     }
 }
+
+// Testar conexão
+testConnection();
 
 module.exports = { connection, testConnection };
