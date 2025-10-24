@@ -88,7 +88,7 @@ i {
     align-items: center;
     justify-content: center;
     justify-items: center;
-    height: calc(70vh - 40px);
+    height: calc(50vh - 40px);
 }
 
 h1 {
@@ -103,6 +103,7 @@ h4 {
 
 #containerBotoesFormulario {
     display: flex;
+    margin-top: 4rem;
     gap: 2rem;
 }
 
@@ -116,7 +117,7 @@ h4 {
     font-family: "Public Sans", sans-serif;
     border: none;
     background-color: #1c4cff;
-    transition: background-color 0.5s ease;
+    transition: background-color 0.10s ease;
 }
 
 .botaoFormulario:hover {
