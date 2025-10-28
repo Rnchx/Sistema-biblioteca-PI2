@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap');
+
+body {
+    font-family: "Public Sans", sans-serif;
+    margin: 0;
+    background-color: white;
+}
+
+/* Faixa azul superior */
+#containerFaixaAzul {
+    background-color: #1c4cff;
+    padding: 10px;
+}
+
+#textContainerFaixaAzul {
+    color: white;
+    text-align: left;
+    margin: 0;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+/* Estrutura principal */
+#containerPrincipal {
+    margin: 30px;
+}
+
+/* Logo e topo */
+#containerTopo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#containerLogoPuc img {
+    width: 120px;
+    height: auto;
+}
+
+/* Link voltar (antigo) */
+#voltar a {
+    text-decoration: none;
+    color: #1c4cff;
+    font-weight: bold;
+}
+
+/* Título principal */
+h1 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Barra de busca */
+#containerBusca {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#containerBusca input {
+    width: 300px;
+    padding: 10px;
+    border: 2px solid #1c4cff;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+#containerBusca button {
+    background-color: white;
+    border: 2px solid #1c4cff;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    color: #1c4cff;
+    transition: 0.3s;
+}
+
+#containerBusca button:hover {
+    background-color: #1c4cff;
+    color: white;
+}
+
+/* Subtítulos (azul) */
+h2 {
+    background-color: #1c4cff;
+    color: white;
+    text-align: center;
+    padding: 8px;
+    font-size: 14px;
+    margin-top: 30px;
+}
+
+/* Tabelas */
+.tabela-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 15px;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabela th,
+.tabela td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Cabeçalhos das tabelas — agora azuis */
+.tituloTabela {
+    background-color: #1c4cff;
+    color: white;
+}
+
+/* Linhas alternadas */
+.tabela tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.tabela tbody tr:nth-child(even) {
+    background-color: #e6e6e6;
+}
+
+/* Assinatura no rodapé */
+#assinatura {
+    text-align: right;
+    font-size: 12px;
+    margin-top: 20px;
+    color: gray;
+}
+
+/* Botão voltar (moderno) */
+#voltar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#botaoVoltar {
+    text-decoration: none;
+    background-color: white;
+    color: #1c4cff;
+    font-weight: bold;
+    border: 2px solid #1c4cff;
+    padding: 6px 16px;
+    border-radius: 8px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#botaoVoltar:hover {
+    background-color: #1c4cff;
+    color: white;
+}
