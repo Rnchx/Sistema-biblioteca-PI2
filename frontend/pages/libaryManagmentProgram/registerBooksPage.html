@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Livro</title>
+    <link rel="stylesheet" href="../../styles/libaryManagmentProgram/registerBooks.css">
+    <script defer src="../../scripts/"></script>
+</head>
+
+<body>
+    <div id="containerFaixaAzul">
+        <p id="textContainerFaixaAzul">O O O</p>
+    </div>
+
+    <div id="containerPrincipal">
+        <div id="containerLogoEBotaoVoltar">
+            <img src="puc-campinas-logo.jpg" alt="logo da puc campinas" width="234vw" height="111vh" id="img">
+            <div id="containerBotaoVoltar">
+                <button id="botaoVoltarPagina">
+                    <a href="./loginPage.html">
+                        <p id="textoBotaoVoltar">Voltar</p>
+                    </a>
+                </button>
+            </div>
+        </div>
+
+        <div id="containerFormulario">
+            <h1>Cadastro de Livro</h1>
+            <br>
+            <h4>Biblioteca Digital PUC Campinas</h4>
+            <br><br>
+
+            <div id="containerLabelsInputs">
+                <label class="labelsFormulario" for="titulo">TÍTULO DO LIVRO</label>
+                <input id="titulo" class="inputsFormulario" placeholder="Dom Casmurro (exemplo)" type="text" required>
+
+                <label class="labelsFormulario" for="autor">AUTOR</label>
+                <input id="autor" class="inputsFormulario" placeholder="Machado de Assis (exemplo)" type="text" required>
+
+                <label class="labelsFormulario" for="ano">ANO DE PUBLICAÇÃO</label>
+                <input id="ano" class="inputsFormulario" placeholder="1899 (exemplo)" type="number" required>
+
+                <label class="labelsFormulario" for="editora">EDITORA</label>
+                <input id="editora" class="inputsFormulario" placeholder="Editora Globo (exemplo)" type="text" required>
+
+                <label class="labelsFormulario" for="genero">GÊNERO</label>
+                <input id="genero" class="inputsFormulario" placeholder="Romance (exemplo)" type="text" required>
+
+                <label class="labelsFormulario" for="isbn">ISBN</label>
+                <input id="isbn" class="inputsFormulario" placeholder="978-85-12345-67-8 (exemplo)" type="text" required>
+
+                <br><br>
+                <div id="containerBotao">
+                    <button id="botaoFormulario">CADASTRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
