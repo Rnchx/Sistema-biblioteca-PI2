@@ -1,13 +1,11 @@
 //Pesquisa de livros alugados
+
 async function pesquisar() {
   try {
     const termo = document.getElementById("pesquisa").value;
 
-    const resposta = await fetch(`/pesquisar-alugados?q=${encodeURIComponent(termo)}`);
-    const livros = (await resposta.json()).filter(livro =>
-      livro.titulo.toLowerCase().includes(termo.toLowerCase()) ||
-      livro.codigo.includes(termo)
-    );
+    const resposta = await fetch('http://localhost:3000/api/exemplares');
+    const livros = await resposta.json();
 
     const corpoTabela = document.getElementById("resultado");
     corpoTabela.innerHTML = "";
@@ -37,7 +35,7 @@ async function formulario() {
     const ra = document.getElementById("ra").value;
     const codigo = document.getElementById("codigoLivro").value;
 
-    const resposta = await fetch("http://localhost:3000/NOME_DA_TABELA", {
+    const resposta = await fetch("http://localhost:3000/emprestimos/devolucao", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

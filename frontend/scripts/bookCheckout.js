@@ -2,38 +2,31 @@
 
 async function pesquisar() {
   try {
-    const termo = document.getElementById("pesquisa").value;
+  const resposta = await fetch('http://localhost:3000/api/exemplares/disponiveis');
+  const resultado = await resposta.json();
 
-    const resposta = await fetch(`/pesquisar-livros?q=${encodeURIComponent(termo)}`);
-    const livros = (await resposta.json()).filter(livro =>
-      livro.titulo.toLowerCase().includes(termo.toLowerCase()) ||
-      livro.codigo.includes(termo)
-    );
+  if (resultado.success) {
+    const tbody = document.querySelector('#tabelaLivros tbody');
+    tbody.innerHTML = '';
 
-    const corpoTabela = document.getElementById("resultado");
-    corpoTabela.innerHTML = "";
-
-    livros.forEach(livro => {
-      const tr = document.createElement("tr");
-
-      const tdCodigo = document.createElement("td");
-      tdCodigo.textContent = livro.codigo;
-
-      const tdTitulo = document.createElement("td");
-      tdTitulo.textContent = livro.titulo;
-
-      tr.appendChild(tdCodigo);
-      tr.appendChild(tdTitulo);
-      corpoTabela.appendChild(tr);
-    });
-  } catch (error) {
-    console.error("Erro ao pesquisar livros:", error);
-  }
+    resultado.data.forEach(ex => {
+      const linha = document.createElement('tr');
+      linha.innerHTML = `
+        <td>${ex.id}</td>
+        <td>${ex.titulo}</td>
+        <td>${ex.autor}</td>
+        <td>${ex.status}</td>
+      `;
+      tbody.appendChild(linha);
+     });
+    } else {
+      console.error('Erro na resposta da API:', resultado.error);
+    }
+  } catch (erro) {
+    console.error('Erro ao buscar exemplares:', erro);
+}
 }
 
-/*app.get('/pesquisar', (req, res) => {
-  const termo = req.query.q.toLowerCase();
-  BACKEND PRECISA TER ESSES PARâMETROS P/ FUNÇÃO ACIMA*/ 
 
 
 //Formulario de retirada 
@@ -42,7 +35,7 @@ async function formulario() {
     const ra = document.getElementById("ra").value;
     const codigo = document.getElementById("codigoLivro").value;
 
-    const resposta = await fetch("http://localhost:3000/NOME_DA_TABELA", {
+    const resposta = await fetch("http://localhost:3000/api/emprestimos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
