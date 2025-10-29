@@ -4,8 +4,8 @@ require('dotenv').config();
 const connection = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root', 
-    password: process.env.DB_PASSWORD || '', // senha que estiver usando no banco
-    database: process.env.DB_NAME || 'pi2', // depende do nome do banco que estiver usando
+    password: process.env.DB_PASSWORD || 'SeltR150610',
+    database: process.env.DB_NAME || 'pi2',
     port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
