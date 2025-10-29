@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const connection = require('./database/connection');
+const { connection } = require('./database/connection');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -8,6 +8,52 @@ const PORT = process.env.PORT || 3000;
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+// DEBUG: Verificar cada controller individualmente
+console.log('=== INICIANDO DEBUG DOS CONTROLLERS ===');
+
+try {
+    const alunoController = require('./controllers/alunoController');
+    console.log('✅ alunoController - carregado');
+    console.log('   cadastrarAluno:', typeof alunoController.cadastrarAluno);
+    console.log('   listarAlunos:', typeof alunoController.listarAlunos);
+} catch (error) {
+    console.log('❌ alunoController - ERRO:', error.message);
+}
+
+try {
+    const livroController = require('./controllers/livroController');
+    console.log('✅ livroController - carregado');
+    console.log('   cadastrarLivro:', typeof livroController.cadastrarLivro);
+} catch (error) {
+    console.log('❌ livroController - ERRO:', error.message);
+}
+
+try {
+    const exemplarController = require('./controllers/exemplarController');
+    console.log('✅ exemplarController - carregado');
+    console.log('   listarExemplares:', typeof exemplarController.listarExemplares);
+} catch (error) {
+    console.log('❌ exemplarController - ERRO:', error.message);
+}
+
+try {
+    const emprestimoController = require('./controllers/emprestimoController');
+    console.log('✅ emprestimoController - carregado');
+    console.log('   realizarEmprestimo:', typeof emprestimoController.realizarEmprestimo);
+} catch (error) {
+    console.log('❌ emprestimoController - ERRO:', error.message);
+}
+
+try {
+    const classificacaoController = require('./controllers/classificacaoController');
+    console.log('✅ classificacaoController - carregado');
+    console.log('   obterClassificacaoPorAluno:', typeof classificacaoController.obterClassificacaoPorAluno);
+} catch (error) {
+    console.log('❌ classificacaoController - ERRO:', error.message);
+}
+
+console.log('=== FIM DO DEBUG ===');
 
 // Importar controllers
 const alunoController = require('./controllers/alunoController');
@@ -21,7 +67,10 @@ app.post('/alunos', alunoController.cadastrarAluno);
 app.get('/alunos', alunoController.listarAlunos);
 app.get('/alunos/ra/:ra', alunoController.buscarAlunoPorRa);
 app.get('/alunos/:id', alunoController.buscarAlunoPorId);
+app.get('/alunos/cpf/:cpf', alunoController.buscarAlunoPorCpf);
+app.get('/alunos/telefone/:telefone', alunoController.buscarAlunoPorTelefone);
 app.put('/alunos/:id', alunoController.atualizarAluno);
+app.delete('/alunos/:id', alunoController.excluirAluno);
 
 // Rotas de Livro
 app.post('/livros', livroController.cadastrarLivro);
