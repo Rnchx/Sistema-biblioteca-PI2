@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS pi2;
-USE pi2;
-
 -- DELETAR AS TABELAS ANTES
 
 DROP TABLE IF EXISTS emprestimo;
@@ -26,9 +23,11 @@ CREATE TABLE IF NOT EXISTS aluno (
 -- TABELA DE LIVROS
 
 CREATE TABLE IF NOT EXISTS livro (
-    id INT AUTO_INCREMENT PRIMARY KEY UNIQUE NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
-    autor VARCHAR(120) NOT NULL
+    isbn VARCHAR(20) UNIQUE,
+    autor VARCHAR(100) NOT NULL,
+    editora VARCHAR(100) NOT NULL
 );
 
 
@@ -57,9 +56,9 @@ CREATE TABLE IF NOT EXISTS emprestimo (
 
 CREATE TABLE IF NOT EXISTS classificacao (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    codigo VARCHAR(20) UNIQUE NOT NULL,
-    descricao TEXT,
-    idAluno INT,
+    tipo VARCHAR(20) NOT NULL,
+    descricao TEXT NOT NULL,
+    idAluno INT NOT NULL,
     FOREIGN KEY (idAluno) REFERENCES aluno(id)
 );
 
@@ -75,11 +74,11 @@ INSERT INTO aluno (nome, ra, cpf, email, telefone, endereco) VALUES
 
 -- INSERIR LIVROS
 
-INSERT INTO livro (titulo, autor) VALUES
-('Fundamentos de Programação', 'José da Silva'),
-('O Senhor dos Anéis', 'J.R.R. Tolkien'),
-('História do Brasil', 'Maria Fernandes'),
-('Orgulho e Preconceito', 'Jane Austen');
+INSERT INTO livro (titulo, isbn, autor, editora) VALUES
+('Fundamentos de Programação', '978-85-12345-01-1', 'José da Silva', 'Tecnologia Press'),
+('O Senhor dos Anéis', '561-76-31835-01-1', 'J.R.R. Tolkien', 'Data Books'),
+('História do Brasil', '978-85-12345-03-3', 'Maria Fernandes', 'Defalcântara'),
+('Orgulho e Preconceito', '978-85-12345-04-4', 'Jane Austen', 'Bigger historys');
 
 
 -- INSERIR EXEMPLARES
@@ -95,6 +94,30 @@ INSERT INTO exemplar (status, id_livro) VALUES
 -- INSERIR EMPRESTIMOS
 
 INSERT INTO emprestimo (id_exemplar, id_aluno) VALUES
-(1, 1),
+(2, 1),
 (3, 2),
 (4, 3);
+
+-- INSERIR CLASSIFICACAO
+
+INSERT INTO classificacao (tipo, descricao, idAluno) VALUES 
+('INICIANTE', 'Leitor Iniciante - até 5 livros', 1),
+('REGULAR', 'Leitor Regular - 6 a 10 livros', 2),
+('ATIVO', 'Leitor Ativo - 11 a 20 livros', 3);
+
+
+-- INSERIR EMPRESTIMOS
+
+UPDATE exemplar SET status = 'Emprestado' WHERE id IN (1, 2, 3, 4, 5);
+
+INSERT INTO emprestimo (id_exemplar, id_aluno) VALUES
+-- Aluno 1 (João) - 3 empréstimos (INICIANTE)
+(1, 1), (2, 1), (3, 1),
+
+-- Aluno 2 (Maria) - 7 empréstimos (REGULAR)  
+(4, 2), (5, 2), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2),
+
+-- Aluno 3 (Lucas) - 12 empréstimos (ATIVO)
+(1, 3), (2, 3), (3, 3), (4, 3), (5, 3), 
+(1, 3), (2, 3), (3, 3), (4, 3), (5, 3),
+(1, 3), (2, 3);

@@ -17,27 +17,37 @@ class Exemplar {
     }
 
     static async listarQtdExemplarDeUmLivro(id_livro) {
-    const [rows] = await connection.execute(
-        `SELECT 
+        const [rows] = await connection.execute(
+            `SELECT 
             COUNT(*) as total_exemplares,
             SUM(CASE WHEN status = 'Disponível' THEN 1 ELSE 0 END) as disponiveis,
             SUM(CASE WHEN status = 'Emprestado' THEN 1 ELSE 0 END) as emprestados,
             SUM(CASE WHEN status = 'Extraviado' THEN 1 ELSE 0 END) as extraviados
          FROM exemplar 
          WHERE id_livro = ?`,
-        [id_livro]
-    );
-    return rows[0];
-}
+            [id_livro]
+        );
+        return rows[0];
+    }
 
-    static async listarDisponiveis() {
-  const [rows] = await connection.execute(`
-            SELECT ex.*, l.id, l.titulo, l.autor, l.status
+static async listarDisponiveis() {
+    try {
+        const [rows] = await connection.execute(`
+            SELECT 
+                ex.id as exemplar_id,
+                ex.status as exemplar_status,
+                l.id as livro_id,
+                l.titulo,
+                l.autor
             FROM exemplar ex
-            JOIN livro l ON ex.id_livro = l.id
+            INNER JOIN livro l ON ex.id_livro = l.id
             WHERE ex.status = 'Disponível'
-  `);
-  return rows;
+        `);
+        return rows;
+    } catch (error) {
+        console.error('Erro no listarDisponiveis:', error);
+        throw error;
+    }
 }
 
     static async adicionarExemplar(idLivro) {
@@ -66,17 +76,17 @@ class Exemplar {
             'SELECT status FROM exemplar WHERE id = ?',
             [id]
         );
-        
+
         if (rows.length === 0) {
             throw new Error('Exemplar não encontrado');
         }
-        
+
         return rows[0].status === 'Disponível';
     }
 
     static async deletarExemplar(id) {
         await connection.execute('START TRANSACTION');
-        
+
         try {
 
             // verifica primeiro se o exemplar está emprestado
@@ -84,11 +94,11 @@ class Exemplar {
                 'SELECT status FROM exemplar WHERE id = ?',
                 [id]
             );
-            
+
             if (exemplar.length === 0) {
                 throw new Error('Exemplar não encontrado');
             }
-            
+
             if (exemplar[0].status === 'Emprestado') {
                 throw new Error('Não é possível excluir exemplar emprestado');
             }
@@ -97,7 +107,7 @@ class Exemplar {
                 'SELECT COUNT(*) as total FROM emprestimo WHERE id_exemplar = ?',
                 [id]
             );
-            
+
             if (emprestimos[0].total > 0) {
                 throw new Error('Não é possível excluir exemplar com histórico de empréstimos');
             }
@@ -106,10 +116,10 @@ class Exemplar {
                 'DELETE FROM exemplar WHERE id = ?',
                 [id]
             );
-            
+
             await connection.execute('COMMIT');
             return result;
-            
+
         } catch (error) {
             await connection.execute('ROLLBACK');
             throw error;

@@ -24,7 +24,7 @@ exports.obterClassificacaoPorAluno = async (req, res) => {
                     ra: aluno.ra
                 },
                 classificacao: {
-                    codigo: classificacao.codigo,
+                    tipo: classificacao.tipo, // Mudei codigo para tipo
                     descricao: classificacao.descricao,
                     totalLivros: classificacao.totalLivros
                 }
@@ -42,12 +42,7 @@ exports.obterClassificacaoPorAluno = async (req, res) => {
 
 exports.listarClassificacaoGeral = async (req, res) => {
     try {
-        // Buscar todas as classificações do banco
-        const [classificacoes] = await connection.execute(`
-            SELECT c.*, a.nome as aluno_nome, a.ra 
-            FROM classificacao c
-            JOIN aluno a ON c.idAluno = a.id
-        `);
+        const classificacoes = await Classificacao.listarClassificacoesComAlunos();
 
         // Formatar resposta
         const classificacoesFormatadas = classificacoes.map(classificacao => ({
@@ -57,7 +52,7 @@ exports.listarClassificacaoGeral = async (req, res) => {
                 ra: classificacao.ra
             },
             classificacao: {
-                codigo: classificacao.codigo,
+                tipo: classificacao.tipo, // Mudei codigo para tipo
                 descricao: classificacao.descricao
             }
         }));
@@ -103,7 +98,7 @@ exports.recalcularClassificacao = async (req, res) => {
                     ra: aluno.ra
                 },
                 classificacao: {
-                    codigo: classificacao.codigo,
+                    tipo: classificacao.tipo, // Mudei codigo para tipo
                     descricao: classificacao.descricao,
                     totalLivros: classificacao.totalLivros
                 }
@@ -124,10 +119,10 @@ exports.listarPorNivel = async (req, res) => {
         const { nivel } = req.params;
 
         const [alunos] = await connection.execute(`
-            SELECT a.id, a.nome, a.ra, c.codigo, c.descricao
+            SELECT a.id, a.nome, a.ra, c.tipo, c.descricao  -- Mudei codigo para tipo
             FROM aluno a
             JOIN classificacao c ON a.id = c.idAluno
-            WHERE c.codigo = ?
+            WHERE c.tipo = ?  -- Mudei codigo para tipo
         `, [nivel.toUpperCase()]);
 
         res.json({

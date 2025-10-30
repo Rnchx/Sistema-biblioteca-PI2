@@ -10,13 +10,32 @@
 /* Faixa azul superior */
 #containerFaixaAzul {
     background-color: #1c4cff;
-    padding: 8px;
+    padding: 1rem;
+    position: relative;
 }
 
 #textContainerFaixaAzul {
+    font-size: 10px;
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.7rem;
+    margin-left: 5vw;
+    color: whitesmoke;
+}
+
+/* Informações do aluno no header */
+.info-aluno-header {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
     color: white;
-    font-size: 12px;
-    text-align: center;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.9rem;
+    background: rgba(255,255,255,0.1);
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 /* Container principal */
@@ -41,33 +60,63 @@
     margin-left: 10px;
 }
 
-/* Botão voltar */
-#containerBotaoVoltar {
+/* ===== BOTÃO VOLTAR MODELO ===== */
+.container-botao-voltar {
     display: flex;
     align-items: center;
-    margin-top: 10px;
-    margin-left: 20px;
+    gap: 10px;
+    padding: 12px 20px;
+    margin: 2rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: fit-content;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-#containerBotaoVoltar i {
-    margin-right: 8px;
-    color: black;
+.container-botao-voltar:hover {
+    border-color: #1c4cff;
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(28, 76, 255, 0.15);
 }
 
-#botaoVoltarPagina {
-    background-color: white;
+.botao-voltar {
+    background: none;
     border: none;
     cursor: pointer;
-}
-
-#botaoVoltarPagina a {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
-    color: black;
 }
 
-#textoBotaoVoltar {
-    font-size: 12px;
+.icone-voltar {
+    color: #6c757d;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.texto-botao-voltar {
     font-weight: 600;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.95rem;
+    color: #495057;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.container-botao-voltar:hover .icone-voltar {
+    color: #1c4cff;
+    transform: translateX(-2px);
+}
+
+.container-botao-voltar:hover .texto-botao-voltar {
+    color: #1c4cff;
 }
 
 /* Container dos resultados */
@@ -80,10 +129,11 @@
 #tituloResultados {
     background-color: #1c4cff;
     color: white;
-    font-size: 10px;
+    font-size: 15px;
     font-weight: 700;
     text-align: center;
     padding: 8px;
+    margin-bottom: 20px;
 }
 
 /* Tabela principal */
@@ -92,34 +142,118 @@
     justify-content: center;
     width: 100%;
     border-collapse: collapse;
+    gap: 20px;
 }
 
 /* Colunas */
 .coluna {
-    width: 50%;
-    border: 1px solid #d9d9d9;
+    width: 48%;
+    border: 2px solid #d9d9d9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Cabeçalhos das colunas */
 .cabecalhoColuna {
     background-color: black;
     color: white;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     text-align: center;
-    padding: 8px 0;
+    padding: 12px 0;
+}
+
+/* Container dos livros */
+#livrosDisponiveis, #livrosEmprestados {
+    min-height: 200px;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 /* Linhas dos livros */
 .linhaLivro {
-    font-size: 12px;
-    text-align: center;
-    padding: 6px 0;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.2s ease;
+}
+
+.linhaLivro:hover {
+    background-color: #f8f9fa;
 }
 
 /* Linhas com fundo alternado */
 .fundoCinza {
-    background-color: #e6e6e6;
+    background-color: #f8f9fa;
+}
+
+.fundoBranco {
+    background-color: white;
+}
+
+/* Informações do livro */
+.info-livro {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.titulo-livro {
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 14px;
+}
+
+.autor-livro {
+    color: #6c757d;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.exemplar-info {
+    color: #495057;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+/* Estados dos livros */
+.livro-disponivel {
+    border-left: 4px solid #28a745;
+}
+
+.livro-emprestado {
+    border-left: 4px solid #dc3545;
+}
+
+/* Mensagem quando não há livros */
+.mensagem-vazia {
+    text-align: center;
+    color: #6c757d;
+    padding: 40px 20px;
+    font-style: italic;
+}
+
+/* Loading */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #1c4cff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Responsividade */
@@ -130,5 +264,12 @@
 
     .coluna {
         width: 100%;
+    }
+    
+    .info-aluno-header {
+        position: static;
+        margin-top: 10px;
+        text-align: center;
+        transform: none;
     }
 }
