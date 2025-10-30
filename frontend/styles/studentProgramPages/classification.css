@@ -66,3 +66,17 @@ h1 {
 #textoBotaoVoltar:hover {
   color: #1c4cff;
 }
+
+section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #1c4cff;
+  border-radius: 8px;
+}
+
+.lista-leitores p {
+  margin: 5px 0;
+  padding: 8px;
+  background-color: whitesmoke;
+  border-radius: 4px;
+}
