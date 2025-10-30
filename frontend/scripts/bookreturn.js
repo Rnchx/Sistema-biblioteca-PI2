@@ -7,25 +7,26 @@ async function pesquisar() {
     const resposta = await fetch('http://localhost:3000/api/exemplares');
     const livros = await resposta.json();
 
-    const corpoTabela = document.getElementById("resultado");
-    corpoTabela.innerHTML = "";
+    if (resultado.success) {
+    const tbody = document.querySelector('#tabelaLivros tbody');
+    tbody.innerHTML = '';
 
-    livros.forEach(livro => {
-      const tr = document.createElement("tr");
-
-      const tdCodigo = document.createElement("td");
-      tdCodigo.textContent = livro.codigo;
-
-      const tdTitulo = document.createElement("td");
-      tdTitulo.textContent = livro.titulo;
-
-      tr.appendChild(tdCodigo);
-      tr.appendChild(tdTitulo);
-      corpoTabela.appendChild(tr);
-    });
-  } catch (error) {
-    console.error("Erro ao pesquisar livros:", error);
-  }
+    resultado.data.forEach(ex => {
+      const linha = document.createElement('tr');
+      linha.innerHTML = `
+        <td>${ex.id}</td>
+        <td>${ex.titulo}</td>
+        <td>${ex.autor}</td>
+        <td>${ex.status}</td>
+      `;
+      tbody.appendChild(linha);
+     });
+    } else {
+      console.error('Erro na resposta da API:', resultado.error);
+    }
+  } catch (erro) {
+    console.error('Erro ao buscar exemplares alugados:', erro);
+}
 }
 
 
