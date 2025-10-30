@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
         alert(`Bem-vindo, ${aluno.nome}!`);
         
         // Redirecionar para a página principal
-        window.location.href = '../pages/studentMainPage.html'; // Ajuste o caminho
+        window.location.href = '../studentProgramPages/optionsPage.html';
     }
     
     // Login falhou
