@@ -69,10 +69,10 @@ h4 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.3rem;
 }
 
 #botaoFormulario {
-    margin: 2%;
     width: 50%;
     height: 5vh;
     border-radius: 0%;
@@ -91,8 +91,8 @@ h4 {
 }
 
 #botaoFormulario2 {
-    width: 45%;
-    height: 4vh;
+    width: 48%;
+    height: 4.5vh;
     border-radius: 0%;
     border: 1px solid black;
     color: whitesmoke;

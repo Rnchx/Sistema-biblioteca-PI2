@@ -96,29 +96,7 @@ h1 {
     font-size: 2.2rem;
 }
 
-h4 {
-    font-family: "Public Sans", sans-serif;
-    font-weight: 400;
-}
-
-#containerBotoesFormulario {
-    display: flex;
-    gap: 2rem;
-}
-
-.botaoFormulario {
+#inputPesquisa{
     padding: 1rem;
-    border-radius: 0%;
-    border: 1px solid black;
-    color: whitesmoke;
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
-    border: none;
-    background-color: #1c4cff;
-    transition: background-color 0.10s ease;
-}
-
-.botaoFormulario:hover {
-    cursor: pointer;
-    background-color: #3863ff;
+    width: 15vw;
 }
