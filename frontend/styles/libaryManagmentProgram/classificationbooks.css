@@ -1,156 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Public Sans", Arial, sans-serif;
+  font-family: "Public Sans", sans-serif;
 }
 
 body {
   background-color: #ffffff;
   color: #000000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
 }
 
 #containerFaixaAzul {
   width: 100%;
   background-color: #1c4cff;
   padding: 8px 0;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
 }
 
 #textContainerFaixaAzul {
   color: white;
   font-weight: bold;
   letter-spacing: 4px;
-  text-align: left;
+  margin-left: 2vw;
 }
 
-#containerTopo {
+#containerLogoPuc {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 85%;
-  margin: 20px auto;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 2rem;
+  margin-top: 1rem;
 }
-
 
 #containerLogoPuc img {
-  width: 120px;
+  width: 234px;
   height: auto;
+  display: block;
 }
 
-
-#voltar {
+#containerBotaoVoltar {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  gap: 6px;
+  margin-top: 0.5rem;
 }
 
-#botaoVoltar {
+#containerBotaoVoltar i {
+  color: black;
+  font-size: 16px;
+}
+
+#botaoVoltarPagina {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+#botaoVoltarPagina a {
   text-decoration: none;
-  background-color: white;
-  color: #1c4cff;
-  font-weight: bold;
-  border: 2px solid #1c4cff;
-  padding: 6px 16px;
-  border-radius: 8px;
-  transition: 0.3s;
 }
 
-#botaoVoltar:hover {
-  background-color: #1c4cff;
-  color: white;
+#textoBotaoVoltar {
+  font-family: "Public Sans", sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: black;
+}
+
+#textoBotaoVoltar:hover {
+  color: #1c4cff;
 }
 
 main {
   width: 80%;
+  margin: 40px auto;
   text-align: center;
-  margin-top: 20px;
 }
 
 h1 {
   font-size: 28px;
   font-weight: 700;
-  margin-bottom: 5px;
-}
-
-#subtitulo {
-  color: #444;
-  font-size: 15px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .classificacao {
   margin-bottom: 25px;
-  border-radius: 6px;
-  overflow: hidden;
 }
 
 .classificacao h2 {
   background-color: #1c4cff;
   color: white;
-  font-size: 15px;
+  padding: 10px;
   font-weight: bold;
-  padding: 8px 0;
-  text-transform: uppercase;
 }
 
 .classificacao ul {
   list-style: none;
-  background-color: #f0f0f0;
-  padding: 12px 0;
+  padding: 0;
 }
 
 .classificacao ul li {
-  background-color: white;
-  border: 1px solid #e0e0e0;
-  width: 90%;
+  background-color: #f3f3f3;
   margin: 6px auto;
-  padding: 8px 0;
-  border-radius: 8px;
-  transition: 0.3s;
-}
-
-.classificacao ul li:hover {
-  background-color: #e8edff;
-}
-
-#verMais {
-  margin: 20px 0 40px;
-}
-
-#verMais a {
-  text-decoration: none;
-  color: #1c4cff;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-#verMais a:hover {
-  color: #002aff;
-}
-
-@media (max-width: 768px) {
-  #containerTopo {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  main {
-    width: 95%;
-  }
-
-  .classificacao ul li {
-    font-size: 14px;
-  }
-
-  #botaoVoltar {
-    padding: 5px 12px;
-    font-size: 14px;
-  }
+  padding: 8px;
+  border-radius: 6px;
+  width: 90%;
 }

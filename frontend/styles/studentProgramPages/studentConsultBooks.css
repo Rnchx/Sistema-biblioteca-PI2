@@ -1,52 +1,57 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
+/* Zerar margens e fontes padrão */
 * {
-    margin: 0%;
+    margin: 0;
+    padding: 0;
+    font-family: "Public Sans", sans-serif;
 }
 
+/* Faixa azul superior */
 #containerFaixaAzul {
     background-color: #1c4cff;
-    padding: 10px;
+    padding: 8px;
 }
 
 #textContainerFaixaAzul {
-    font-size: 10px;
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
-    font-size: 0.7rem;
-    margin-left: 5vw;
+    color: white;
+    font-size: 12px;
+    text-align: center;
 }
 
+/* Container principal */
 #containerPrincipal {
+    width: 90%;
+    margin: 0 auto;
     display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* Logo e botão voltar */
 #containerLogoEBotaoVoltar {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 20px;
 }
 
 #img {
-    margin: 1rem;
+    margin-left: 10px;
 }
 
+/* Botão voltar */
 #containerBotaoVoltar {
     display: flex;
-    margin: 2%;
-    margin-left: 10%;
-    width: 3vw;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 20px;
 }
 
-#containerBotaoVoltar:hover {
-    display: flex;
-    margin: 2%;
-    margin-left: 10%;
-    width: 3vw;
-    color: #1c4cff;
-}
-
-i {
-    margin: 4px;
+#containerBotaoVoltar i {
+    margin-right: 8px;
+    color: black;
 }
 
 #botaoVoltarPagina {
@@ -57,46 +62,73 @@ i {
 
 #botaoVoltarPagina a {
     text-decoration: none;
-}
-
-#botaoVoltarPagina a:hover {
-    text-decoration: none;
-    cursor: pointer;
+    color: black;
 }
 
 #textoBotaoVoltar {
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
-    font-size: 1.1rem;
-    color: black;
-    text-decoration: none; 
+    font-size: 12px;
+    font-weight: 600;
 }
 
-#textoBotaoVoltar:hover {
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
-    font-size: 1.1rem;
-    text-decoration: none;
-    color: #1c4cff;
+/* Container dos resultados */
+#containerResultados {
+    width: 100%;
+    margin-top: 20px;
 }
 
-#containerFormulario {
-    width: 70%;
+/* Título azul com texto centralizado */
+#tituloResultados {
+    background-color: #1c4cff;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    padding: 8px;
+}
+
+/* Tabela principal */
+#tabelaLivros {
     display: flex;
-    flex-direction: column;
-    align-content: center;
-    align-items: center;
     justify-content: center;
-    justify-items: center;
-    height: calc(50vh - 40px);
+    width: 100%;
+    border-collapse: collapse;
 }
 
-h1 {
-    font-family: "Public Sans", sans-serif;
-    font-size: 2.2rem;
+/* Colunas */
+.coluna {
+    width: 50%;
+    border: 1px solid #d9d9d9;
 }
 
-#inputPesquisa{
-    padding: 1rem;
-    width: 15vw;
+/* Cabeçalhos das colunas */
+.cabecalhoColuna {
+    background-color: black;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 0;
+}
+
+/* Linhas dos livros */
+.linhaLivro {
+    font-size: 12px;
+    text-align: center;
+    padding: 6px 0;
+}
+
+/* Linhas com fundo alternado */
+.fundoCinza {
+    background-color: #e6e6e6;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    #tabelaLivros {
+        flex-direction: column;
+    }
+
+    .coluna {
+        width: 100%;
+    }
 }

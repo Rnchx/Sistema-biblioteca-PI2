@@ -1,11 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap');
 
+/* ======== BASE ======== */
 body {
   font-family: "Public Sans", sans-serif;
   margin: 0;
   background-color: white;
+  color: black;
 }
 
+/* ======== FAIXA AZUL ======== */
 #containerFaixaAzul {
   background-color: #1c4cff;
   padding: 10px;
@@ -13,103 +16,79 @@ body {
 
 #textContainerFaixaAzul {
   color: white;
-  text-align: left;
-  margin: 0;
   font-weight: bold;
-  letter-spacing: 3px;
+  margin-left: 2vw;
 }
 
-#containerPrincipal {
-  margin: 30px;
-}
-
-#containerTopo {
+/* ======== LOGO E BOTÃO VOLTAR ======== */
+#containerLogoPuc {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 2rem;
+  margin-top: 1rem;
 }
 
 #containerLogoPuc img {
-  width: 120px;
+  width: 234px;
   height: auto;
+  display: block;
 }
 
-#voltar {
+#containerBotaoVoltar {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  gap: 6px;
+  margin-top: 0.5rem;
 }
 
-#botaoVoltar {
+#containerBotaoVoltar i {
+  color: black;
+  font-size: 16px;
+}
+
+#botaoVoltarPagina {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+#botaoVoltarPagina a {
   text-decoration: none;
-  background-color: white;
+}
+
+#textoBotaoVoltar {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: black;
+}
+
+#textoBotaoVoltar:hover {
   color: #1c4cff;
-  font-weight: bold;
-  border: 2px solid #1c4cff;
-  padding: 6px 16px;
-  border-radius: 8px;
-  transition: 0.3s;
 }
 
-#botaoVoltar:hover {
-  background-color: #1c4cff;
-  color: white;
-}
-
-h1 {
+/* ======== FORMULÁRIO ======== */
+#containerPrincipal {
+  width: 80%;
+  margin: 30px auto;
   text-align: center;
-  margin: 20px 0 10px 0;
-  font-size: 2rem;
 }
 
-h4 {
-  text-align: center;
-  font-weight: 400;
-  color: #444;
-  margin-bottom: 40px;
+input, select {
+  padding: 8px;
+  margin: 8px 0;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-label {
-  font-weight: bold;
-  align-self: flex-start;
-  margin-left: 37%;
-  color: #000;
-}
-
-input {
-  width: 25%;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 6px;
-  font-family: "Public Sans", sans-serif;
-  transition: border-color 0.3s;
-}
-
-input:focus {
-  border-color: #1c4cff;
-  outline: none;
-}
-
-#botaoCadastrar {
-  margin-top: 20px;
+button {
   background-color: #1c4cff;
   color: white;
   border: none;
   padding: 10px 25px;
-  font-size: 15px;
-  border-radius: 6px;
-  font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  border-radius: 6px;
 }
 
-#botaoCadastrar:hover {
+button:hover {
   background-color: #003ce0;
 }

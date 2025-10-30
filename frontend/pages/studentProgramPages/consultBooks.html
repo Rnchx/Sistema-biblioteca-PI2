@@ -2,49 +2,67 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Biblioteca - Aluno</title>
-    <link rel="stylesheet" href="../../styles/studentProgramPages/studentConsultBooks.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="../../scripts/studentRegister.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Biblioteca - Resultado da Pesquisa</title>
+
+  <link rel="stylesheet" href="../../styles/studentProgramPages/studentConsultBooks.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="../../scripts/studentBooksResult.js"></script>
 </head>
 
 <body>
-    <div id="containerFaixaAzul">
-        <p id="textContainerFaixaAzul">O O O</p>
+  <!-- Faixa azul superior -->
+  <div id="containerFaixaAzul">
+    <p id="textContainerFaixaAzul">O O O</p>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div id="containerPrincipal">
+
+    <!-- Logo e botão voltar -->
+    <div id="containerLogoEBotaoVoltar">
+      <img src="../../images/puc-campinas-logo.jpg"
+        alt="logo da puc campinas"
+        width="234vw"
+        height="111vh"
+        id="img">
+
+      <div id="containerBotaoVoltar">
+        <i class="fa-solid fa-backward"></i>
+        <button id="botaoVoltarPagina">
+          <a href="#">
+            <p id="textoBotaoVoltar">Voltar</p>
+          </a>
+        </button>
+      </div>
     </div>
 
-    <div id="containerPrincipal">
-        <div id="containerLogoEBotaoVoltar">
-            <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234vw" height="111vh"
-                id="img">
+    <!-- Container dos resultados -->
+    <div id="containerResultados">
+      <div id="tituloResultados">
+        <p>LIVROS (RESULTADO DE ACORDO COM O STATUS)</p>
+      </div>
 
-            <div id="containerBotaoVoltar">
-                <i class="fa-solid fa-backward"></i>
-                <button id="botaoVoltarPagina">
-                    <a href="./optionsPage.html">
-                        <p id="textoBotaoVoltar">Voltar</p>
-                    </a>
-                </button>
-            </div>
+      <div id="tabelaLivros">
+        <!-- Coluna de livros disponíveis -->
+        <div class="coluna" id="colunaDisponiveis">
+          <div class="cabecalhoColuna">DISPONÍVEIS</div>
+          <div id="livrosDisponiveis"></div>
         </div>
 
-        <div id="containerFormulario">
-            <h1>Consultar Livros para Empréstimo</h1>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <input id="inputPesquisa" type="text" placeholder="DIGITE O NOME DO LIVRO/CÓDIGO">
-
+        <!-- Coluna de livros emprestados -->
+        <div class="coluna" id="colunaEmprestados">
+          <div class="cabecalhoColuna">EMPRESTADOS</div>
+          <div id="livrosEmprestados"></div>
         </div>
+      </div>
     </div>
+  </div>
 </body>
 
 </html>
