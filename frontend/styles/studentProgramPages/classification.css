@@ -1,0 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Faixa azul superior */
+#containerFaixaAzul {
+  background-color: #1c4cff;
+  padding: 10px;
+}
+
+#textContainerFaixaAzul {
+  font-family: "Public Sans", sans-serif;
+  font-size: 0.7rem;
+  font-weight: bold;
+  margin-left: 5vw;
+}
+
+/* Container principal */
+#containerPrincipal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  flex-direction: column;
+}
+
+/* Logo e botão voltar */
+#containerLogoEBotaoVoltar {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Título principal */
+h1 {
+  text-align: center;
+  margin: 40px;
+  color: #000000;
+}
+
+/* Botão voltar */
+#botaoVoltarPagina {
+    background-color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#botaoVoltarPagina a {
+  text-decoration: none;
+}
+
+#botaoVoltarPagina a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#textoBotaoVoltar {
+  font-family: "Public Sans", sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+}
+
+#textoBotaoVoltar:hover {
+  color: #1c4cff;
+}

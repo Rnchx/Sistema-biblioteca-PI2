@@ -31,14 +31,14 @@ class Exemplar {
 }
 
     static async listarDisponiveis() {
-        const [rows] = await connection.execute(`
-            SELECT ex.*, l.titulo, l.autor 
+  const [rows] = await connection.execute(`
+            SELECT ex.*, l.id, l.titulo, l.autor, l.status
             FROM exemplar ex
             JOIN livro l ON ex.id_livro = l.id
             WHERE ex.status = 'Disponível'
-        `);
-        return rows;
-    }
+  `);
+  return rows;
+}
 
     static async adicionarExemplar(idLivro) {
         const [result] = await connection.execute(
