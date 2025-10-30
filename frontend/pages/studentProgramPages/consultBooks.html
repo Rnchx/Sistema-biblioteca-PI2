@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Biblioteca - Aluno</title>
+    <title>Sistema Biblioteca - Consulta de Livros</title>
     <link rel="stylesheet" href="../../styles/studentProgramPages/studentConsultBooks.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="../../scripts/studentRegister.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script defer src="../../scripts/studentConsultBooks.js"></script>
 </head>
-
 <body>
     <div id="containerFaixaAzul">
         <p id="textContainerFaixaAzul">O O O</p>
+        <!-- Informações do aluno serão inseridas via JavaScript -->
     </div>
 
     <div id="containerPrincipal">
         <div id="containerLogoEBotaoVoltar">
-            <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234vw" height="111vh"
-                id="img">
+            <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234" height="111" id="img">
 
-            <div id="containerBotaoVoltar">
-                <i class="fa-solid fa-backward"></i>
-                <button id="botaoVoltarPagina">
-                    <a href="./optionsPage.html">
-                        <p id="textoBotaoVoltar">Voltar</p>
-                    </a>
+            <!-- Botão Voltar atualizado -->
+            <a href="./optionsPage.html" class="container-botao-voltar">
+                <button class="botao-voltar">
+                    <i class="fas fa-arrow-left icone-voltar"></i>
+                    <p class="texto-botao-voltar">Voltar para Opções</p>
                 </button>
-            </div>
+            </a>
         </div>
 
-        <div id="containerFormulario">
-            <h1>Consultar Livros para Empréstimo</h1>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <input id="inputPesquisa" type="text" placeholder="DIGITE O NOME DO LIVRO/CÓDIGO">
+        <!-- Container dos resultados -->
+        <div id="containerResultados">
+            <div id="tituloResultados">
+                <p>LIVROS (RESULTADO DE ACORDO COM O STATUS)</p>
+            </div>
 
+            <div id="tabelaLivros">
+                <!-- Coluna de livros disponíveis -->
+                <div class="coluna" id="colunaDisponiveis">
+                    <div class="cabecalhoColuna">DISPONÍVEIS</div>
+                    <div id="livrosDisponiveis" class="loading">
+                        <span class="loading-spinner"></span>Carregando livros disponíveis...
+                    </div>
+                </div>
+
+                <!-- Coluna de livros emprestados -->
+                <div class="coluna" id="colunaEmprestados">
+                    <div class="cabecalhoColuna">EMPRESTADOS</div>
+                    <div id="livrosEmprestados" class="loading">
+                        <span class="loading-spinner"></span>Carregando livros emprestados...
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
-
 </html>

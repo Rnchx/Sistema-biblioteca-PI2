@@ -42,12 +42,10 @@ function configurarLinks(aluno) {
     const botaoPontuacao = document.querySelector('#containerBotoesFormulario a:last-child');
     
     if (botaoLivros) {
-        // Ajustado para a página de consulta de livros no studentProgramPages
         botaoLivros.href = '../studentProgramPages/consultBooks.html';
     }
     
     if (botaoPontuacao) {
-        // Ajustado para a página de pontuação de leitura no studentProgramPages
         botaoPontuacao.href = '../studentProgramPages/checkReadingScore.html';
     }
 }
@@ -58,21 +56,36 @@ function logout() {
     window.location.href = '../studentProgramPages/loginPage.html';
 }
 
-// BOTÃO VOLTAR COM LOGOUT
-function configurarBotaoVoltar() {
-    const botaoVoltar = document.getElementById('botaoVoltarPagina');
-    if (botaoVoltar) {
-        // Remove o link atual e adiciona logout
-        const link = botaoVoltar.querySelector('a');
-        if (link) {
-            link.removeAttribute('href');
-            link.onclick = function(e) {
-                e.preventDefault();
-                if (confirm('Deseja realmente sair do sistema?')) {
-                    logout();
+// CONFIGURAR BOTÃO DE LOGOUT
+function configurarBotaoLogout() {
+    const botaoLogout = document.getElementById('botaoLogout');
+    const containerLogout = document.getElementById('containerBotaoLogout');
+    
+    if (botaoLogout && containerLogout) {
+        botaoLogout.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Criar popup de confirmação personalizado
+            if (confirm('Deseja realmente sair do sistema?')) {
+                // Animação de loading no botão
+                const texto = botaoLogout.querySelector('.texto-botao-logout');
+                const icone = botaoLogout.querySelector('.icone-logout');
+                
+                if (texto && icone) {
+                    texto.innerHTML = 'Saindo...';
+                    icone.className = 'fas fa-spinner icone-logout fa-spin';
+                    containerLogout.style.pointerEvents = 'none';
                 }
-            };
-        }
+                
+                // Logout após 1 segundo (para ver a animação)
+                setTimeout(() => {
+                    logout();
+                }, 1000);
+            }
+        });
+        
+        // Efeito hover com tooltip
+        containerLogout.title = "Clique para sair do sistema";
     }
 }
 
@@ -84,50 +97,70 @@ document.addEventListener('DOMContentLoaded', function() {
     if (aluno) {
         console.log(`✅ Aluno logado: ${aluno.nome} (RA: ${aluno.ra})`);
 
+        // ✅ Atualizar interface com dados reais
         atualizarDadosAluno(aluno);
 
+        // ✅ Configurar links dos botões
         configurarLinks(aluno);
 
-        configurarBotaoVoltar();
+        // ✅ Configurar botão de logout (SUBSTITUIU O VOLTAR)
+        configurarBotaoLogout();
 
-        adicionarBotaoLogout();
+        // ✅ Adicionar informações do aluno no header (opcional)
+        adicionarInfoAlunoHeader(aluno);
     }
 });
 
-// BOTÃO LOGOUT NO HEADER (OPCIONAL) -> para implementar futuramente talvez
-function adicionarBotaoLogout() {
+// INFORMACÕES DO ALUNO NO HEADER
+function adicionarInfoAlunoHeader(aluno) {
     const faixaAzul = document.getElementById('containerFaixaAzul');
     if (faixaAzul) {
-        const botaoLogout = document.createElement('button');
-        botaoLogout.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Sair';
-        botaoLogout.style.cssText = `
+        const infoAluno = document.createElement('div');
+        infoAluno.innerHTML = `
+            <span style="color: white; font-family: 'Public Sans', sans-serif; font-size: 0.9rem;">
+                <i class="fas fa-user" style="margin-right: 5px;"></i>
+                ${aluno.nome} | RA: ${aluno.ra}
+            </span>
+        `;
+        infoAluno.style.cssText = `
             position: absolute;
             right: 20px;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
+            background: rgba(255,255,255,0.1);
             padding: 5px 12px;
             border-radius: 4px;
-            cursor: pointer;
-            font-family: "Public Sans", sans-serif;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
         `;
-        botaoLogout.onmouseover = function() {
-            this.style.background = 'rgba(255,255,255,0.3)';
-        };
-        botaoLogout.onmouseout = function() {
-            this.style.background = 'rgba(255,255,255,0.2)';
-        };
-        botaoLogout.onclick = function() {
-            if (confirm('Deseja realmente sair do sistema?')) {
-                logout();
-            }
-        };
         
         faixaAzul.style.position = 'relative';
-        faixaAzul.appendChild(botaoLogout);
+        faixaAzul.appendChild(infoAluno);
     }
 }
+
+// DETECTAR INATIVIDADE PARA LOGOUT AUTOMÁTICO
+function configurarLogoutPorInatividade() {
+    let tempoInatividade;
+    
+    function resetarTempo() {
+        clearTimeout(tempoInatividade);
+        // Logout após 30 minutos de inatividade
+        tempoInatividade = setTimeout(() => {
+            if (confirm('Sua sessão expirou por inatividade. Deseja continuar?')) {
+                resetarTempo();
+            } else {
+                logout();
+            }
+        }, 30 * 60 * 1000); // 30 minutos
+    }
+    
+    // Eventos que resetam o tempo de inatividade
+    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(evento => {
+        document.addEventListener(evento, resetarTempo);
+    });
+    
+    resetarTempo();
+}
+
+// Iniciar detecção de inatividade (opcional)
+// configurarLogoutPorInatividade();

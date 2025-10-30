@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Biblioteca - Aluno</title>
     <link rel="stylesheet" href="../../styles/studentProgramPages/studentOptions.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../../scripts/studentOptions.js"></script>
 </head>
 <body>
@@ -19,25 +17,21 @@
         <div id="containerLogoEBotaoVoltar">
             <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234" height="111" id="img">
 
-            <div id="containerBotaoVoltar">
-                <i class="fa-solid fa-backward"></i>
-                <button id="botaoVoltarPagina">
-                    <a href="#">
-                        <p id="textoBotaoVoltar">Voltar</p>
-                    </a>
+            <div class="container-botao-logout botao-logout-primary" id="containerBotaoLogout">
+                <button class="botao-logout" id="botaoLogout">
+                    <i class="fas fa-sign-out-alt icone-logout"></i>
+                    <p class="texto-botao-logout">Logout</p>
                 </button>
             </div>
         </div>
 
         <div id="containerFormulario">
-            <h1>[SEU NOME]</h1>
-            <h4>[RA]</h4>
+            <h2>Bem vindo!</h2><h1>[SEU NOME]</h1>
             <br>
             <br>
             <br>
             <br>
             <br>
-            
             <div id="containerBotoesFormulario">
                 <a href="./catalogoLivros.html"><button class="botaoFormulario">CONSULTAR LIVROS<br>PARA EMPRÉSTIMO</button></a>
                 <a href="./pontuacaoLeitura.html"><button class="botaoFormulario">CONSULTAR PONTUAÇÃO<br>DE LEITURA</button></a>

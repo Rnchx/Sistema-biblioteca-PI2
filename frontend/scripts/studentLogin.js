@@ -1,12 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
     // Elementos do DOM
     const loginForm = document.querySelector('#containerLabelsInputs');
     const raInput = document.querySelector('.inputsFormulario');
     const entrarBtn = document.querySelector('#botaoFormulario');
     
-    // URL da sua API - ajuste conforme necessário
+    // URL da sua API
     const API_BASE_URL = 'http://localhost:3000';
+    
+    // Variável para armazenar dados do aluno logado
+    let alunoLogadoData = null;
+    
+    // Inicializar sistema de popup
+    inicializarPopup();
     
     // Evento de clique no botão ENTRAR
     entrarBtn.addEventListener('click', async function(e) {
@@ -16,17 +21,17 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Validação básica
         if (!ra) {
-            alert('Por favor, digite seu RA');
+            mostrarPopup('error', 'Campo obrigatório', 'Por favor, digite seu RA');
             return;
         }
         
         if (!validarRA(ra)) {
-            alert('RA deve conter apenas números (ex: 25003959)');
+            mostrarPopup('error', 'RA inválido', 'RA deve conter apenas números (ex: 25003959)');
             return;
         }
         
-        // Mostrar loading
-        entrarBtn.textContent = 'ENTRANDO...';
+        // Mostrar loading no botão
+        entrarBtn.innerHTML = '<span class="loading-spinner"></span>ENTRANDO...';
         entrarBtn.disabled = true;
         
         try {
@@ -35,26 +40,119 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (aluno) {
                 // Login bem-sucedido
-                loginSucesso(aluno);
+                await loginSucesso(aluno);
             } else {
                 // Aluno não encontrado
-                loginFalhou('RA não encontrado. Verifique o número ou faça cadastro.');
+                mostrarPopup('error', 'RA não encontrado', 'Verifique o número ou faça cadastro.', true);
             }
             
         } catch (error) {
             console.error('Erro no login:', error);
-            loginFalhou('Erro ao conectar com o servidor. Tente novamente.');
+            mostrarPopup('error', 'Erro de conexão', 'Erro ao conectar com o servidor. Tente novamente.', true);
         } finally {
             // Restaurar botão
-            entrarBtn.textContent = 'ENTRAR';
+            entrarBtn.innerHTML = 'ENTRAR';
             entrarBtn.disabled = false;
         }
     });
     
+    // Sistema de Popup
+    function inicializarPopup() {
+        const popupHTML = `
+            <div class="popup-overlay" id="popupOverlay">
+                <div class="popup-container" id="popupContainer">
+                    <div class="popup-icon" id="popupIcon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 class="popup-title" id="popupTitle">Título</h2>
+                    <p class="popup-message" id="popupMessage">Mensagem</p>
+                    <div class="popup-buttons" id="popupButtons">
+                        <button class="popup-button" id="popupButtonOk">OK</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', popupHTML);
+        
+        // Configurar evento do botão OK
+        document.getElementById('popupButtonOk').addEventListener('click', function() {
+            fecharPopup();
+            // Se tiver dados de aluno logado, redirecionar
+            if (alunoLogadoData) {
+                redirecionarParaHome();
+            }
+        });
+        
+        // Fechar popup clicando fora
+        document.getElementById('popupOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharPopup();
+                // Se tiver dados de aluno logado, redirecionar mesmo clicando fora
+                if (alunoLogadoData) {
+                    redirecionarParaHome();
+                }
+            }
+        });
+        
+        // Fechar com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharPopup();
+                // Se tiver dados de aluno logado, redirecionar mesmo com ESC
+                if (alunoLogadoData) {
+                    redirecionarParaHome();
+                }
+            }
+        });
+    }
+    
+    function mostrarPopup(tipo, titulo, mensagem, focarInput = false) {
+        const overlay = document.getElementById('popupOverlay');
+        const container = document.getElementById('popupContainer');
+        const icon = document.getElementById('popupIcon');
+        const title = document.getElementById('popupTitle');
+        const message = document.getElementById('popupMessage');
+        
+        // Configurar estilo baseado no tipo
+        container.className = 'popup-container';
+        if (tipo === 'success') {
+            container.classList.add('popup-success');
+            icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+        } else if (tipo === 'error') {
+            container.classList.add('popup-error');
+            icon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+        }
+        
+        // Configurar conteúdo
+        title.textContent = titulo;
+        message.textContent = mensagem;
+        
+        // Mostrar popup
+        overlay.style.display = 'flex';
+        
+        // Focar no input se especificado
+        if (focarInput) {
+            setTimeout(() => {
+                raInput.focus();
+                raInput.select();
+            }, 300);
+        }
+    }
+    
+    function fecharPopup() {
+        const overlay = document.getElementById('popupOverlay');
+        overlay.style.display = 'none';
+    }
+    
+    function redirecionarParaHome() {
+        window.location.href = '../studentProgramPages/optionsPage.html';
+    }
+    
     // Validar formato do RA
     function validarRA(ra) {
-        const raRegex = /^\d+$/; // Apenas números
-        return raRegex.test(ra) && ra.length >= 7; // Pelo menos 7 dígitos
+        const raRegex = /^\d+$/;
+        return raRegex.test(ra) && ra.length >= 7;
     }
     
     // Verificar se aluno existe na API
@@ -64,18 +162,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (!response.ok) {
                 if (response.status === 404) {
-                    return null; // Aluno não encontrado
+                    return null;
                 }
                 throw new Error(`Erro HTTP: ${response.status}`);
             }
             
             const data = await response.json();
-            
-            if (data.success) {
-                return data.data; // Retorna os dados do aluno
-            } else {
-                return null;
-            }
+            return data.success ? data.data : null;
             
         } catch (error) {
             console.error('Erro ao verificar aluno:', error);
@@ -84,8 +177,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Login bem-sucedido
-    function loginSucesso(aluno) {
-        // Salvar dados do aluno no localStorage/sessionStorage
+    async function loginSucesso(aluno) {
+        // Salvar dados do aluno
         sessionStorage.setItem('alunoLogado', JSON.stringify({
             id: aluno.id,
             nome: aluno.nome,
@@ -94,18 +187,14 @@ document.addEventListener('DOMContentLoaded', function() {
             timestamp: new Date().getTime()
         }));
         
-        // Mostrar mensagem de sucesso
-        alert(`Bem-vindo, ${aluno.nome}!`);
+        // Armazenar dados para redirecionamento posterior
+        alunoLogadoData = aluno;
         
-        // Redirecionar para a página principal
-        window.location.href = '../studentProgramPages/optionsPage.html';
-    }
-    
-    // Login falhou
-    function loginFalhou(mensagem) {
-        alert(mensagem);
-        raInput.focus();
-        raInput.select();
+        // Mostrar popup de sucesso (NÃO redireciona automaticamente)
+        mostrarPopup('success', 'Login realizado!', `Bem-vindo, ${aluno.nome}!`);
+        
+        // REMOVI o setTimeout que redirecionava automaticamente
+        // Agora só redireciona quando o usuário clicar no OK
     }
     
     // Enter no input também submete o formulário

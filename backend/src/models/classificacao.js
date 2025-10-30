@@ -1,26 +1,24 @@
 const { connection } = require('../database/connection');
 
 class Classificacao {
-
-
     static async criar(classificacao) {
-        const { codigo, descricao, idAluno } = classificacao;
+        const { tipo, descricao, idAluno } = classificacao; 
         const [result] = await connection.execute(
-            'INSERT INTO classificacao (codigo, descricao, idAluno) VALUES (?, ?, ?)',
-            [codigo, descricao, idAluno]
+            'INSERT INTO classificacao (tipo, descricao, idAluno) VALUES (?, ?, ?)', 
+            [tipo, descricao, idAluno] 
         );
         return result;
     }
 
-    static async atualizarClassificacaoAluno(idAluno, codigo, descricao) {
+    static async atualizarClassificacaoAluno(idAluno, tipo, descricao) { 
         await connection.execute(
             'DELETE FROM classificacao WHERE idAluno = ?',
             [idAluno]
         );
 
         const [result] = await connection.execute(
-            'INSERT INTO classificacao (codigo, descricao, idAluno) VALUES (?, ?, ?)',
-            [codigo, descricao, idAluno]
+            'INSERT INTO classificacao (tipo, descricao, idAluno) VALUES (?, ?, ?)', 
+            [tipo, descricao, idAluno] 
         );
         return result;
     }
@@ -34,52 +32,52 @@ class Classificacao {
         );
 
         const totalLivros = rows[0].total_livros;
-        let codigo, descricao;
+        let tipo, descricao; 
 
         if (totalLivros <= 5) {
-            codigo = 'INICIANTE';
+            tipo = 'INICIANTE'; 
             descricao = 'Leitor Iniciante';
         } else if (totalLivros <= 10) {
-            codigo = 'REGULAR';
+            tipo = 'REGULAR'; 
             descricao = 'Leitor Regular';
         } else if (totalLivros <= 20) {
-            codigo = 'ATIVO';
+            tipo = 'ATIVO'; 
             descricao = 'Leitor Ativo';
         } else {
-            codigo = 'EXTREMO';
+            tipo = 'EXTREMO'; 
             descricao = 'Leitor Extremo';
         }
 
-        return { codigo, descricao, totalLivros };
+        return { tipo, descricao, totalLivros }; 
     }
 
     static async listarClassificacoesComAlunos() {
-    const [rows] = await connection.execute(`
-        SELECT c.*, a.nome as aluno_nome, a.ra 
-        FROM classificacao c
-        JOIN aluno a ON c.idAluno = a.id
-    `);
-    return rows;
-}
+        const [rows] = await connection.execute(`
+            SELECT c.*, a.nome as aluno_nome, a.ra 
+            FROM classificacao c
+            JOIN aluno a ON c.idAluno = a.id
+        `);
+        return rows;
+    }
 
     // método mais ágil
     static async classificarEAtualizarAluno(idAluno) {
-    try {
-        // Calcula a classificação
-        const classificacao = await Classificacao.calcularClassificacao(idAluno);
-        
-        // Atualiza no banco
-        await Classificacao.atualizarClassificacaoAluno(
-            idAluno, 
-            classificacao.codigo, 
-            classificacao.descricao
-        );
-        
-        return classificacao;
-    } catch (error) {
-        throw error;
+        try {
+            // Calcula a classificação
+            const classificacao = await Classificacao.calcularClassificacao(idAluno);
+            
+            // Atualiza no banco
+            await Classificacao.atualizarClassificacaoAluno(
+                idAluno, 
+                classificacao.tipo, 
+                classificacao.descricao
+            );
+            
+            return classificacao;
+        } catch (error) {
+            throw error;
+        }
     }
-}
 }
 
 module.exports = Classificacao;

@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Biblioteca - Aluno</title>
     <link rel="stylesheet" href="../../styles/studentProgramPages/studentRegister.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../../scripts/studentRegister.js"></script>
 </head>
-
 <body>
     <div id="containerFaixaAzul">
         <p id="textContainerFaixaAzul">O O O</p>
@@ -19,17 +15,16 @@
 
     <div id="containerPrincipal">
         <div id="containerLogoEBotaoVoltar">
-            <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234vw" height="111vh"
-                id="img">
+            <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234" height="111" id="img">
 
-            <div id="containerBotaoVoltar">
-                <i class="fa-solid fa-backward"></i>
-                <button id="botaoVoltarPagina">
-                    <a href="./loginPage.html">
-                        <p id="textoBotaoVoltar">Voltar</p>
-                    </a>
+            <!-- botão voltar novo modelo - by Rnchx -->
+            <a href="./loginPage.html" class="container-botao-voltar">
+                <button class="botao-voltar">
+                    <i class="fas fa-arrow-left icone-voltar"></i>
+                    <p class="texto-botao-voltar">Voltar para Login</p>
                 </button>
-            </div>
+            </a>
+            
         </div>
 
         <div id="containerFormulario">
@@ -40,36 +35,31 @@
             <br>
 
             <div id="containerLabelsInputs">
-
                 <label class="labelsFormulario" for="">NOME</label>
                 <input class="inputsFormulario" placeholder="Maria Fernanda Oliveira (exemplo)" type="text" required>
 
                 <label class="labelsFormulario" for="">RA</label>
                 <input class="inputsFormulario" placeholder="2511111 (exemplo)" type="text" required>
 
+                <label class="labelsFormulario" for="">CPF</label>
+                <input class="inputsFormulario" placeholder="123.456.789-00 (exemplo)" type="text" required>
+
                 <label class="labelsFormulario" for="">TELEFONE (CEL)</label>
-                <input class="inputsFormulario" placeholder="(11) 1 1111 - 1111" type="text" required>
+                <input class="inputsFormulario" placeholder="(11) 1 1111-1111" type="text" required>
 
                 <label class="labelsFormulario" for="">E-MAIL</label>
-                <input class="inputsFormulario" placeholder="mariafernanda01@puccampinas.edu.br (exemplo)" type="text"
-                    required>
-
-                <label class="labelsFormulario" for="">CURSO</label>
-                <input class="inputsFormulario" placeholder="sistemas de informação (exemplo)" type="text" required>
+                <input class="inputsFormulario" placeholder="mariafernanda01@puccampinas.edu.br (exemplo)" type="email" required>
 
                 <label class="labelsFormulario" for="">ENDEREÇO</label>
-                <input class="inputsFormulario" placeholder="Rua Joaquim Alves 21 - Campinas SP (exemplo)" type="text"
-                    required>
+                <input class="inputsFormulario" placeholder="Rua Joaquim Alves 21 - Campinas SP (exemplo)" type="text" required>
                 <br>
                 <br>
 
                 <div id="containerBotao">
                     <button id="botaoFormulario">CADASTRAR</button>
                 </div>
-
             </div>
         </div>
     </div>
 </body>
-
 </html>
