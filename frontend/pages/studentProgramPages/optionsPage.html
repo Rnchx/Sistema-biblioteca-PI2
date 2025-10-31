@@ -20,7 +20,7 @@
             <div class="container-botao-logout botao-logout-primary" id="containerBotaoLogout">
                 <button class="botao-logout" id="botaoLogout">
                     <i class="fas fa-sign-out-alt icone-logout"></i>
-                    <p class="texto-botao-logout">Logout</p>
+                    <p class="texto-botao-logout">Sair</p>
                 </button>
             </div>
         </div>
@@ -35,6 +35,20 @@
             <div id="containerBotoesFormulario">
                 <a href="./catalogoLivros.html"><button class="botaoFormulario">CONSULTAR LIVROS<br>PARA EMPRÉSTIMO</button></a>
                 <a href="./pontuacaoLeitura.html"><button class="botaoFormulario">CONSULTAR PONTUAÇÃO<br>DE LEITURA</button></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-container popup-warning" id="popupContainer">
+            <div class="popup-icon" id="popupIcon">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <h2 class="popup-title" id="popupTitle">Confirmar Logout</h2>
+            <p class="popup-message" id="popupMessage">Deseja realmente sair do sistema?</p>
+            <div class="popup-buttons" id="popupButtons">
+                <button class="popup-button popup-button-secondary" id="popupButtonCancel">Cancelar</button>
+                <button class="popup-button" id="popupButtonConfirm">Sair</button>
             </div>
         </div>
     </div>

@@ -4,47 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Biblioteca - Aluno</title>
+    <title>Sistema Biblioteca - Classificação do Leitor</title>
     <link rel="stylesheet" href="../../styles/studentProgramPages/studentClassification.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <script src="../../scripts/classification.js"></script>  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script defer src="../../scripts/studentClassification.js"></script>
 </head>
 
 <body>
-    <!-- Faixa azul superior -->
     <div id="containerFaixaAzul">
         <p id="textContainerFaixaAzul">O O O</p>
     </div>
 
-    <!-- Conteúdo principal -->
     <div id="containerPrincipal">
-        <!-- Logo da PUC -->
-        <div id="containerLogoPuc">
-            <img src="../../images/puc-campinas-logo.jpg" alt="logo da PUC Campinas" width="234vw" height="111vh">
-        </div>
-         <div id="containerBotaoVoltar">
-                <i class="fa-solid fa-backward"></i>
-                <button id="botaoVoltarPagina">
-                    <a href="./optionsPage.html">
-                        <p id="textoBotaoVoltar">Voltar</p>
-                    </a>
-                </button>
-            </div>
+        <div id="containerLogoEBotaoVoltar">
+            <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234" height="111" id="img">
 
-            <h1>Sua classificação como leitor</h1>
+            <a href="./optionsPage.html" class="container-botao-voltar">
+                <button class="botao-voltar">
+                    <i class="fas fa-arrow-left icone-voltar"></i>
+                    <p class="texto-botao-voltar">Voltar para Opções</p>
+                </button>
+            </a>
+        </div>
+
+        <h1>Sua classificação como leitor</h1>
         <h3>Últimos 6 meses</h3>
 
-        <section>
-            <h2>Leitor Extremo (+20 livros)</h2>
-            <div id="leitoresExtremos" class="lista-leitores"></div>
-        </section>
 
-        <section>
-            <h2>Leitor Ativo (de 11 a 20 livros)</h2>
-            <div id="leitoresAtivos" class="lista-leitores"></div>
-        </section>
+        <div id="containerClassificacao">
+            <div id="badgeLeitor">
+                <div id="iconeLeitor">
+                    <i class="fas fa-book-reader"></i>
+                </div>
 
-        <section>
-            <h2>Leitor Regular (de 6 a 10 livros)</h2>
-            <div id="leitoresRegulares" class="lista-leitores"></div>
-        </section>
+                <div id="textoClassificacao">
+                    <h2 id="tituloClassificacao">CARREGANDO...</h2>
+                    <p id="descricaoClassificacao">Aguarde enquanto carregamos sua classificação</p>
+                </div>
+                <div id="nomeAluno">
+                    <p id="nomeAlunoTexto">[NOME DO ALUNO]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,7 +1,5 @@
-// Configuração da API
 const API_BASE_URL = 'http://localhost:3000';
 
-// Variáveis globais
 let alunoLogado = null;
 
 // Inicialização da página
@@ -68,8 +66,8 @@ async function carregarLivros() {
         const disponiveis = await carregarExemplaresDisponiveis();
         exibirLivrosDisponiveis(disponiveis);
         
-        // Carregar empréstimos ativos do aluno
-        const emprestados = await carregarEmprestadosAluno();
+        // CORREÇÃO: Carregar TODOS os empréstimos ativos do sistema
+        const emprestados = await carregarTodosEmprestimosAtivos();
         exibirLivrosEmprestados(emprestados);
         
     } catch (error) {
@@ -96,10 +94,10 @@ async function carregarExemplaresDisponiveis() {
     }
 }
 
-// Carregar empréstimos ativos do aluno
-async function carregarEmprestadosAluno() {
+// CORREÇÃO: Carregar TODOS os empréstimos ativos do sistema
+async function carregarTodosEmprestimosAtivos() {
     try {
-        const response = await fetch(`${API_BASE_URL}/emprestimos/aluno/${alunoLogado.ra}/ativos`);
+        const response = await fetch(`${API_BASE_URL}/emprestimos/ativos`);
         
         if (!response.ok) {
             throw new Error(`Erro HTTP: ${response.status}`);
@@ -109,7 +107,7 @@ async function carregarEmprestadosAluno() {
         return data.success ? data.data : [];
         
     } catch (error) {
-        console.error('Erro ao carregar empréstimos:', error);
+        console.error('Erro ao carregar todos os empréstimos ativos:', error);
         return [];
     }
 }
@@ -141,12 +139,12 @@ function exibirLivrosDisponiveis(livros) {
     container.innerHTML = html;
 }
 
-// Exibir livros emprestados
+// CORREÇÃO: Exibir TODOS os livros emprestados do sistema
 function exibirLivrosEmprestados(emprestimos) {
     const container = document.getElementById('livrosEmprestados');
     
     if (!emprestimos || emprestimos.length === 0) {
-        container.innerHTML = '<div class="mensagem-vazia">Você não possui livros emprestados</div>';
+        container.innerHTML = '<div class="mensagem-vazia">Nenhum livro emprestado no momento</div>';
         return;
     }
     
@@ -154,12 +152,19 @@ function exibirLivrosEmprestados(emprestimos) {
     emprestimos.forEach((emprestimo, index) => {
         const classeFundo = index % 2 === 0 ? 'fundoCinza' : 'fundoBranco';
         
+        const isMeuEmprestimo = emprestimo.ra_aluno === alunoLogado.ra;
+        const destaque = isMeuEmprestimo ? 'style="font-weight: bold; color: #1c4cff;"' : '';
+        
         html += `
             <div class="linhaLivro ${classeFundo} livro-emprestado">
                 <div class="info-livro">
-                    <div class="titulo-livro">${emprestimo.livro_titulo || 'Título não disponível'}</div>
+                    <div class="titulo-livro" ${destaque}>${emprestimo.livro_titulo || 'Título não disponível'}</div>
                     <div class="autor-livro">${emprestimo.autor || 'Autor não disponível'}</div>
                     <div class="exemplar-info">Exemplar #${emprestimo.exemplar_id}</div>
+                    <div class="exemplar-info" style="font-size: 10px; color: #6c757d;">
+                        Emprestado para: ${emprestimo.aluno_nome || 'Aluno não identificado'} 
+                        ${isMeuEmprestimo ? '<span style="color: #1c4cff;">(MEU EMPRÉSTIMO)</span>' : ''}
+                    </div>
                 </div>
             </div>
         `;
@@ -189,8 +194,8 @@ function iniciarAtualizacaoAutomatica() {
         if (alunoLogado) {
             carregarLivros();
         }
-    }, 30000);
+    }, 30000); // Alterado para 30 segundos
 }
 
 // Iniciar atualização automática (opcional)
-// iniciarAtualizacaoAutomatica();
+iniciarAtualizacaoAutomatica();

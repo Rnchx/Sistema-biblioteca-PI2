@@ -1,92 +1,338 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Zerar margens e fontes padrão */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Public Sans", sans-serif;
 }
 
 /* Faixa azul superior */
 #containerFaixaAzul {
-  background-color: #1c4cff;
-  padding: 10px;
+    background-color: #1c4cff;
+    padding: 1rem;
+    position: relative;
 }
 
 #textContainerFaixaAzul {
-  font-family: "Public Sans", sans-serif;
-  font-size: 0.7rem;
-  font-weight: bold;
-  margin-left: 5vw;
+    font-size: 10px;
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.7rem;
+    margin-left: 5vw;
+    color: whitesmoke;
+}
+
+/* Informações do aluno no header */
+.info-aluno-header {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.9rem;
+    background: rgba(255,255,255,0.1);
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 /* Container principal */
 #containerPrincipal {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px;
-  flex-direction: column;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
 }
 
 /* Logo e botão voltar */
 #containerLogoEBotaoVoltar {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 20px;
 }
 
-/* Título principal */
+#img {
+    margin-left: 10px;
+}
+
+/* ===== BOTÃO VOLTAR MODELO ===== */
+.container-botao-voltar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    margin: 2rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: fit-content;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container-botao-voltar:hover {
+    border-color: #1c4cff;
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(28, 76, 255, 0.15);
+}
+
+.botao-voltar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.icone-voltar {
+    color: #6c757d;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.texto-botao-voltar {
+    font-weight: 600;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.95rem;
+    color: #495057;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.container-botao-voltar:hover .icone-voltar {
+    color: #1c4cff;
+    transform: translateX(-2px);
+}
+
+.container-botao-voltar:hover .texto-botao-voltar {
+    color: #1c4cff;
+}
+
+/* Títulos */
 h1 {
-  text-align: center;
-  color: #000000;
+    text-align: center;
+    color: #000000;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-weight: 700;
 }
 
 h3 {
-  text-align: center;
-  margin-bottom: 65px;
-  color: #000000
+    text-align: center;
+    margin-bottom: 40px;
+    color: #000000;
+    font-size: 1.2rem;
+    font-weight: normal;
 }
 
-/* Botão voltar */
-#botaoVoltarPagina {
+/* Container de classificação */
+#containerClassificacao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+}
+
+/* Badge do leitor - ESTILO BASE SEM COR DE FUNDO */
+#badgeLeitor {
+    border-radius: 15px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    width: 100%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    /* REMOVI o background-color daqui */
+}
+
+#badgeLeitor:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+#iconeLeitor {
     background-color: white;
-    border: none;
-    cursor: pointer;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-#botaoVoltarPagina a {
-  text-decoration: none;
+#iconeLeitor i {
+    font-size: 3rem;
 }
 
-#botaoVoltarPagina a:hover {
-  text-decoration: none;
-  cursor: pointer;
+#textoClassificacao {
+    color: white;
+    flex: 1;
 }
 
-#textoBotaoVoltar {
-  font-family: "Public Sans", sans-serif;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: black;
-  text-decoration: none;
+#tituloClassificacao {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-#textoBotaoVoltar:hover {
-  color: #1c4cff;
+#descricaoClassificacao {
+    font-size: 1.1rem;
+    font-weight: normal;
+    opacity: 0.9;
 }
 
-section {
-  padding: 15px;
-  background-color: #1c4cff;
-  border-radius: 8px;
-  color:antiquewhite;
-  width: 700px;
-  margin: 0 auto;
-  margin-top: 15px;
-  margin-bottom: 15px;
-
+/* Nome do aluno */
+#nomeAluno {
+    text-align: center;
 }
 
-.lista-leitores p {
-  margin: 5px 0;
-  padding: 8px;
-  background-color: whitesmoke;
-  border-radius: 4px;
+#nomeAlunoTexto {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #000000;
+    background-color: #f8f9fa;
+    padding: 12px 35px;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e9ecef;
+}
+
+/* ===== CLASSES DE CLASSIFICAÇÃO - CORES FORTES E DISTINTAS ===== */
+
+/* LEITOR EXTREMO - Azul vibrante */
+.classificacao-extremo {
+    background: linear-gradient(135deg, #1c4cff 0%, #3a60ff 100%) !important;
+}
+
+.classificacao-extremo #iconeLeitor i {
+    color: #1c4cff !important;
+}
+
+/* LEITOR ATIVO - Verde vibrante */
+.classificacao-ativo {
+    background: linear-gradient(135deg, #28a745 0%, #34ce57 100%) !important;
+}
+
+.classificacao-ativo #iconeLeitor i {
+    color: #28a745 !important;
+}
+
+/* LEITOR REGULAR - Laranja vibrante */
+.classificacao-regular {
+    background: linear-gradient(135deg, #fd7e14 0%, #ff922b 100%) !important;
+}
+
+.classificacao-regular #iconeLeitor i {
+    color: #fd7e14 !important;
+}
+
+/* LEITOR INICIANTE - Cinza */
+.classificacao-iniciante {
+    background: linear-gradient(135deg, #6c757d 0%, #868e96 100%) !important;
+}
+
+.classificacao-iniciante #iconeLeitor i {
+    color: #6c757d !important;
+}
+
+/* ERRO - Vermelho */
+.classificacao-erro {
+    background: linear-gradient(135deg, #dc3545 0%, #e35d6a 100%) !important;
+}
+
+.classificacao-erro #iconeLeitor i {
+    color: #dc3545 !important;
+}
+
+/* Loading */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #1c4cff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    #containerPrincipal {
+        width: 95%;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+    
+    #badgeLeitor {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+        padding: 25px;
+    }
+    
+    #iconeLeitor {
+        width: 80px;
+        height: 80px;
+    }
+    
+    #iconeLeitor i {
+        font-size: 2.5rem;
+    }
+    
+    #tituloClassificacao {
+        font-size: 1.5rem;
+    }
+    
+    #descricaoClassificacao {
+        font-size: 1rem;
+    }
+    
+    #nomeAlunoTexto {
+        font-size: 1.1rem;
+        padding: 10px 25px;
+    }
+    
+    .info-aluno-header {
+        position: static;
+        margin-top: 10px;
+        text-align: center;
+        transform: none;
+    }
 }
