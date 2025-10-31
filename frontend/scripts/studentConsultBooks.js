@@ -152,7 +152,7 @@ function exibirLivrosEmprestados(emprestimos) {
     emprestimos.forEach((emprestimo, index) => {
         const classeFundo = index % 2 === 0 ? 'fundoCinza' : 'fundoBranco';
         
-        const isMeuEmprestimo = emprestimo.ra_aluno === alunoLogado.ra;
+        const isMeuEmprestimo = emprestimo.ra === alunoLogado.ra;
         const destaque = isMeuEmprestimo ? 'style="font-weight: bold; color: #1c4cff;"' : '';
         
         html += `
@@ -162,8 +162,7 @@ function exibirLivrosEmprestados(emprestimos) {
                     <div class="autor-livro">${emprestimo.autor || 'Autor não disponível'}</div>
                     <div class="exemplar-info">Exemplar #${emprestimo.exemplar_id}</div>
                     <div class="exemplar-info" style="font-size: 10px; color: #6c757d;">
-                        Emprestado para: ${emprestimo.aluno_nome || 'Aluno não identificado'} 
-                        ${isMeuEmprestimo ? '<span style="color: #1c4cff;">(MEU EMPRÉSTIMO)</span>' : ''}
+                        ${isMeuEmprestimo ? '<span style="color: #1c4cff; font-weight: bold">EMPRÉSTIMO FEITO POR VOCÊ</span>' : ''}
                     </div>
                 </div>
             </div>

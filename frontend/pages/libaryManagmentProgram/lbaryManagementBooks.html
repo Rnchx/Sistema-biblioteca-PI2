@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Livros - Bibliotecário</title>
+    <link rel="stylesheet" href="../../styles/libaryManagmentProgram/managementBooks.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../../scripts/managementBooks.js"></script>
+</head>
+<body>
+    <div id="containerFaixaAzul">
+        <p id="textContainerFaixaAzul">O O O</p>
+    </div>
+
+    <div id="containerPrincipal">
+        <div id="containerLogoEBotaoVoltar">
+            <img src="../../images/puc-campinas-logo-sem-fundo.png" alt="logo da puc campinas" width="234" height="111" id="img">
+
+            <a href="./libraryManager.html" class="container-botao-voltar">
+                <button class="botao-voltar">
+                    <i class="fas fa-arrow-left icone-voltar"></i>
+                    <p class="texto-botao-voltar">Voltar para Gerenciamento</p>
+                </button>
+            </a>
+        </div>
+
+        <div id="containerGerenciamento">
+            <h1>Gerenciamento de Livros</h1>
+            <br>
+            <h4>Biblioteca Digital PUC Campinas</h4>
+            <br>
+            <br>
+
+            <div id="containerBusca">
+                <input type="text" id="campoBusca" placeholder="Digite o nome do livro/código" class="input-busca">
+                <button id="botaoBusca" class="botao-busca">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div id="containerResultados">
+                <h2 id="tituloResultados">...</h2>
+                
+                <div id="containerTabelas">
+                    <div class="tabela-container">
+                        <h3 class="titulo-tabela">DISPONÍVEIS</h3>
+                        <div class="tabela-wrapper">
+                            <table class="tabela" id="tabelaDisponiveis">
+                                <thead>
+                                    <tr>
+                                        <th>Nome do Livro</th>
+                                        <th>Exemplares Disponíveis</th>
+                                        <th>Autor</th>
+                                        <th>Editora</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corpoTabelaDisponiveis">
+                                    <!-- Dados serão preenchidos via JavaScript -->
+                                </tbody>
+                            </table>
+                            <!-- Container do botão Carregar Mais para disponíveis -->
+                            <div id="containerCarregarMaisDisponiveis">
+                                <button id="botaoCarregarMaisDisponiveis" class="botao-carregar-mais">
+                                    <i class="fas fa-chevron-down"></i>
+                                    Carregar Mais Livros
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tabela-container">
+                        <h3 class="titulo-tabela">EMPRESTADOS</h3>
+                        <div class="tabela-wrapper">
+                            <table class="tabela" id="tabelaEmprestados">
+                                <thead>
+                                    <tr>
+                                        <th>Nome do Livro</th>
+                                        <th>Nome do Aluno</th>
+                                        <th>RA</th>
+                                        <th>Email</th>
+                                        <th>Telefone</th>
+                                        <th>Endereço</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corpoTabelaEmprestados">
+                                    <!-- Dados serão preenchidos via JavaScript -->
+                                </tbody>
+                            </table>
+                            <!-- Container do botão Carregar Mais para emprestados -->
+                            <div id="containerCarregarMaisEmprestados">
+                                <button id="botaoCarregarMaisEmprestados" class="botao-carregar-mais">
+                                    <i class="fas fa-chevron-down"></i>
+                                    Carregar Mais Empréstimos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -3,10 +3,10 @@ const { connection } = require('../database/connection');
 class Livro {
 
     static async criar(livro) {
-        const { titulo, autor } = livro;
+        const { titulo, isbn, autor, editora } = livro;
         const [result] = await connection.execute(
-            'INSERT INTO livro (titulo, autor) VALUES (?, ?)',
-            [titulo, autor]
+            'INSERT INTO livro (titulo, isbn, autor, editora) VALUES (?, ?, ?, ?)',
+            [titulo, isbn, autor, editora]
         );
         return result;
     }
@@ -68,16 +68,15 @@ class Livro {
     }
 
     static async atualizar(id, livro) {
-        const { titulo, autor } = livro;
+        const { titulo, isbn, autor, editora } = livro;
         const [result] = await connection.execute(
-            'UPDATE livro SET titulo = ?, autor = ? WHERE id = ?',
-            [titulo, autor, id]
+            'UPDATE livro SET titulo = ?, isbn = ?, autor = ?, editora = ? WHERE id = ?',
+            [titulo, isbn, autor, editora, id]
         );
         return result;
     }
 
     static async deletar(id) {
-
         await connection.execute('START TRANSACTION');
         
         try {

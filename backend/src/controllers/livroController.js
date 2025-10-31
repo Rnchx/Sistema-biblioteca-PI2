@@ -2,17 +2,17 @@ const Livro = require('../models/livro');
 
 exports.cadastrarLivro = async (req, res) => {
     try {
-        const { titulo, autor } = req.body;
+        const { titulo, isbn, autor, editora } = req.body;
 
-        // Validações corrigidas
-        if (!titulo || !autor) {
+        // Validações com todos os campos
+        if (!titulo || !isbn || !autor || !editora) {
             return res.status(400).json({
                 success: false,
-                error: 'Título e autor são obrigatórios'
+                error: 'Todos os campos são obrigatórios: título, ISBN, autor e editora'
             });
         }
 
-        const result = await Livro.criar({ titulo, autor });
+        const result = await Livro.criar({ titulo, isbn, autor, editora });
         
         res.status(201).json({
             success: true,
@@ -20,7 +20,9 @@ exports.cadastrarLivro = async (req, res) => {
             data: { 
                 id: result.insertId, 
                 titulo, 
-                autor
+                isbn,
+                autor,
+                editora
             }
         });
 
@@ -94,7 +96,7 @@ exports.listarTodosLivros = async (req, res) => {
         console.error('Erro ao listar todos os livros:', error);
         res.status(500).json({
             success: false,
-            error: 'Erro interno do servidor'
+                            error: 'Erro interno do servidor'
         });
     }
 };
@@ -147,7 +149,7 @@ exports.listarLivrosComExemplares = async (req, res) => {
 exports.atualizarLivro = async (req, res) => {
     try {
         const { id } = req.params;
-        const { titulo, autor } = req.body;
+        const { titulo, isbn, autor, editora } = req.body;
 
         // Verificar se livro existe
         const livroExistente = await Livro.buscarPorId(id);
@@ -158,15 +160,15 @@ exports.atualizarLivro = async (req, res) => {
             });
         }
 
-        // Validações
-        if (!titulo || !autor) {
+        // Validações com todos os campos
+        if (!titulo || !isbn || !autor || !editora) {
             return res.status(400).json({
                 success: false,
-                error: 'Título e autor são obrigatórios'
+                error: 'Todos os campos são obrigatórios: título, ISBN, autor e editora'
             });
         }
 
-        const result = await Livro.atualizar(id, { titulo, autor });
+        const result = await Livro.atualizar(id, { titulo, isbn, autor, editora });
 
         res.json({
             success: true,
@@ -174,7 +176,9 @@ exports.atualizarLivro = async (req, res) => {
             data: {
                 id: parseInt(id),
                 titulo,
-                autor
+                isbn,
+                autor,
+                editora
             }
         });
 
@@ -223,27 +227,6 @@ exports.excluirLivro = async (req, res) => {
         });
     }
 };
-
-
-// o metódo obterEstatiscas irá retornar uma estatísca geral do sistema da biblioteca, falar quantos livros tem, quantos livros tem pelo menos 1 exemplar, quantos
-// disponiveis, quantos emprestados e quantos extraviados.
-
-{/*
-    
-    Exemplo prático:
-    
-    "success": true,
-    "data": {
-        "total_livros": 15,           // Total de livros cadastrados
-        "livros_com_exemplares": 12,  // Quantos livros têm pelo menos 1 exemplar
-        "resumo_exemplares": {
-            "total": 45,              // Total de exemplares no sistema
-            "disponiveis": 28,        // Exemplares disponíveis para empréstimo
-            "emprestados": 15,        // Exemplares atualmente emprestados
-            "extraviados": 2          // Exemplares marcados como extraviados
-    
-    
-    */}
 
 exports.obterEstatisticas = async (req, res) => {
     try {

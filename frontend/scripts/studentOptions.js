@@ -88,7 +88,7 @@ function mostrarPopupLogout() {
     container.className = 'popup-container popup-warning';
     icon.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
     title.textContent = 'Confirmar Saída';
-    message.textContent = 'Deseja realmente sair do sistema?';
+    message.textContent = 'Deseja realmente deslogar da sua conta?';
     
     // Remover event listeners anteriores para evitar duplicação
     const newCancelButton = cancelButton.cloneNode(true);

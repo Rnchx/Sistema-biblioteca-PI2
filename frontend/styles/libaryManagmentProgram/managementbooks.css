@@ -1,84 +1,373 @@
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap');
+/* managementBooks.css */
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
-body {
-  font-family: "Public Sans", sans-serif;
-  margin: 0;
-  background-color: #fff;
+* {
+    margin: 0%;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: "Public Sans", sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
 
 #containerFaixaAzul {
-  background-color: #1c4cff;
-  padding: 10px;
+    background-color: #1c4cff;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 #textContainerFaixaAzul {
-  color: white;
-  font-weight: bold;
-  margin-left: 2vw;
+    font-size: 10px;
+    font-weight: bold;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.7rem;
+    margin-left: 5vw;
+    color: whitesmoke;
 }
 
-#containerLogoPuc {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 2rem;
-  margin-top: 1rem;
+/* Container Principal */
+#containerPrincipal {
+    display: flex;
+    min-height: calc(100vh - 60px);
 }
 
-#containerLogoPuc img {
-  width: 234px;
-  height: auto;
-  display: block;
+/* Container Logo e Botão Voltar */
+#containerLogoEBotaoVoltar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    min-width: 300px;
 }
 
-#containerBotaoVoltar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 0.5rem;
+#img {
+    margin: 1rem 0 2rem 0;
+    border-radius: 8px;
 }
 
-#containerBotaoVoltar i {
-  color: black;
-  font-size: 16px;
+/* Container do Gerenciamento */
+#containerGerenciamento {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 50%);
 }
 
-#botaoVoltarPagina {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
+h1 {
+    font-family: "Public Sans", sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: center;
 }
 
-#botaoVoltarPagina a {
-  text-decoration: none;
+h2 {
+    font-family: "Public Sans", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
 }
 
-#textoBotaoVoltar {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: black;
+h3 {
+    font-family: "Public Sans", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
 }
 
-#textoBotaoVoltar:hover {
-  color: #1c4cff;
+h4 {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 400;
+    color: #666;
+    text-align: center;
+}
+
+/* Container de Busca */
+#containerBusca {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    margin: 1rem 0 2rem 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 2px solid #e9ecef;
+}
+
+.input-busca {
+    flex: 1;
+    height: 50px;
+    padding: 12px 20px;
+    border: none;
+    font-family: "Public Sans", sans-serif;
+    font-size: 1rem;
+    background: #fafbfc;
+    outline: none;
+}
+
+.input-busca:focus {
+    background: white;
+}
+
+.botao-busca {
+    width: 60px;
+    background: linear-gradient(135deg, #1c4cff 0%, #003ce0 100%);
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.botao-busca:hover {
+    background: linear-gradient(135deg, #003ce0 0%, #002bb3 100%);
+}
+
+/* Container de Resultados */
+#containerResultados {
+    width: 100%;
+    max-width: 1200px;
+}
+
+#tituloResultados {
+    text-align: center;
+    color: #1c4cff;
+    margin-bottom: 2rem;
+}
+
+/* Container das Tabelas */
+#containerTabelas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+.tabela-container {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eaeaea;
+}
+
+.titulo-tabela {
+    background: #1c4cff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.tabela-wrapper {
+    overflow-x: auto;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.tabela th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #e9ecef;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.tabela td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+}
+
+.tabela tbody tr:hover {
+    background-color: #f8f9ff;
+}
+
+.tabela tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Botão Voltar */
+.container-botao-voltar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: fit-content;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container-botao-voltar:hover {
+    border-color: #1c4cff;
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(28, 76, 255, 0.15);
+}
+
+.botao-voltar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.icone-voltar {
+    color: #6c757d;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.texto-botao-voltar {
+    font-weight: 600;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.95rem;
+    color: #495057;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.container-botao-voltar:hover .icone-voltar {
+    color: #1c4cff;
+    transform: translateX(-2px);
+}
+
+.container-botao-voltar:hover .texto-botao-voltar {
+    color: #1c4cff;
+}
+
+/* Mensagem de carregamento e vazio */
+.mensagem-vazia {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #1c4cff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    #containerPrincipal {
+        flex-direction: column;
+    }
+    
+    #containerLogoEBotaoVoltar {
+        min-width: auto;
+        padding: 1.5rem;
+    }
+    
+    #containerGerenciamento {
+        padding: 1.5rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .tabela-container {
+        padding: 1rem;
+    }
+    
+    .container-botao-voltar {
+        margin: 1rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .tabela-container {
+        padding: 0.5rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
 }
 
 
-table {
-  width: 80%;
-  border-collapse: collapse;
-  margin: 30px auto;
+/* Container do botão Carregar Mais */
+.container-carregar-mais {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
 }
 
-th {
-  background-color: #1c4cff;
-  color: white;
-  padding: 10px;
+.botao-carregar-mais {
+    background: linear-gradient(135deg, #1c4cff 0%, #003ce0 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(28, 76, 255, 0.3);
 }
 
-td {
-  border: 1px solid #ccc;
-  padding: 8px;
+.botao-carregar-mais:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(28, 76, 255, 0.4);
+    background: linear-gradient(135deg, #003ce0 0%, #002bb3 100%);
+}
+
+.botao-carregar-mais:active {
+    transform: translateY(0);
+}
+
+.botao-carregar-mais:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }

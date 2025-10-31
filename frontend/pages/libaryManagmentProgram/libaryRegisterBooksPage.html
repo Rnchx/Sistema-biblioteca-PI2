@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Livros - Bibliotecário</title>
+    <link rel="stylesheet" href="../../styles/libaryManagmentProgram/libaryRegisterBooks.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../../scripts/libaryRegisterBooks.js"></script>
+</head>
+<body>
+    <div id="containerFaixaAzul">
+        <p id="textContainerFaixaAzul">O O O</p>
+    </div>
+
+    <div id="containerPrincipal">
+        <div id="containerLogoEBotaoVoltar">
+            <img src="../../images/puc-campinas-logo-sem-fundo.png" alt="logo da puc campinas" width="234" height="111" id="img">
+
+            <a href="./libraryManager.html" class="container-botao-voltar">
+                <button class="botao-voltar">
+                    <i class="fas fa-arrow-left icone-voltar"></i>
+                    <p class="texto-botao-voltar">Voltar para Gerenciamento</p>
+                </button>
+            </a>
+        </div>
+
+        <div id="containerFormulario">
+            <h1>Cadastrar Livro</h1>
+            <br>
+            <h4>Biblioteca Digital PUC Campinas</h4>
+            <br>
+            <br>
+
+            <div id="containerLabelsInputs">
+                <label class="labelsFormulario" for="titulo">TÍTULO DO LIVRO</label>
+                <input class="inputsFormulario" id="titulo" placeholder="Dom Casmurro (exemplo)" type="text" required>
+
+                <label class="labelsFormulario" for="isbn">ISBN</label>
+                <input class="inputsFormulario" id="isbn" placeholder="978-85-12345-67-8 (exemplo)" type="text" required>
+
+                <label class="labelsFormulario" for="autor">AUTOR</label>
+                <input class="inputsFormulario" id="autor" placeholder="Machado de Assis (exemplo)" type="text" required>
+
+                <label class="labelsFormulario" for="editora">EDITORA</label>
+                <input class="inputsFormulario" id="editora" placeholder="Editora Globo (exemplo)" type="text" required>
+
+                <label class="labelsFormulario" for="quantidade">QUANTIDADE DE EXEMPLARES</label>
+                <input class="inputsFormulario" id="quantidade" placeholder="3 (exemplo)" type="number" min="1" max="10" value="1" required>
+                <br>
+                <br>
+
+                <div id="containerBotao">
+                    <button id="botaoFormulario">CADASTRAR LIVRO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
