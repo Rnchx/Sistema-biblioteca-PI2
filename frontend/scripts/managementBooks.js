@@ -426,7 +426,7 @@ async function realizarBusca() {
         resetarPaginacaoEmprestimos();
         exibirProximosDisponiveis();
         exibirProximosEmprestimos();
-        document.getElementById('tituloResultados').textContent = 'LIVROS DISPONÍVEIS';
+        document.getElementById('tituloResultados').textContent = 'Busque o livro que desejar';
         return;
     }
     

@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Public Sans", sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+#containerFaixaAzul {
+  background-color: #1c4cff;
+  padding: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#textContainerFaixaAzul {
+  font-size: 10px;
+  font-weight: bold;
+  font-family: "Public Sans", sans-serif;
+  font-size: 0.7rem;
+  margin-left: 5vw;
+  color: whitesmoke;
+}
+
+/* Container Principal */
+#containerPrincipal {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+/* Container Logo e Botão Voltar */
+#containerLogoEBotaoVoltar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  min-width: 300px;
+}
+
+#img {
+  margin: 1rem 0 2rem 0;
+  border-radius: 8px;
+}
+
+/* Container da Classificação */
+#containerClassificacao {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 50%);
+}
+
+h1 {
+  font-family: "Public Sans", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+h4 {
+  font-family: "Public Sans", sans-serif;
+  font-weight: 400;
+  color: #666;
+  text-align: center;
+}
+
+#subtitulo {
+  font-family: "Public Sans", sans-serif;
+  font-size: 1.1rem;
+  color: #1c4cff;
+  font-weight: 600;
+  text-align: center;
+  background: rgba(28, 76, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+/* Container das Categorias */
+#containerCategorias {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.categoria-leitor {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid #eaeaea;
+  overflow: hidden;
+}
+
+.titulo-categoria {
+  padding: 1.2rem 2rem;
+  font-family: "Public Sans", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin: 0;
+}
+
+.leitor-extremo {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+.leitor-ativo {
+  background: linear-gradient(135deg, #1c4cff 0%, #003ce0 100%);
+}
+
+.leitor-regular {
+  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+}
+
+.leitor-iniciante {
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+}
+
+.container-lista {
+  padding: 1.5rem 2rem;
+}
+
+.lista-leitores {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.lista-leitores li {
+  background: #f8f9fa;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+  font-family: "Public Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lista-leitores li:hover {
+  background: #f8f9ff;
+  border-color: #1c4cff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(28, 76, 255, 0.15);
+}
+
+.lista-leitores li .quantidade-livros {
+  background: #1c4cff;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Botão Ver Mais */
+#containerVerMais {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.botao-ver-mais {
+  background: linear-gradient(135deg, #1c4cff 0%, #003ce0 100%);
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  border-radius: 10px;
+  font-family: "Public Sans", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(28, 76, 255, 0.3);
+}
+
+.botao-ver-mais:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(28, 76, 255, 0.4);
+  background: linear-gradient(135deg, #003ce0 0%, #002bb3 100%);
+}
+
+.botao-ver-mais:active {
+  transform: translateY(0);
+}
+
+/* Botão Voltar */
+.container-botao-voltar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  background: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: fit-content;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container-botao-voltar:hover {
+  border-color: #1c4cff;
+  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(28, 76, 255, 0.15);
+}
+
+.botao-voltar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.icone-voltar {
+  color: #6c757d;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.texto-botao-voltar {
+  font-weight: 600;
+  font-family: "Public Sans", sans-serif;
+  font-size: 0.95rem;
+  color: #495057;
+  margin: 0;
+  transition: all 0.3s ease;
+}
+
+.container-botao-voltar:hover .icone-voltar {
+  color: #1c4cff;
+  transform: translateX(-2px);
+}
+
+.container-botao-voltar:hover .texto-botao-voltar {
+  color: #1c4cff;
+}
+
+/* Mensagens de estado */
+.mensagem-vazia {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #1c4cff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  #containerPrincipal {
+    flex-direction: column;
+  }
+  
+  #containerLogoEBotaoVoltar {
+    min-width: auto;
+    padding: 1.5rem;
+  }
+  
+  #containerClassificacao {
+    padding: 1.5rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .container-lista {
+    padding: 1rem;
+  }
+  
+  .titulo-categoria {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .lista-leitores li {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  .container-lista {
+    padding: 0.8rem;
+  }
+  
+  .titulo-categoria {
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+  }
+  
+  .lista-leitores li {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  .botao-ver-mais {
+    padding: 12px 25px;
+    font-size: 0.9rem;
+  }
+}

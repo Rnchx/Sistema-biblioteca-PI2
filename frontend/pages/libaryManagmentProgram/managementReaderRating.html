@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classificação Geral dos Leitores</title>
-    <link rel="stylesheet" href="../../styles/libaryManagmentProgram/classificationbooks.css">
+    <title>Classificação Geral dos Leitores - Bibliotecário</title>
+    <link rel="stylesheet" href="../../styles/libaryManagmentProgram/libaryManagementReaderRating.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../../scripts/libaryManagementReaderRating.js"></script>
 </head>
 
 <body>
@@ -12,51 +14,72 @@
         <p id="textContainerFaixaAzul">O O O</p>
     </div>
 
-    <div id="containerTopo">
-        <div id="containerLogoPuc">
-            <img src="../../images/puc-campinas-logo.jpg" alt="Logo da PUC-Campinas">
+    <div id="containerPrincipal">
+        <div id="containerLogoEBotaoVoltar">
+            <img src="../../images/puc-campinas-logo-sem-fundo.png" alt="logo da puc campinas" width="234" height="111" id="img">
+
+            <a href="../libaryManagmentProgram/libraryManager.html" class="container-botao-voltar">
+                <button class="botao-voltar">
+                    <i class="fas fa-arrow-left icone-voltar"></i>
+                    <p class="texto-botao-voltar">Voltar para Gerenciamento</p>
+                </button>
+            </a>
         </div>
 
-        <div id="voltar">
-            <a href="../libaryManagmentProgram/Management.html" id="botaoVoltar">← VOLTAR</a>
+        <div id="containerClassificacao">
+            <h1>Classificação Geral dos Leitores</h1>
+            <br>
+            <h4>Biblioteca Digital PUC Campinas</h4>
+            <br>
+            <p id="subtitulo">Período: últimos 6 meses</p>
+            <br>
+            <br>
+
+            <div id="containerCategorias">
+                <section class="categoria-leitor">
+                    <h2 class="titulo-categoria leitor-extremo">LEITOR EXTREMO — MAIS DE 20 LIVROS</h2>
+                    <div class="container-lista">
+                        <ul id="listaExtremo" class="lista-leitores">
+                            <!-- Dados serão preenchidos via JavaScript -->
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="categoria-leitor">
+                    <h2 class="titulo-categoria leitor-ativo">LEITOR ATIVO — DE 11 A 20 LIVROS</h2>
+                    <div class="container-lista">
+                        <ul id="listaAtivo" class="lista-leitores">
+                            <!-- Dados serão preenchidos via JavaScript -->
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="categoria-leitor">
+                    <h2 class="titulo-categoria leitor-regular">LEITOR REGULAR — DE 6 A 10 LIVROS</h2>
+                    <div class="container-lista">
+                        <ul id="listaRegular" class="lista-leitores">
+                            <!-- Dados serão preenchidos via JavaScript -->
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="categoria-leitor">
+                    <h2 class="titulo-categoria leitor-iniciante">LEITOR INICIANTE — ATÉ 5 LIVROS</h2>
+                    <div class="container-lista">
+                        <ul id="listaIniciante" class="lista-leitores">
+                            <!-- Dados serão preenchidos via JavaScript -->
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <div id="containerVerMais">
+                <button id="botaoVerMais" class="botao-ver-mais">
+                    <i class="fas fa-chevron-down"></i>
+                    Ver Mais Leitores
+                </button>
+            </div>
         </div>
     </div>
-
-    <main>
-        <h1>Classificação geral dos leitores</h1>
-        <p id="subtitulo">últimos 6 meses</p>
-
-        <section class="classificacao">
-            <h2>LEITOR EXTREMO — MAIS DE 20 LIVROS</h2>
-            <ul>
-                <li>[nome do leitor]</li>
-                <li>[nome do leitor]</li>
-                <li>[nome do leitor]</li>
-            </ul>
-        </section>
-
-        <section class="classificacao">
-            <h2>LEITOR ATIVO — DE 11 A 20 LIVROS</h2>
-            <ul>
-                <li>[nome do leitor]</li>
-                <li>[nome do leitor]</li>
-                <li>[nome do leitor]</li>
-            </ul>
-        </section>
-
-        <section class="classificacao">
-            <h2>LEITOR REGULAR — DE 6 A 10 LIVROS</h2>
-            <ul>
-                <li>[nome do leitor]</li>
-            </ul>
-        </section>
-
-        <div id="verMais">
-            <a href="#">ver mais ></a>
-        </div>
-    </main>
-        
-    <script src="../../scripts/classification.js"></script>
-    
 </body>
 </html>
