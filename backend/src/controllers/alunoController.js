@@ -4,13 +4,14 @@ exports.cadastrarAluno = async (req, res) => {
     try {
         const { nome, ra, cpf, email, telefone, endereco } = req.body;
 
-        if (!nome || !ra || !cpf) {
+        if (!nome || !ra || !cpf || !email) {
             return res.status(400).json({ 
                 success: false,
-                error: 'Nome, RA e CPF são obrigatórios' 
+                error: 'Nome, RA, CPF e Email são obrigatórios' 
             });
         }
 
+        // Verificar RA
         const alunoExistenteRA = await Aluno.buscarPorRa(ra);
         if (alunoExistenteRA) {
             return res.status(400).json({
@@ -19,12 +20,32 @@ exports.cadastrarAluno = async (req, res) => {
             });
         }
 
+        // Verificar CPF
         const alunoExistenteCPF = await Aluno.buscarPorCpf(cpf);
         if (alunoExistenteCPF) {
             return res.status(400).json({
                 success: false,
                 error: 'CPF já cadastrado'
             });
+        }
+
+        // Verificar Email
+        const alunoExistenteEmail = await Aluno.buscarPorEmail(email);
+        if (alunoExistenteEmail) {
+            return res.status(400).json({
+                success: false,
+                error: 'Email já cadastrado'
+            });
+        }
+
+        if (telefone) {
+            const alunoExistenteTelefone = await Aluno.buscarPorTelefone(telefone);
+            if (alunoExistenteTelefone) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Telefone já cadastrado'
+                });
+            }
         }
 
         const result = await Aluno.criar({ 
@@ -165,8 +186,8 @@ exports.atualizarAluno = async (req, res) => {
             });
         }
 
-        const result = await Aluno.atualizar(id, { 
-            nome, email, telefone, endereco 
+        const result = await Aluno.atualizar(id, {
+            nome, email, telefone, endereco
         });
 
         if (result.affectedRows === 0) {
@@ -245,6 +266,87 @@ exports.buscarAlunoPorTelefone = async (req, res) => {
 
     } catch (error) {
         console.error('Erro ao buscar aluno por telefone:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Erro interno do servidor'
+        });
+    }
+};
+
+exports.verificarRaExistente = async (req, res) => {
+    try {
+        const { ra } = req.params;
+
+        const aluno = await Aluno.buscarPorRa(ra);
+
+        res.json({
+            success: true,
+            existe: !!aluno
+        });
+
+    } catch (error) {
+        console.error('Erro ao verificar RA:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Erro interno do servidor'
+        });
+    }
+};
+
+exports.verificarCpfExistente = async (req, res) => {
+    try {
+        const { cpf } = req.params;
+
+        const aluno = await Aluno.buscarPorCpf(cpf);
+
+        res.json({
+            success: true,
+            existe: !!aluno
+        });
+
+    } catch (error) {
+        console.error('Erro ao verificar CPF:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Erro interno do servidor'
+        });
+    }
+};
+
+exports.verificarTelefoneExistente = async (req, res) => {
+    try {
+        const { telefone } = req.params;
+
+        const aluno = await Aluno.buscarPorTelefone(telefone);
+
+        res.json({
+            success: true,
+            existe: !!aluno
+        });
+
+    } catch (error) {
+        console.error('Erro ao verificar telefone:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Erro interno do servidor'
+        });
+    }
+};
+
+exports.verificarEmailExistente = async (req, res) => {
+    try {
+        const { email } = req.params;
+
+        // Você precisa adicionar este método no model Aluno
+        const aluno = await Aluno.buscarPorEmail(email);
+
+        res.json({
+            success: true,
+            existe: !!aluno
+        });
+
+    } catch (error) {
+        console.error('Erro ao verificar email:', error);
         res.status(500).json({
             success: false,
             error: 'Erro interno do servidor'

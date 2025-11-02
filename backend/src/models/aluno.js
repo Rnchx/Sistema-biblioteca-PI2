@@ -42,6 +42,14 @@ class Aluno {
         return rows[0];
     }
 
+    static async buscarPorEmail(email) {
+    const [rows] = await connection.execute(
+        'SELECT * FROM aluno WHERE email = ?',
+        [email]
+    );
+    return rows[0];
+}
+
     static async buscarPorTelefone(telefone) {
         const [rows] = await connection.execute(
             'SELECT * FROM aluno WHERE telefone = ?',

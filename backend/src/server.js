@@ -69,6 +69,10 @@ app.get('/alunos/ra/:ra', alunoController.buscarAlunoPorRa);
 app.get('/alunos/:id', alunoController.buscarAlunoPorId);
 app.get('/alunos/cpf/:cpf', alunoController.buscarAlunoPorCpf);
 app.get('/alunos/telefone/:telefone', alunoController.buscarAlunoPorTelefone);
+app.get('/alunos/verificar-ra/:ra', alunoController.verificarRaExistente);
+app.get('/alunos/verificar-cpf/:cpf', alunoController.verificarCpfExistente);
+app.get('/alunos/verificar-telefone/:telefone', alunoController.verificarTelefoneExistente);
+app.get('/alunos/verificar-email/:email', alunoController.verificarEmailExistente);
 app.put('/alunos/:id', alunoController.atualizarAluno);
 app.delete('/alunos/:id', alunoController.excluirAluno);
 
