@@ -1,35 +1,23 @@
-// libaryManagementReaderRating.js
-// Configuração da API
+// libaryManagementReaderRating.js - VERSÃO CORRIGIDA
 const API_BASE_URL = 'http://localhost:3000';
 
 // Elementos do DOM
 let botaoVerMais;
 let listaExtremo, listaAtivo, listaRegular, listaIniciante;
 
-// Variáveis para controle da paginação
+// Variáveis para controle
 let limiteLeitores = 10;
 let leitoresExtremo = [];
 let leitoresAtivo = [];
 let leitoresRegular = [];
 let leitoresIniciante = [];
 
-// Inicialização da página
+// Inicialização
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🏆 Página de classificação de leitores carregada');
     inicializarElementos();
     configurarEventos();
-    
-    // Primeiro tenta a API normal
     carregarClassificacao();
-    
-    // Depois de 3 segundos, se não carregou, usa dados reais
-    setTimeout(() => {
-        if (leitoresIniciante.length === 0 || 
-            (leitoresIniciante.length > 0 && leitoresIniciante[0].nome === 'Leitor Anônimo' && leitoresIniciante[0].quantidade_livros === 0)) {
-            console.log('🔄 Carregando dados reais como fallback...');
-            carregarDadosReais();
-        }
-    }, 3000);
 });
 
 function inicializarElementos() {
@@ -42,9 +30,7 @@ function inicializarElementos() {
 
 function configurarEventos() {
     if (botaoVerMais) {
-        botaoVerMais.addEventListener('click', function() {
-            carregarMaisLeitores();
-        });
+        botaoVerMais.addEventListener('click', carregarMaisLeitores);
     }
 }
 
@@ -52,81 +38,64 @@ function configurarEventos() {
 async function carregarClassificacao() {
     try {
         console.log('🔄 Carregando classificação geral...');
-        
-        // Mostrar loading
         mostrarLoading();
         
-        // Carregar classificação geral da API
         const response = await fetch(`${API_BASE_URL}/classificacao/geral`);
-        if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
         
         const data = await response.json();
         console.log('📊 Resposta COMPLETA da API:', data);
-        console.log('📊 Tipo da resposta:', typeof data);
-        console.log('📊 É array?', Array.isArray(data));
         
-        // Log detalhado da estrutura
-        if (Array.isArray(data)) {
-            console.log('📊 Primeiro elemento do array:', data[0]);
-            console.log('📊 Quantidade de elementos:', data.length);
-        } else if (data && typeof data === 'object') {
-            console.log('📊 Chaves do objeto:', Object.keys(data));
-            if (data.data) {
-                console.log('📊 Data é array?', Array.isArray(data.data));
-                console.log('📊 Primeiro elemento de data:', data.data && data.data[0]);
-            }
-        }
-        
-        // Processar os dados da classificação
         processarDadosClassificacao(data);
-        
-        // Exibir TODOS os leitores de cada categoria
-        exibirTodosLeitores();
-        
-        // Atualizar botão Ver Mais
-        atualizarBotaoVerMais();
         
     } catch (error) {
         console.error('❌ Erro ao carregar classificação:', error);
         mostrarMensagemErro('Erro ao carregar a classificação. Tente novamente.');
-        
-        // Carregar dados reais como fallback
-        console.log('🔄 Carregando dados reais como fallback...');
-        carregarDadosReais();
     }
 }
 
-// Processar dados da classificação
+// Processar dados da classificação - CORRIGIDO
 function processarDadosClassificacao(data) {
-    // Extrair array de classificação da resposta
     const classificacao = extrairDadosClassificacao(data);
     
     console.log('📋 Dados brutos da classificação:', classificacao);
     
-    // Limpar arrays anteriores
+    // Limpar arrays
     leitoresExtremo = [];
     leitoresAtivo = [];
     leitoresRegular = [];
     leitoresIniciante = [];
     
-    // Classificar leitores por categoria
-    classificacao.forEach(leitor => {
-        const quantidadeLivros = leitor.quantidade_livros || leitor.total_livros || leitor.livros_lidos || leitor.livros || 0;
-        const nome = leitor.nome || leitor.aluno_nome || leitor.nome_aluno || leitor.aluno || `Aluno ${leitor.id || leitor.idAluno}` || 'Leitor Anônimo';
-        const ra = leitor.ra || leitor.ra_aluno || '';
+    // Processar cada aluno
+    classificacao.forEach(item => {
+        const aluno = item.aluno || {};
+        const classificacaoInfo = item.classificacao || {};
         
-        console.log(`📖 Leitor: ${nome}, Livros: ${quantidadeLivros}, RA: ${ra}`);
+        const nome = aluno.nome || 'Leitor Anônimo';
+        const ra = aluno.ra || '';
+        const tipo = classificacaoInfo.tipo || '';
         
-        if (quantidadeLivros > 20) {
-            leitoresExtremo.push({...leitor, nome, quantidade_livros: quantidadeLivros, ra});
-        } else if (quantidadeLivros >= 11) {
-            leitoresAtivo.push({...leitor, nome, quantidade_livros: quantidadeLivros, ra});
-        } else if (quantidadeLivros >= 6) {
-            leitoresRegular.push({...leitor, nome, quantidade_livros: quantidadeLivros, ra});
+        // ⚠️ IMPORTANTE: Usar totalLivros REAL do backend, não estimar!
+        const totalLivros = classificacaoInfo.totalLivros || 0;
+        
+        console.log(`📖 Processando: ${nome}, Tipo: ${tipo}, Livros REAL: ${totalLivros}, RA: ${ra}`);
+        
+        const leitor = {
+            nome,
+            ra,
+            tipo,
+            quantidade_livros: totalLivros // Usar o valor REAL
+        };
+        
+        // Classificar pelo tipo CORRETO
+        if (tipo === 'EXTREMO') {
+            leitoresExtremo.push(leitor);
+        } else if (tipo === 'ATIVO') {
+            leitoresAtivo.push(leitor);
+        } else if (tipo === 'REGULAR') {
+            leitoresRegular.push(leitor);
         } else {
-            leitoresIniciante.push({...leitor, nome, quantidade_livros: quantidadeLivros, ra});
+            leitoresIniciante.push(leitor);
         }
     });
     
@@ -134,57 +103,37 @@ function processarDadosClassificacao(data) {
     console.log('📈 Leitores Ativo:', leitoresAtivo);
     console.log('📈 Leitores Regular:', leitoresRegular);
     console.log('📈 Leitores Iniciante:', leitoresIniciante);
-}
-
-// Extrair dados da classificação da resposta da API
-function extrairDadosClassificacao(data) {
-    console.log('🔍 Extraindo dados da estrutura:', data);
     
-    if (Array.isArray(data)) {
-        console.log('✅ Dados são um array diretamente');
-        return data;
-    } else if (data && Array.isArray(data.data)) {
-        console.log('✅ Dados estão em data.array');
+    exibirTodosLeitores();
+    atualizarBotaoVerMais();
+}
+
+function extrairDadosClassificacao(data) {
+    if (data && data.success && Array.isArray(data.data)) {
         return data.data;
-    } else if (data && Array.isArray(data.classificacao)) {
-        console.log('✅ Dados estão em data.classificacao');
-        return data.classificacao;
-    } else if (data && Array.isArray(data.leitores)) {
-        console.log('✅ Dados estão em data.leitores');
-        return data.leitores;
-    } else if (data && Array.isArray(data.results)) {
-        console.log('✅ Dados estão em data.results');
-        return data.results;
-    } else if (data && typeof data === 'object') {
-        console.log('⚠️ Estrutura inesperada, tentando converter objeto para array');
-        // Tentar converter objeto para array
-        const array = Object.values(data);
-        console.log('🔍 Array convertido:', array);
-        return array;
-    } else {
-        console.warn('⚠️ Estrutura de classificação inesperada:', data);
-        return [];
     }
+    return [];
 }
 
-// Exibir TODOS os leitores de cada categoria
 function exibirTodosLeitores() {
-    exibirLeitoresCategoria(listaExtremo, leitoresExtremo, 'leitor-extremo');
-    exibirLeitoresCategoria(listaAtivo, leitoresAtivo, 'leitor-ativo');
-    exibirLeitoresCategoria(listaRegular, leitoresRegular, 'leitor-regular');
-    exibirLeitoresCategoria(listaIniciante, leitoresIniciante, 'leitor-iniciante');
+    console.log('🎯 Exibindo leitores...');
+    exibirLeitoresCategoria(listaExtremo, leitoresExtremo);
+    exibirLeitoresCategoria(listaAtivo, leitoresAtivo);
+    exibirLeitoresCategoria(listaRegular, leitoresRegular);
+    exibirLeitoresCategoria(listaIniciante, leitoresIniciante);
 }
 
-// Exibir leitores de uma categoria específica
-function exibirLeitoresCategoria(elementoLista, leitores, tipoCategoria) {
+// Exibir leitores - CORREÇÃO DA FORMATAÇÃO
+function exibirLeitoresCategoria(elementoLista, leitores) {
     if (!elementoLista) return;
     
     elementoLista.innerHTML = '';
     
     if (!Array.isArray(leitores) || leitores.length === 0) {
-        elementoLista.innerHTML = `
-            <li class="mensagem-vazia">Nenhum leitor nesta categoria</li>
-        `;
+        const mensagemItem = document.createElement('li');
+        mensagemItem.className = 'mensagem-vazia';
+        mensagemItem.textContent = 'Nenhum leitor nesta categoria';
+        elementoLista.appendChild(mensagemItem);
         return;
     }
     
@@ -194,46 +143,49 @@ function exibirLeitoresCategoria(elementoLista, leitores, tipoCategoria) {
         const ra = leitor.ra || '';
         
         const item = document.createElement('li');
-        item.innerHTML = `
-            <span class="nome-leitor">${nome} ${ra ? `(RA: ${ra})` : ''}</span>
-            <span class="quantidade-livros">${quantidadeLivros} livros</span>
-        `;
+        
+        // CORREÇÃO: Criar elementos corretamente
+        const nomeSpan = document.createElement('span');
+        nomeSpan.className = 'nome-leitor';
+        nomeSpan.textContent = `${nome} ${ra ? `(RA: ${ra})` : ''}`;
+        
+        const livrosSpan = document.createElement('span');
+        livrosSpan.className = 'quantidade-livros';
+        livrosSpan.textContent = `${quantidadeLivros} livro${quantidadeLivros !== 1 ? 's' : ''}`;
+        
+        item.appendChild(nomeSpan);
+        item.appendChild(livrosSpan);
+        
         elementoLista.appendChild(item);
     });
 }
 
-// Carregar mais leitores (para o caso de ter muitos leitores)
 function carregarMaisLeitores() {
     if (botaoVerMais) {
         botaoVerMais.disabled = true;
         botaoVerMais.innerHTML = '<span class="loading-spinner"></span> Carregando...';
     }
     
-    // Aumentar o limite para mostrar mais leitores
     limiteLeitores += 10;
     
     setTimeout(() => {
-        // Re-exibir leitores com o novo limite
-        exibirLeitoresCategoria(listaExtremo, leitoresExtremo.slice(0, limiteLeitores), 'leitor-extremo');
-        exibirLeitoresCategoria(listaAtivo, leitoresAtivo.slice(0, limiteLeitores), 'leitor-ativo');
-        exibirLeitoresCategoria(listaRegular, leitoresRegular.slice(0, limiteLeitores), 'leitor-regular');
-        exibirLeitoresCategoria(listaIniciante, leitoresIniciante.slice(0, limiteLeitores), 'leitor-iniciante');
+        exibirLeitoresCategoria(listaExtremo, leitoresExtremo.slice(0, limiteLeitores));
+        exibirLeitoresCategoria(listaAtivo, leitoresAtivo.slice(0, limiteLeitores));
+        exibirLeitoresCategoria(listaRegular, leitoresRegular.slice(0, limiteLeitores));
+        exibirLeitoresCategoria(listaIniciante, leitoresIniciante.slice(0, limiteLeitores));
         
         atualizarBotaoVerMais();
     }, 500);
 }
 
-// Atualizar estado do botão Ver Mais
 function atualizarBotaoVerMais() {
     if (!botaoVerMais) return;
     
-    // Verificar se há mais leitores do que o limite atual em qualquer categoria
-    const haMaisExtremo = leitoresExtremo.length > limiteLeitores;
-    const haMaisAtivo = leitoresAtivo.length > limiteLeitores;
-    const haMaisRegular = leitoresRegular.length > limiteLeitores;
-    const haMaisIniciante = leitoresIniciante.length > limiteLeitores;
-    
-    const haMaisLeitores = haMaisExtremo || haMaisAtivo || haMaisRegular || haMaisIniciante;
+    const haMaisLeitores = 
+        leitoresExtremo.length > limiteLeitores ||
+        leitoresAtivo.length > limiteLeitores ||
+        leitoresRegular.length > limiteLeitores ||
+        leitoresIniciante.length > limiteLeitores;
     
     if (haMaisLeitores) {
         botaoVerMais.style.display = 'flex';
@@ -244,61 +196,26 @@ function atualizarBotaoVerMais() {
     }
 }
 
-// Mostrar loading
 function mostrarLoading() {
     const categorias = [listaExtremo, listaAtivo, listaRegular, listaIniciante];
-    
     categorias.forEach(lista => {
         if (lista) {
-            lista.innerHTML = `
-                <li class="mensagem-vazia">
-                    <span class="loading-spinner"></span> Carregando...
-                </li>
-            `;
+            lista.innerHTML = '<li class="mensagem-vazia"><span class="loading-spinner"></span> Carregando...</li>';
         }
     });
 }
 
-// Mostrar mensagem de erro
 function mostrarMensagemErro(mensagem) {
     const categorias = [listaExtremo, listaAtivo, listaRegular, listaIniciante];
-    
     categorias.forEach(lista => {
         if (lista) {
-            lista.innerHTML = `
-                <li class="mensagem-vazia">${mensagem}</li>
-            `;
+            lista.innerHTML = `<li class="mensagem-vazia">${mensagem}</li>`;
         }
     });
-    
-    if (botaoVerMais) {
-        botaoVerMais.style.display = 'none';
-    }
+    if (botaoVerMais) botaoVerMais.style.display = 'none';
 }
 
-// Função com dados baseados na sua consulta SQL
-function carregarDadosReais() {
-    console.log('🔄 Carregando dados baseados na consulta SQL...');
-    
-    // Dados baseados na sua tabela do banco
-    const dadosReais = [
-        { id: 4, nome: "Aluno 4", tipo: "EXTREMO", descricao: "Leitor Extremo", quantidade_livros: 25, ra: "25000004" },
-        { id: 3, nome: "Aluno 3", tipo: "ATIVO", descricao: "Leitor Ativo - 11 a 20 livros", quantidade_livros: 15, ra: "25000003" },
-        { id: 5, nome: "Aluno 5", tipo: "ATIVO", descricao: "Leitor Ativo - 11 a 20 livros", quantidade_livros: 18, ra: "25000005" },
-        { id: 2, nome: "Aluno 2", tipo: "REGULAR", descricao: "Leitor Regular - 6 a 10 livros", quantidade_livros: 8, ra: "25000002" },
-        { id: 6, nome: "Aluno 6", tipo: "REGULAR", descricao: "Leitor Regular - 6 a 10 livros", quantidade_livros: 7, ra: "25000006" },
-        { id: 8, nome: "Aluno 8", tipo: "REGULAR", descricao: "Leitor Regular - 6 a 10 livros", quantidade_livros: 9, ra: "25000008" },
-        { id: 7, nome: "Aluno 7", tipo: "INICIANTE", descricao: "Leitor Iniciante - até 5 livros", quantidade_livros: 3, ra: "25000007" },
-        { id: 9, nome: "Aluno 9", tipo: "INICIANTE", descricao: "Leitor Iniciante", quantidade_livros: 2, ra: "25000009" },
-        { id: 1, nome: "Aluno 1", tipo: "INICIANTE", descricao: "Leitor Iniciante", quantidade_livros: 1, ra: "25000001" }
-    ];
-    
-    processarDadosClassificacao(dadosReais);
-    exibirTodosLeitores();
-    atualizarBotaoVerMais();
-}
-
-// Função para testar a API manualmente
+// Funções de debug
 async function testarAPI() {
     try {
         console.log('🧪 TESTANDO API...');
@@ -306,14 +223,9 @@ async function testarAPI() {
         const data = await response.json();
         console.log('🧪 RESPOSTA DA API:', data);
         
-        // Verificar estrutura
-        if (Array.isArray(data)) {
-            console.log('🧪 É um array com', data.length, 'elementos');
-            data.forEach((item, index) => {
-                console.log(`🧪 Item ${index}:`, item);
-            });
-        } else {
-            console.log('🧪 É um objeto com chaves:', Object.keys(data));
+        if (data && data.success && data.data) {
+            console.log('🧪 Estrutura do primeiro aluno:', data.data[0]);
+            console.log('🧪 TotalLivros do primeiro aluno:', data.data[0].classificacao.totalLivros);
         }
         
         return data;
@@ -322,29 +234,8 @@ async function testarAPI() {
     }
 }
 
-// Teste alternativo - talvez o endpoint seja diferente
-async function testarEndpointsAlternativos() {
-    const endpoints = [
-        '/classificacao/geral',
-        '/classificacao',
-        '/leitores/classificacao',
-        '/alunos/classificacao',
-        '/ranking/leitores'
-    ];
-    
-    for (const endpoint of endpoints) {
-        try {
-            console.log(`🔍 Testando endpoint: ${endpoint}`);
-            const response = await fetch(`${API_BASE_URL}${endpoint}`);
-            if (response.ok) {
-                const data = await response.json();
-                console.log(`✅ Endpoint ${endpoint} funcionou:`, data);
-                break;
-            }
-        } catch (error) {
-            console.log(`❌ Endpoint ${endpoint} falhou:`, error.message);
-        }
-    }
+function recarregarClassificacao() {
+    carregarClassificacao();
 }
 
 console.log('✅ JavaScript da classificação de leitores carregado!');

@@ -66,13 +66,49 @@ async function carregarLivros() {
         const disponiveis = await carregarExemplaresDisponiveis();
         exibirLivrosDisponiveis(disponiveis);
         
-        // CORREÇÃO: Carregar TODOS os empréstimos ativos do sistema
+        // Carregar TODOS os empréstimos ativos do sistema
         const emprestados = await carregarTodosEmprestimosAtivos();
         exibirLivrosEmprestados(emprestados);
         
     } catch (error) {
         console.error('Erro ao carregar livros:', error);
         mostrarErro('Erro ao carregar dados dos livros');
+    }
+}
+
+// Função alternativa para carregar todos os exemplares e filtrar localmente
+async function carregarExemplaresAlternativo() {
+    try {
+        // Buscar TODOS os exemplares
+        const response = await fetch(`${API_BASE_URL}/exemplares`);
+        
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.success) {
+            return [];
+        }
+        
+        // Buscar TODOS os empréstimos ativos
+        const responseEmprestimos = await fetch(`${API_BASE_URL}/emprestimos`);
+        const emprestimosData = await responseEmprestimos.json();
+        
+        const emprestimosAtivos = emprestimosData.success ? 
+            emprestimosData.data.filter(emp => emp.status === 'ativo') : [];
+        
+        // Filtrar exemplares disponíveis (não estão emprestados)
+        const exemplaresDisponiveis = data.data.filter(exemplar => {
+            return !emprestimosAtivos.some(emp => emp.exemplar_id === exemplar.id);
+        });
+        
+        return exemplaresDisponiveis;
+        
+    } catch (error) {
+        console.error('Erro no método alternativo:', error);
+        return [];
     }
 }
 
@@ -86,15 +122,21 @@ async function carregarExemplaresDisponiveis() {
         }
         
         const data = await response.json();
-        return data.success ? data.data : [];
+        
+        // Se não retornar dados, tentar método alternativo
+        if (!data.success || !data.data || data.data.length === 0) {
+            return await carregarExemplaresAlternativo();
+        }
+        
+        return data.data;
         
     } catch (error) {
         console.error('Erro ao carregar exemplares disponíveis:', error);
-        return [];
+        return await carregarExemplaresAlternativo();
     }
 }
 
-// CORREÇÃO: Carregar TODOS os empréstimos ativos do sistema
+// Carregar TODOS os empréstimos ativos do sistema
 async function carregarTodosEmprestimosAtivos() {
     try {
         const response = await fetch(`${API_BASE_URL}/emprestimos/ativos`);
@@ -130,7 +172,7 @@ function exibirLivrosDisponiveis(livros) {
                 <div class="info-livro">
                     <div class="titulo-livro">${livro.titulo || 'Título não disponível'}</div>
                     <div class="autor-livro">${livro.autor || 'Autor não disponível'}</div>
-                    <div class="exemplar-info">Exemplar #${livro.exemplar_id}</div>
+                    <div class="exemplar-info">Exemplar #${livro.exemplar_id || livro.id}</div>
                 </div>
             </div>
         `;
@@ -139,7 +181,7 @@ function exibirLivrosDisponiveis(livros) {
     container.innerHTML = html;
 }
 
-// CORREÇÃO: Exibir TODOS os livros emprestados do sistema
+// Exibir livros emprestados
 function exibirLivrosEmprestados(emprestimos) {
     const container = document.getElementById('livrosEmprestados');
     
@@ -148,28 +190,50 @@ function exibirLivrosEmprestados(emprestimos) {
         return;
     }
     
+    // Agrupar empréstimos por exemplar para evitar duplicatas
+    const emprestimosAgrupados = agruparEmprestimosPorExemplar(emprestimos);
+    
     let html = '';
-    emprestimos.forEach((emprestimo, index) => {
+    emprestimosAgrupados.forEach((emprestimo, index) => {
         const classeFundo = index % 2 === 0 ? 'fundoCinza' : 'fundoBranco';
         
         const isMeuEmprestimo = emprestimo.ra === alunoLogado.ra;
-        const destaque = isMeuEmprestimo ? 'style="font-weight: bold; color: #1c4cff;"' : '';
         
         html += `
             <div class="linhaLivro ${classeFundo} livro-emprestado">
                 <div class="info-livro">
-                    <div class="titulo-livro" ${destaque}>${emprestimo.livro_titulo || 'Título não disponível'}</div>
+                    <div class="titulo-livro" style="${isMeuEmprestimo ? 'font-weight: bold; color: #1c4cff;' : ''}">
+                        ${emprestimo.livro_titulo || 'Título não disponível'}
+                    </div>
                     <div class="autor-livro">${emprestimo.autor || 'Autor não disponível'}</div>
                     <div class="exemplar-info">Exemplar #${emprestimo.exemplar_id}</div>
-                    <div class="exemplar-info" style="font-size: 10px; color: #6c757d;">
-                        ${isMeuEmprestimo ? '<span style="color: #1c4cff; font-weight: bold">EMPRÉSTIMO FEITO POR VOCÊ</span>' : ''}
-                    </div>
+                    ${isMeuEmprestimo ? 
+                        '<div class="exemplar-info" style="color: #1c4cff; font-weight: bold">EMPRÉSTIMO FEITO POR VOCÊ</div>' : 
+                        ''
+                    }
                 </div>
             </div>
         `;
     });
     
     container.innerHTML = html;
+}
+
+// Agrupar empréstimos por exemplar para evitar duplicatas
+function agruparEmprestimosPorExemplar(emprestimos) {
+    const agrupados = [];
+    const exemplaresProcessados = new Set();
+    
+    emprestimos.forEach(emprestimo => {
+        const chaveExemplar = emprestimo.exemplar_id;
+        
+        if (!exemplaresProcessados.has(chaveExemplar)) {
+            exemplaresProcessados.add(chaveExemplar);
+            agrupados.push(emprestimo);
+        }
+    });
+    
+    return agrupados;
 }
 
 // Mostrar erro
@@ -186,15 +250,15 @@ function mostrarErro(mensagem) {
     });
 }
 
-// Atualizar dados periodicamente (opcional)
+// Atualizar dados periodicamente
 function iniciarAtualizacaoAutomatica() {
     // Atualizar a cada 30 segundos
     setInterval(() => {
         if (alunoLogado) {
             carregarLivros();
         }
-    }, 30000); // Alterado para 30 segundos
+    }, 30000);
 }
 
-// Iniciar atualização automática (opcional)
+// Iniciar atualização automática
 iniciarAtualizacaoAutomatica();

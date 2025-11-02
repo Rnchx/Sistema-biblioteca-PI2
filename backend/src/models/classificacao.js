@@ -51,14 +51,64 @@ class Classificacao {
         return { tipo, descricao, totalLivros }; 
     }
 
-    static async listarClassificacoesComAlunos() {
-        const [rows] = await connection.execute(`
-            SELECT c.*, a.nome as aluno_nome, a.ra 
-            FROM classificacao c
-            JOIN aluno a ON c.idAluno = a.id
-        `);
-        return rows;
-    }
+static async listarClassificacoesComAlunos() {
+    console.log('🔍 [DEBUG] Executando listarClassificacoesComAlunos CORRIGIDA');
+    
+    // BUSCAR TODOS OS ALUNOS primeiro
+    const [todosAlunos] = await connection.execute('SELECT * FROM aluno');
+    console.log(`🔍 [DEBUG] Total de alunos encontrados: ${todosAlunos.length}`);
+    
+    // Para cada aluno, garantir que tem classificação
+    const classificacoesCompletas = await Promise.all(
+        todosAlunos.map(async (aluno) => {
+            try {
+                // Verificar se já tem classificação
+                const [classificacaoExistente] = await connection.execute(
+                    'SELECT * FROM classificacao WHERE idAluno = ?',
+                    [aluno.id]
+                );
+                
+                if (classificacaoExistente.length > 0) {
+                    // Já tem classificação, retornar ela
+                    return {
+                        ...classificacaoExistente[0],
+                        aluno_nome: aluno.nome,
+                        ra: aluno.ra
+                    };
+                } else {
+                    // Não tem classificação, calcular agora
+                    console.log(`🔍 [DEBUG] Aluno ${aluno.nome} não tem classificação, calculando...`);
+                    const novaClassificacao = await Classificacao.classificarEAtualizarAluno(aluno.id);
+                    
+                    // Buscar a classificação recém-criada
+                    const [classificacaoCriada] = await connection.execute(
+                        'SELECT * FROM classificacao WHERE idAluno = ?',
+                        [aluno.id]
+                    );
+                    
+                    return {
+                        ...classificacaoCriada[0],
+                        aluno_nome: aluno.nome,
+                        ra: aluno.ra
+                    };
+                }
+            } catch (error) {
+                console.error(`❌ Erro ao processar aluno ${aluno.nome}:`, error);
+                // Retornar estrutura básica em caso de erro
+                return {
+                    idAluno: aluno.id,
+                    tipo: 'INICIANTE',
+                    descricao: 'Leitor Iniciante',
+                    aluno_nome: aluno.nome,
+                    ra: aluno.ra
+                };
+            }
+        })
+    );
+    
+    console.log('✅ [DEBUG] Classificações completas processadas:', classificacoesCompletas.length);
+    return classificacoesCompletas;
+}
 
     // método mais ágil
     static async classificarEAtualizarAluno(idAluno) {

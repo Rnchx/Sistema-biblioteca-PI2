@@ -1,141 +1,177 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
-    margin: 0%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+:root {
+    --primary-blue: #1c4cff;
+    --primary-blue-hover: #3863ff;
+    --danger-red: #dc3545;
+    --danger-red-hover: #c82333;
+    --text-dark: #1a1a1a;
+    --text-light: #6c757d;
+    --background-light: #f8f9fa;
+    --white: #ffffff;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: "Public Sans", sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* HEADER */
 #containerFaixaAzul {
-    background-color: #1c4cff;
-    padding: 1rem;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    padding: 1rem 2rem;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 #textContainerFaixaAzul {
-    font-size: 10px;
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
     font-size: 0.7rem;
-    margin-left: 5vw;
-    color: whitesmoke;
+    font-weight: bold;
+    color: var(--white);
+    letter-spacing: 2px;
 }
 
+/* LAYOUT PRINCIPAL */
 #containerPrincipal {
     display: flex;
+    min-height: calc(100vh - 70px);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
 }
 
 #containerLogoEBotaoVoltar {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 30%;
+    max-width: 300px;
 }
 
 #img {
-    margin: 1rem;
+    margin: 1rem 0;
+    border-radius: 3px;
 }
 
-#containerBotaoVoltar {
-    display: flex;
-    margin: 2%;
-    margin-left: 10%;
-    width: 3vw;
-}
-
-#containerBotaoVoltar:hover {
-    display: flex;
-    margin: 2%;
-    margin-left: 10%;
-    width: 3vw;
-    color: #1c4cff;
-}
-
-i {
-    margin: 4px;
-}
-
-#botaoVoltarPagina {
-    background-color: white;
-    border: none;
-    cursor: pointer;
-}
-
-#botaoVoltarPagina a {
-    text-decoration: none;
-}
-
-#botaoVoltarPagina a:hover {
-    text-decoration: none;
-    cursor: pointer;
-}
-
-#textoBotaoVoltar {
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
-    font-size: 1.1rem;
-    color: black;
-    text-decoration: none; 
-}
-
-#textoBotaoVoltar:hover {
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
-    font-size: 1.1rem;
-    text-decoration: none;
-    color: #1c4cff;
-}
-
+/* CONTAINER DO FORMULÁRIO */
 #containerFormulario {
-    width: 70%;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-content: center;
-    align-items: center;
     justify-content: center;
-    justify-items: center;
-    height: calc(50vh - 40px);
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    position: relative;
 }
 
-h1 {
-    font-family: "Public Sans", sans-serif;
-    font-size: 2.2rem;
-}
-
-h2 {
-    font-family: "Public Sans", sans-serif;
+#containerFormulario h2 {
     font-weight: 400;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
 }
 
+#containerFormulario h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 3rem;
+}
+
+/* BOTÕES PRINCIPAIS - CORREÇÃO PARA TAMANHOS IGUAIS */
 #containerBotoesFormulario {
     display: flex;
     gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+a {
+    text-decoration: none;
 }
 
 .botaoFormulario {
-    padding: 1rem;
-    border-radius: 3px;
-    border: 1px solid black;
-    color: whitesmoke;
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
+    padding: 1.5rem 2rem;
+    border-radius: var(--border-radius);
     border: none;
-    background-color: #1c4cff;
-    transition: background-color 0.10s ease;
+    color: var(--white);
+    font-weight: 600;
+    font-family: "Public Sans", sans-serif;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    transition: var(--transition);
+    cursor: pointer;
+    width: 280px;
+    height: 90px;
+    font-size: 1rem;
+    line-height: 1.4;
+    box-shadow: 0 4px 15px rgba(28, 76, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.botaoFormulario::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .botaoFormulario:hover {
-    cursor: pointer;
-    background-color: #3863ff;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(28, 76, 255, 0.3);
 }
 
+.botaoFormulario:hover::before {
+    left: 100%;
+}
 
-/* ===== BOTÃO LOGOUT MODELO ===== */
+/* Garantir que o texto dentro dos botões fique centralizado */
+.botaoFormulario br {
+    display: block;
+    content: "";
+    margin-top: 0.3rem;
+}
+
+/* BOTÃO LOGOUT */
 .container-botao-logout {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 12px 20px;
-    margin: 2rem;
-    border: 2px solid #dc3545;
-    border-radius: 8px;
-    background: white;
-    transition: all 0.3s ease;
+    margin: 2rem 0;
+    border: 2px solid var(--danger-red);
+    border-radius: var(--border-radius);
+    background: var(--white);
+    transition: var(--transition);
     cursor: pointer;
     width: fit-content;
     text-decoration: none;
@@ -143,7 +179,7 @@ h2 {
 }
 
 .container-botao-logout:hover {
-    border-color: #dc3545;
+    border-color: var(--danger-red-hover);
     background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
@@ -162,101 +198,48 @@ h2 {
 }
 
 .icone-logout {
-    color: #dc3545;
+    color: var(--danger-red);
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 .texto-botao-logout {
     font-weight: 600;
     font-family: "Public Sans", sans-serif;
     font-size: 0.95rem;
-    color: #dc3545;
+    color: var(--danger-red);
     margin: 0;
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 .container-botao-logout:hover .icone-logout {
-    color: #dc3545;
+    color: var(--danger-red-hover);
     transform: translateX(2px);
 }
 
 .container-botao-logout:hover .texto-botao-logout {
-    color: #dc3545;
+    color: var(--danger-red-hover);
 }
 
-/* Variações do botão logout */
 .botao-logout-primary {
-    border-color: #dc3545;
-    background: linear-gradient(135deg, #dc3545 0%, #e35d6a 100%);
+    border-color: var(--danger-red);
+    background: linear-gradient(135deg, var(--danger-red) 0%, #e35d6a 100%);
 }
 
 .botao-logout-primary .texto-botao-logout {
-    color: white;
+    color: var(--white);
 }
 
 .botao-logout-primary .icone-logout {
-    color: white;
+    color: var(--white);
 }
 
 .botao-logout-primary:hover {
-    border-color: #c82333;
-    background: linear-gradient(135deg, #c82333 0%, #dc3545 100%);
+    border-color: var(--danger-red-hover);
+    background: linear-gradient(135deg, var(--danger-red-hover) 0%, var(--danger-red) 100%);
 }
 
-.botao-logout-outline {
-    border-color: #dc3545;
-    background: transparent;
-}
-
-.botao-logout-outline .texto-botao-logout {
-    color: #dc3545;
-}
-
-.botao-logout-outline .icone-logout {
-    color: #dc3545;
-}
-
-.botao-logout-outline:hover {
-    background: #dc3545;
-}
-
-.botao-logout-outline:hover .texto-botao-logout {
-    color: white;
-}
-
-.botao-logout-outline:hover .icone-logout {
-    color: white;
-}
-
-/* Tamanhos do botão logout */
-.botao-logout-sm {
-    padding: 8px 16px;
-}
-
-.botao-logout-sm .texto-botao-logout {
-    font-size: 0.85rem;
-}
-
-.botao-logout-sm .icone-logout {
-    font-size: 0.85rem;
-}
-
-.botao-logout-lg {
-    padding: 16px 24px;
-}
-
-.botao-logout-lg .texto-botao-logout {
-    font-size: 1.1rem;
-}
-
-.botao-logout-lg .icone-logout {
-    font-size: 1.1rem;
-}
-
-
-
-
+/* POPUP */
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -272,7 +255,7 @@ h2 {
 }
 
 .popup-container {
-    background: white;
+    background: var(--white);
     border-radius: 12px;
     padding: 2rem;
     max-width: 400px;
@@ -288,14 +271,6 @@ h2 {
     margin-bottom: 1rem;
 }
 
-.popup-success .popup-icon {
-    color: #28a745;
-}
-
-.popup-error .popup-icon {
-    color: #dc3545;
-}
-
 .popup-warning .popup-icon {
     color: #ffc107;
 }
@@ -305,52 +280,15 @@ h2 {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #1a1a1a;
+    color: var(--text-dark);
 }
 
 .popup-message {
     font-family: "Public Sans", sans-serif;
     font-size: 1rem;
-    color: #6c757d;
+    color: var(--text-light);
     margin-bottom: 1.5rem;
     line-height: 1.5;
-}
-
-.popup-button {
-    background: linear-gradient(135deg, #1c4cff 0%, #3863ff 100%);
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 6px;
-    font-family: "Public Sans", sans-serif;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 0 5px;
-}
-
-.popup-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(28, 76, 255, 0.3);
-}
-
-.popup-button-secondary {
-    background: #6c757d;
-}
-
-.popup-button-secondary:hover {
-    background: #5a6268;
-    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
-}
-
-.popup-button-warning {
-    background: linear-gradient(135deg, #dc3545 0%, #e35d6a 100%);
-}
-
-.popup-button-warning:hover {
-    background: linear-gradient(135deg, #c82333 0%, #dc3545 100%);
-    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
 }
 
 .popup-buttons {
@@ -360,7 +298,35 @@ h2 {
     margin-top: 1rem;
 }
 
-/* Animações */
+.popup-button {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-hover) 100%);
+    color: var(--white);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    margin: 0 5px;
+}
+
+.popup-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(28, 76, 255, 0.3);
+}
+
+.popup-button-secondary {
+    background: var(--text-light);
+}
+
+.popup-button-secondary:hover {
+    background: #5a6268;
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+}
+
+/* ANIMAÇÕES */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -377,13 +343,12 @@ h2 {
     }
 }
 
-/* Loading spinner */
 .loading-spinner {
     display: inline-block;
     width: 20px;
     height: 20px;
     border: 3px solid #f3f3f3;
-    border-top: 3px solid #1c4cff;
+    border-top: 3px solid var(--primary-blue);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-right: 10px;
@@ -392,4 +357,80 @@ h2 {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    #containerPrincipal {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    #containerLogoEBotaoVoltar {
+        width: 100%;
+        max-width: none;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    #img {
+        width: 150px;
+        height: auto;
+    }
+    
+    #containerFormulario {
+        padding: 1.5rem;
+    }
+    
+    #containerFormulario h1 {
+        font-size: 2rem;
+    }
+    
+    #containerBotoesFormulario {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+    
+    .botaoFormulario {
+        width: 100%;
+        height: 100px;
+        padding: 1.2rem;
+    }
+    
+    .container-botao-logout {
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    #containerFaixaAzul {
+        padding: 0.8rem 1rem;
+    }
+    
+    #containerPrincipal {
+        padding: 0.5rem;
+    }
+    
+    #containerFormulario {
+        padding: 1rem;
+    }
+    
+    #containerFormulario h1 {
+        font-size: 1.8rem;
+    }
+    
+    .popup-container {
+        padding: 1.5rem;
+    }
+    
+    .popup-buttons {
+        flex-direction: column;
+    }
+    
+    .popup-button {
+        width: 100%;
+        margin: 5px 0;
+    }
 }

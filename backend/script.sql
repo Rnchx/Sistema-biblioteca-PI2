@@ -1,5 +1,3 @@
--- CRIAÇÃO DO BANCO
-
 CREATE DATABASE IF NOT EXISTS pi2;
 USE pi2;
 
@@ -148,69 +146,50 @@ INSERT INTO classificacao (tipo, descricao, idAluno) VALUES
 ('INICIANTE', 'Leitor Iniciante - até 5 livros', 7),
 ('REGULAR', 'Leitor Regular - 6 a 10 livros', 8);
 
--- INSERIR EMPRÉSTIMOS ATIVOS (livros atualmente emprestados)
+-- INSERIR TODOS OS EMPRÉSTIMOS DE UMA VEZ
 INSERT INTO emprestimo (id_exemplar, id_aluno) VALUES
--- João (id 1) tem 2 livros emprestados
-(3, 1),  -- Fundamentos de Programação
-(5, 1),  -- O Senhor dos Anéis
+-- JOÃO (ID 1) - INICIANTE: 4 livros no total
+(3, 1), (5, 1), (1, 1), (2, 1),
 
--- Maria (id 2) tem 3 livros emprestados
-(7, 2),  -- História do Brasil
-(9, 2),  -- Orgulho e Preconceito
-(15, 2), -- Dom Casmurro
+-- MARIA (ID 2) - REGULAR: 8 livros no total  
+(7, 2), (9, 2), (15, 2), (4, 2), (6, 2), (8, 2), (10, 2), (12, 2),
 
--- Lucas (id 3) tem 4 livros emprestados
-(11, 3), -- 1984
-(13, 3), -- A Revolução dos Bichos
-(17, 3), -- O Pequeno Príncipe
-(19, 3), -- Cem Anos de Solidão
+-- LUCAS (ID 3) - ATIVO: 15 livros no total
+(11, 3), (13, 3), (17, 3), (19, 3), (21, 3), (23, 3), (25, 3), (27, 3),
+(14, 3), (16, 3), (18, 3), (20, 3), (22, 3), (24, 3), (26, 3),
 
--- Ana (id 4) tem 2 livros emprestados
-(21, 4), -- Harry Potter
-(23, 4), -- O Hobbit
+-- ANA (ID 4) - EXTREMO: 25 livros no total
+(28, 4), (5, 4), (7, 4), (9, 4), (11, 4), (13, 4), (15, 4), (17, 4), 
+(19, 4), (21, 4), (23, 4), (25, 4), (27, 4), (1, 4), (2, 4), (4, 4),
+(6, 4), (8, 4), (10, 4), (12, 4), (14, 4), (16, 4), (18, 4), (20, 4), (22, 4),
 
--- Pedro (id 5) tem 3 livros emprestados
-(25, 5), -- Clean Code
-(27, 5), -- O Nome do Vento
-(18, 5), -- O Pequeno Príncipe (segundo exemplar)
+-- PEDRO (ID 5) - ATIVO: 12 livros no total
+(24, 5), (26, 5), (28, 5), (3, 5), (5, 5), (7, 5), (9, 5), (11, 5), 
+(13, 5), (15, 5), (17, 5), (19, 5),
 
--- Carla (id 6) tem 1 livro emprestado
-(20, 6), -- Harry Potter (segundo exemplar)
+-- CARLA (ID 6) - REGULAR: 7 livros no total
+(21, 6), (23, 6), (25, 6), (27, 6), (1, 6), (2, 6), (4, 6),
 
--- Rafael (id 7) tem 2 livros emprestados
-(22, 7), -- O Hobbit (segundo exemplar)
-(26, 7), -- Clean Code (segundo exemplar)
+-- RAFAEL (ID 7) - INICIANTE: 3 livros no total
+(6, 7), (8, 7), (10, 7),
 
--- Fernanda (id 8) tem 1 livro emprestado
-(28, 8); -- O Nome do Vento (segundo exemplar)
-
--- INSERIR HISTÓRICO DE EMPRÉSTIMOS (para testar a classificação - apenas IDs)
-INSERT INTO emprestimo (id_exemplar, id_aluno) VALUES
--- Histórico do João (5 empréstimos no total - INICIANTE)
-(1, 1), (2, 1),
-
--- Histórico da Maria (8 empréstimos no total - REGULAR)
-(4, 2), (6, 2), (8, 2), (10, 2), (12, 2),
-
--- Histórico do Lucas (15 empréstimos no total - ATIVO)
-(14, 3), (16, 3), (18, 3), (20, 3), (22, 3), 
-(24, 3), (26, 3), (28, 3), (1, 3), (3, 3),
-
--- Histórico da Ana (25 empréstimos no total - EXTREMO)
-(5, 4), (7, 4), (9, 4), (11, 4), (13, 4),
-(15, 4), (17, 4), (19, 4), (21, 4), (23, 4),
-(25, 4);
+-- FERNANDA (ID 8) - INICIANTE: 5 livros no total
+(12, 8), (14, 8), (16, 8), (18, 8), (20, 8);
 
 -- ATUALIZAR STATUS DOS EXEMPLARES BASEADO NOS EMPRÉSTIMOS ATIVOS
+-- Considerando que os últimos empréstimos de cada aluno são os ativos
 UPDATE exemplar SET status = 'Emprestado' WHERE id IN (
-    3, 5,     -- João
-    7, 9, 15, -- Maria
-    11, 13, 17, 19, -- Lucas
-    21, 23,   -- Ana
-    25, 27, 18, -- Pedro
-    20,       -- Carla
-    22, 26,   -- Rafael
-    28        -- Fernanda
+    -- João (2 ativos)
+    1, 2,
+    -- Maria (4 ativos)
+    6, 8, 10, 12,
+    -- Lucas (todos devolvidos para este exemplo)
+    -- Ana (todos devolvidos para este exemplo)  
+    -- Pedro (todos devolvidos para este exemplo)
+    -- Carla (todos devolvidos para este exemplo)
+    -- Rafael (todos devolvidos para este exemplo)
+    -- Fernanda (todos devolvidos para este exemplo)
+    22, 24, 26, 28
 );
 
 -- Garantir que os outros exemplares estejam disponíveis
