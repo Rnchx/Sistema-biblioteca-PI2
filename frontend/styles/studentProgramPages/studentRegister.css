@@ -1,152 +1,275 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
-    margin: 0%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+:root {
+    --primary-blue: #1c4cff;
+    --primary-blue-hover: #003ce0;
+    --danger-red: #dc3545;
+    --success-green: #28a745;
+    --text-dark: #1a1a1a;
+    --text-light: #6c757d;
+    --background-light: #f8f9fa;
+    --white: #ffffff;
+    --border-radius: 12px;
+    --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: "Public Sans", sans-serif;
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+}
+
+/* Header */
 #containerFaixaAzul {
-    background-color: #1c4cff;
-    padding: 10px;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 12px rgba(28, 76, 255, 0.2);
+    position: relative;
 }
 
 #textContainerFaixaAzul {
-    font-size: 10px;
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
     font-size: 0.7rem;
-    margin-left: 5vw;
-    color: whitesmoke;
+    font-weight: bold;
+    color: var(--white);
+    letter-spacing: 2px;
 }
 
+/* Layout Principal */
 #containerPrincipal {
     display: flex;
+    margin: 0 auto;
 }
 
+/* Sidebar - Logo e Botão Voltar */
 #containerLogoEBotaoVoltar {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 2.5rem 2rem;
+    background: var(--white);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+    min-width: 320px;
+    border-right: 1px solid #eaeaea;
+    gap: 3rem;
 }
 
-#img {
-    margin: 1rem;
-}
-
-#containerBotaoVoltar {
-    display: flex;
-    margin: 2%;
-    margin-left: 10%;
-    width: 3vw;
-}
-
-#containerBotaoVoltar:hover {
-    display: flex;
-    margin: 2%;
-    margin-left: 10%;
-    width: 3vw;
-    color: #1c4cff;
-}
-
-i {
-    margin: 4px;
-}
-
-#botaoVoltarPagina {
-    background-color: white;
-    border: none;
-    cursor: pointer;
-}
-
-#botaoVoltarPagina a {
-    text-decoration: none;
-}
-
-#botaoVoltarPagina a:hover {
-    text-decoration: none;
-    cursor: pointer;
-}
-
-#textoBotaoVoltar {
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
-    font-size: 1.1rem;
-    color: black;
-    text-decoration: none; 
-}
-
-#textoBotaoVoltar:hover {
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
-    font-size: 1.1rem;
-    text-decoration: none;
-    color: #1c4cff;
-}
-
+/* Container do Formulário */
 #containerFormulario {
-    width: 70%;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-content: center;
     align-items: center;
     justify-content: center;
-    justify-items: center;
-    height: calc(100vh - 40px);
+    padding: 3rem 2rem;
+    background: transparent;
 }
 
 h1 {
-    font-family: "Public Sans", sans-serif;
-    font-size: 3rem;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 h4 {
-    font-family: "Public Sans", sans-serif;
     font-weight: 400;
+    color: var(--text-light);
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    text-transform: lowercase;
 }
 
+/* Container dos Labels e Inputs */
 #containerLabelsInputs {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 520px;
+    background: var(--white);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    border: 1px solid #eaeaea;
+    position: relative;
+}
+
+#containerLabelsInputs::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .labelsFormulario {
-    width: 50%;
-    margin: 0.3rem;
-    font-family: "Public Sans", sans-serif;
-    font-size: 0.8rem;
+    width: 100%;
+    margin: 1rem 0 0.5rem 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 }
 
 .inputsFormulario {
-    width: 20vw;
-    height: 20px;
-    padding: 10px;
+    width: 100%;
+    height: 52px;
+    padding: 0 1.2rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: #fafbfc;
+    color: var(--text-dark);
 }
 
+.inputsFormulario:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(28, 76, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.inputsFormulario::placeholder {
+    color: #9aa0a6;
+    font-weight: 400;
+}
+
+/* Container do Botão */
 #containerBotao {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    margin-top: 2rem;
 }
 
 #botaoFormulario {
-    margin: 2%;
-    width: 50%;
-    height: 5vh;
-    border-radius: 0%;
-    border: 1px solid black;
-    color: whitesmoke;
-    font-weight: bold;
-    font-family: "Public Sans", sans-serif;
+    width: 100%;
+    height: 56px;
+    border-radius: 8px;
     border: none;
-    background-color: #1c4cff;
-    transition: background-color 0.5s ease;
+    color: var(--white);
+    font-weight: 700;
+    font-family: "Public Sans", sans-serif;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-hover) 100%);
+    transition: var(--transition);
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(28, 76, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+#botaoFormulario::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 #botaoFormulario:hover {
-    cursor: pointer;
-    background-color: #3863ff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(28, 76, 255, 0.4);
 }
 
+#botaoFormulario:hover::before {
+    left: 100%;
+}
 
+#botaoFormulario:active {
+    transform: translateY(-1px);
+}
+
+#botaoFormulario:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Botão Voltar */
+.container-botao-voltar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: var(--white);
+    transition: var(--transition);
+    cursor: pointer;
+    width: fit-content;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.container-botao-voltar:hover {
+    border-color: var(--primary-blue);
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(28, 76, 255, 0.15);
+}
+
+.botao-voltar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.icone-voltar {
+    color: #6c757d;
+    font-size: 1.1rem;
+    transition: var(--transition);
+}
+
+.texto-botao-voltar {
+    font-weight: 600;
+    font-family: "Public Sans", sans-serif;
+    font-size: 1rem;
+    color: #495057;
+    margin: 0;
+    transition: var(--transition);
+}
+
+.container-botao-voltar:hover .icone-voltar {
+    color: var(--primary-blue);
+    transform: translateX(-3px);
+}
+
+.container-botao-voltar:hover .texto-botao-voltar {
+    color: var(--primary-blue);
+}
 
 /* POPUP STYLES */
 .popup-overlay {
@@ -155,80 +278,93 @@ h4 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     animation: fadeIn 0.3s ease;
+    backdrop-filter: blur(4px);
 }
 
 .popup-container {
-    background: white;
-    border-radius: 12px;
-    padding: 2rem;
-    max-width: 400px;
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    max-width: 480px;
     width: 90%;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
     animation: slideIn 0.3s ease;
     border: 1px solid #e9ecef;
+    position: relative;
+}
+
+.popup-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .popup-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 4.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .popup-success .popup-icon {
-    color: #28a745;
+    color: var(--success-green);
 }
 
 .popup-error .popup-icon {
-    color: #dc3545;
+    color: var(--danger-red);
 }
 
 .popup-title {
     font-family: "Public Sans", sans-serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #1a1a1a;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
 }
 
 .popup-message {
     font-family: "Public Sans", sans-serif;
-    font-size: 1rem;
-    color: #6c757d;
-    margin-bottom: 1.5rem;
-    line-height: 1.5;
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
     white-space: pre-line;
 }
 
 .popup-button {
-    background: linear-gradient(135deg, #1c4cff 0%, #3863ff 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-hover) 100%);
+    color: var(--white);
     border: none;
-    padding: 12px 30px;
-    border-radius: 6px;
+    padding: 16px 40px;
+    border-radius: 8px;
     font-family: "Public Sans", sans-serif;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 0 5px;
+    transition: var(--transition);
+    box-shadow: 0 6px 20px rgba(28, 76, 255, 0.3);
 }
 
 .popup-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(28, 76, 255, 0.3);
+    box-shadow: 0 8px 25px rgba(28, 76, 255, 0.4);
 }
 
 .popup-buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 1rem;
+    gap: 15px;
+    margin-top: 2rem;
 }
 
 /* Animações */
@@ -240,7 +376,7 @@ h4 {
 @keyframes slideIn {
     from { 
         opacity: 0;
-        transform: translateY(-20px) scale(0.9);
+        transform: translateY(-30px) scale(0.95);
     }
     to { 
         opacity: 1;
@@ -254,10 +390,10 @@ h4 {
     width: 20px;
     height: 20px;
     border: 3px solid #f3f3f3;
-    border-top: 3px solid #1c4cff;
+    border-top: 3px solid var(--primary-blue);
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    margin-right: 10px;
+    margin-right: 12px;
 }
 
 @keyframes spin {
@@ -265,133 +401,77 @@ h4 {
     100% { transform: rotate(360deg); }
 }
 
-
-
-
-/* ===== BOTÃO VOLTAR MODELO (REUTILIZÁVEL) ===== */
-.container-botao-voltar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    margin: 2rem;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    background: white;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    width: fit-content;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* Responsividade */
+@media (max-width: 1024px) {
+    #containerPrincipal {
+        flex-direction: column;
+    }
+    
+    #containerLogoEBotaoVoltar {
+        min-width: auto;
+        padding: 2rem;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    #img {
+        margin: 0;
+        width: 180px;
+        height: auto;
+    }
+    
+    .container-botao-voltar {
+        margin: 0;
+    }
 }
 
-.container-botao-voltar:hover {
-    border-color: #1c4cff;
-    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(28, 76, 255, 0.15);
+@media (max-width: 768px) {
+    #containerFormulario {
+        padding: 2rem 1rem;
+    }
+    
+    h1 {
+        font-size: 2.2rem;
+    }
+    
+    #containerLabelsInputs {
+        padding: 2.5rem 2rem;
+    }
+    
+    .popup-container {
+        padding: 2.5rem 2rem;
+    }
 }
 
-.botao-voltar {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-}
-
-.icone-voltar {
-    color: #6c757d;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.texto-botao-voltar {
-    font-weight: 600;
-    font-family: "Public Sans", sans-serif;
-    font-size: 0.95rem;
-    color: #495057;
-    margin: 0;
-    transition: all 0.3s ease;
-}
-
-.container-botao-voltar:hover .icone-voltar {
-    color: #1c4cff;
-    transform: translateX(-2px);
-}
-
-.container-botao-voltar:hover .texto-botao-voltar {
-    color: #1c4cff;
-}
-
-/* Variações do botão voltar */
-.botao-voltar-primary {
-    border-color: #1c4cff;
-    background: linear-gradient(135deg, #1c4cff 0%, #3863ff 100%);
-}
-
-.botao-voltar-primary .texto-botao-voltar {
-    color: white;
-}
-
-.botao-voltar-primary .icone-voltar {
-    color: white;
-}
-
-.botao-voltar-primary:hover {
-    border-color: #3863ff;
-    background: linear-gradient(135deg, #3863ff 0%, #1c4cff 100%);
-}
-
-.botao-voltar-outline {
-    border-color: #1c4cff;
-    background: transparent;
-}
-
-.botao-voltar-outline .texto-botao-voltar {
-    color: #1c4cff;
-}
-
-.botao-voltar-outline .icone-voltar {
-    color: #1c4cff;
-}
-
-.botao-voltar-outline:hover {
-    background: #1c4cff;
-}
-
-.botao-voltar-outline:hover .texto-botao-voltar {
-    color: white;
-}
-
-.botao-voltar-outline:hover .icone-voltar {
-    color: white;
-}
-
-/* Tamanhos do botão */
-.botao-voltar-sm {
-    padding: 8px 16px;
-}
-
-.botao-voltar-sm .texto-botao-voltar {
-    font-size: 0.85rem;
-}
-
-.botao-voltar-sm .icone-voltar {
-    font-size: 0.85rem;
-}
-
-.botao-voltar-lg {
-    padding: 16px 24px;
-}
-
-.botao-voltar-lg .texto-botao-voltar {
-    font-size: 1.1rem;
-}
-
-.botao-voltar-lg .icone-voltar {
-    font-size: 1.1rem;
+@media (max-width: 480px) {
+    #containerFaixaAzul {
+        padding: 1rem;
+    }
+    
+    #containerLogoEBotaoVoltar {
+        padding: 1.5rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    #containerLabelsInputs {
+        padding: 2rem 1.5rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .popup-container {
+        padding: 2rem 1.5rem;
+    }
+    
+    .popup-title {
+        font-size: 1.5rem;
+    }
+    
+    .popup-message {
+        font-size: 1rem;
+    }
 }
