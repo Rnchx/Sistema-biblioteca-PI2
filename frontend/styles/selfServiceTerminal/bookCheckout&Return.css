@@ -1,42 +1,71 @@
-/* Logo e botão voltar */
-#containerLogoEBotaoVoltar {
-  display: flex;
-  flex-direction: column;
-}
-
 /* Título principal */
 h1 {
-  text-align: center;
-  margin: 40px;
-  color: #000000;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-/* Botão voltar */
-#botaoVoltarPagina {
-    background-color: white;
+.container-botao-voltar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: var(--white);
+    transition: var(--transition);
+    cursor: pointer;
+    width: fit-content;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.container-botao-voltar:hover {
+    border-color: var(--primary-blue);
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(28, 76, 255, 0.15);
+}
+
+.botao-voltar {
+    background: none;
     border: none;
     cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
 }
 
-#botaoVoltarPagina a {
-  text-decoration: none;
+.icone-voltar {
+    color: #6c757d;
+    font-size: 1.1rem;
+    transition: var(--transition);
 }
 
-#botaoVoltarPagina a:hover {
-  text-decoration: none;
-  cursor: pointer;
+.texto-botao-voltar {
+    font-weight: 600;
+    font-family: "Public Sans", sans-serif;
+    font-size: 1rem;
+    color: #495057;
+    margin: 0;
+    transition: var(--transition);
 }
 
-#textoBotaoVoltar {
-  font-family: "Public Sans", sans-serif;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: black;
-  text-decoration: none;
+.container-botao-voltar:hover .icone-voltar {
+    color: var(--primary-blue);
+    transform: translateX(-3px);
 }
 
-#textoBotaoVoltar:hover {
-  color: #1c4cff;
+.container-botao-voltar:hover .texto-botao-voltar {
+    color: var(--primary-blue);
 }
 
 /* Pesquisa de livros */
@@ -75,6 +104,7 @@ h1 {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  max-width: 500px;
 }
 
 /*Formulário*/
