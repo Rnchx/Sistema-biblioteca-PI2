@@ -1,76 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Biblioteca - TOTEM</title>
-    <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookCheckout&Return.css">
-    <link rel="stylesheet" href="../../styles/selfServiceTerminal/generalSSTpage.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <script src="../../scripts/bookReturn.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Biblioteca - TOTEM</title>
+  <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookCheckout&Return.css">
+  <link rel="stylesheet" href="../../styles/selfServiceTerminal/generalSSTpage.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <script src="../../scripts/bookreturn.js"></script>
 </head>
 
 <body>
-    <!-- Faixa azul superior -->
-    <div id="containerFaixaAzul">
-        <p id="textContainerFaixaAzul">O O O</p>
+  <div id="containerFaixaAzul">
+    <p id="textContainerFaixaAzul">O O O</p>
+  </div>
+
+  <div id="containerPrincipal">
+    <div id="containerLogoEBotaoVoltar">
+      <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234" height="111" id="img">
+
+      <a href="./booksSSTPage.html" class="container-botao-voltar">
+        <button class="botao-voltar">
+          <i class="fas fa-arrow-left icone-voltar"></i>
+          <p class="texto-botao-voltar">Voltar para home</p>
+        </button>
+      </a>
     </div>
 
-   <!-- Conteúdo principal -->
-    <div id="containerPrincipal">
-        <!-- Logo da PUC -->
-        <div id="containerLogoPuc">
-            <img src="../../images/puc-campinas-logo.jpg" alt="Logo da PUC Campinas" width="234vw" height="111vh">
-        </div>
+        <div id="containerFormulario">
+      <h1>Meus livros alugados</h1>
 
-         <div id="containerBotaoVoltar">
-                <a href="./booksSSTPage.html" class="container-botao-voltar"></a>
-                <button class="botao-voltar">
-                    <i class="fas fa-arrow-left icone-voltar"></i>
-                    <a href="./booksSSTPage.html">
-                        <p class="texto-botao-voltar">Voltar para home</p>
-                    </a>
-            </div>
+      <!-- Pesquisa de livros -->
+      <div id="PesquisaDeLivros">
+        <form onsubmit="pesquisar(); return false;">
+          <input type="text" id="pesquisa" name="busca" placeholder="Digite o nome ou código do livro" required>
+          <button type="submit">Pesquisar</button>
+        </form>
 
-        <h1>Meus livros alugados</h1>
+        <!-- Tabela de resultados da pesquisa -->
+        <table id="tabelaLivros">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="resultado">
+            <!-- Resultados aparecerão aqui -->
+          </tbody>
+        </table>
+      </div>
 
-        <!-- Pesquisa de livros -->
-        <div id="PesquisaDelivros">
-            <form onsubmit="pesquisar(); return false;">
-                <input type="text" id="pesquisa" name="busca" placeholder="Digite o nome ou código do livro" required>
-                <button type="submit">Pesquisar</button>
-            </form>
-
-            <!-- Tabela de resultados da pesquisa -->
-            <table id="tabelaLivros">
-                <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Título</th>
-                    </tr>
-                </thead>
-                <tbody id="resultado">
-                    <!-- Resultados aparecerão aqui -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Formulário de retirada -->
+        <!-- Formulário de devolução-->
         <div id="formulario">
-            <h2>Formulário de Devolução</h2><br>
-            <form onsubmit="formulario(); return false;">
-                <div id="dadosparadevolucao">
-                    <label class="labelsFormulario" for="ra" id="labelRa">RA</label><br>
-                    <input class="inputsFormulario" type="text" name="ra" placeholder="25111111 (exemplo)"
-                        required>
-                    <br>
-                    <br>
-                    <label class="labelsFormulario" for="codigoLivro" id="labelCodigoLivro">Código do Livro</label><br>
-                    <input class="inputsFormulario" type="text" name="codigoLivro" placeholder="[nº]"
-                        required>
+        <h2>Formulário de Devolução</h2>
+        <form onsubmit="formulario(); return false;">
+          <div class="campoFormulario">
+            <label class="labelsFormulario" for="ra">RA</label>
+            <input class="inputsFormulario" type="text" name="ra" id="ra" placeholder="25111111 (exemplo)" required>
+          </div>
 
-                    <button type="submit" id="botaoFormulario">Devolver</button>
+          <div class="campoFormulario">
+            <label class="labelsFormulario" for="codigoLivro">CÓDIGO DO LIVRO</label>
+            <input class="inputsFormulario" type="text" name="codigoLivro" id="codigoLivro" placeholder="[nº]" required>
+          </div>
+
+          <div id="containerBotao">
+            <button id="botaoFormulario" type="submit">ENVIAR</button>
                 </div>
             </form>
         </div>
