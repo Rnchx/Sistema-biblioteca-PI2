@@ -6,7 +6,7 @@
   <title>Sistema Biblioteca - TOTEM</title>
   <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookCheckout&Return.css">
   <link rel="stylesheet" href="../../styles/selfServiceTerminal/generalSSTpage.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="../../scripts/bookCheckout.js"></script>
 </head>
 
@@ -54,6 +54,7 @@
       </div>
 
       <!-- Formulário de retirada -->
+      <div class="containerLabelsInputs">
       <div id="formulario">
         <h2>Formulário de Empréstimo</h2>
         <form onsubmit="formulario(); return false;">
@@ -66,9 +67,9 @@
             <label class="labelsFormulario" for="codigoLivro">CÓDIGO DO LIVRO</label>
             <input class="inputsFormulario" type="text" name="codigoLivro" id="codigoLivro" placeholder="[nº]" required>
           </div>
-
           <div id="containerBotao">
             <button id="botaoFormulario" type="submit">ENVIAR</button>
+            </div>
           </div>
         </form>
       </div>

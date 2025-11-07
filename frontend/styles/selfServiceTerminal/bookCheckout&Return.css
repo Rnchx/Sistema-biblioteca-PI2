@@ -185,6 +185,14 @@ h1 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+#pesquisa:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(28, 76, 255, 0.15);
+    transform: translateY(-1px);
+}
+
 #PesquisaDeLivros button::before {
   content: '';
   position: absolute;
@@ -231,12 +239,38 @@ h1 {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 550px;
-  margin: 30px auto;
+  max-width: 570px;
+  margin: auto;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.containerLabelsInputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 550px;
+    background: var(--white);
+    padding: 0.9rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    border: 1px solid #eaeaea;
+    position: relative;
+    margin-top: 40px;
+}
+
+.containerLabelsInputs::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .campoFormulario {
@@ -261,6 +295,14 @@ h1 {
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+}
+
+.inputsFormulario:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(28, 76, 255, 0.15);
+    transform: translateY(-1px);
 }
 
 h2 {
@@ -324,3 +366,4 @@ h2 {
     transform: none;
     box-shadow: none;
 }
+
