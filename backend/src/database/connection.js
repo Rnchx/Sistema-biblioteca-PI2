@@ -1,6 +1,9 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
+
+// conexão jp
+
 // const connection = mysql.createPool({
 //     host: process.env.DB_HOST || 'localhost',
 //     user: process.env.DB_USER || 'root', 
@@ -12,7 +15,7 @@ require('dotenv').config();
 //     queueLimit: 0
 // });
 
-// conexao puc
+// conexao puc jp
 
 const connection = mysql.createPool({
     host: process.env.DB_HOST || '172.16.12.14',
@@ -24,6 +27,21 @@ const connection = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
+
+
+// conexao Emely
+
+// const connection = mysql.createPool({
+//     host: process.env.DB_HOST || 'localhost',
+//     user: process.env.DB_USER || 'root', 
+//     password: process.env.DB_PASSWORD || '',
+//     database: process.env.DB_NAME || 'pi2',
+//     port: process.env.DB_PORT || 3306,
+//     waitForConnections: true,
+//     connectionLimit: 10,
+//     queueLimit: 0
+// });
+
 
 async function testConnection() {
     try {
