@@ -11,10 +11,11 @@ async function pesquisar() {
             resultado.data.forEach(ex => {
                 const linha = document.createElement('tr');
                 linha.innerHTML = `
-                    <td>${ex.id}</td>
+                    <td>${ex.exemplar_id}</td>
                     <td>${ex.titulo}</td>
                     <td>${ex.autor}</td>
-                    <td>${ex.status}</td>
+                    <td>${ex.exemplar_status}</td>
+>>>>>>> refs/remotes/origin/main
                 `;
                 tbody.appendChild(linha);
             });
