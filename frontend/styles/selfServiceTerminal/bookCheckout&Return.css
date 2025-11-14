@@ -225,11 +225,36 @@ h1 {
 }
 
 /* Tabela de livros */
+/* Estilo geral da tabela */
 #tabelaLivros {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  max-width: 500px;
+  font-family: Arial, sans-serif;
+}
+
+/* Cabeçalhos da tabela */
+#tabelaLivros th {
+  background-color: #1c4cff;
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #ccc;
+  color: white;
+}
+
+/* Linhas da tabela */
+#tabelaLivros td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Linha de "Nenhum livro encontrado" */
+#tabelaLivros td[colspan="4"] {
+  text-align: center;
+  padding: 12px;
+  font-style: italic;
+  color: #666;
+  margin-top: 10px;
 }
 
 /* Formulário */

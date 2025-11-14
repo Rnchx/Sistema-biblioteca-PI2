@@ -31,27 +31,28 @@
       <h1>Empréstimo de livros</h1>
 
       <!-- Pesquisa de livros -->
-      <div id="PesquisaDeLivros">
-        <form onsubmit="pesquisar(); return false;">
-          <input type="text" id="pesquisa" name="busca" placeholder="Digite o nome ou código do livro" required>
-          <button type="submit">Pesquisar</button>
-        </form>
 
-        <!-- Tabela de resultados da pesquisa -->
-        <table id="tabelaLivros">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Título</th>
-              <th>Autor</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="resultado">
-            <!-- Resultados aparecerão aqui -->
-          </tbody>
-        </table>
-      </div>
+<div id="PesquisaDeLivros">
+  <form onsubmit="pesquisar(); return false;">
+    <input type="text" id="pesquisa" placeholder="Digite o título do livro" />
+    <button type="submit">Pesquisar</button>
+  </form>
+
+  <!-- Tabela de resultados da pesquisa -->
+  <table id="tabelaLivros">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Linhas da tabela -->
+    </tbody>
+  </table>
+</div>
 
       <!-- Formulário de retirada -->
       <div class="containerLabelsInputs">
