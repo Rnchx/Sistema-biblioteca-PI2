@@ -1,31 +1,55 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Biblioteca - TOTEM</title>
-    <link rel="stylesheet" href="../../styles/selfServiceTerminal/booksSST.css">
-    <link rel="stylesheet" href="../../styles/selfServiceTerminal/generalSSTpage.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../../scripts/booksSST.js"></script>
-</head>
+    <title>Totem Biblioteca Digital</title>
 
+    <link rel="stylesheet" href="../../styles/selfServiceTerminal/booksSST.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 <body>
     <div id="containerFaixaAzul">
         <p id="textContainerFaixaAzul">O O O</p>
     </div>
 
+    <div id="containerLogo">
+    <img src="../../images/puc-campinas-logo-sem-fundo.png" alt="Logo PUC Campinas" id="imgLogo">
+</div>
+
+
     <div id="containerPrincipal">
-        <div id="containerLogoPuc">
-            <img src="../../images/puc-campinas-logo.jpg" alt="logo da puc campinas" width="234vw" height="111vh">
+
+        <h1>Totem Biblioteca Digital</h1>
+
+        <div id="containerOpcoes">
+
+            <div class="card-opcao">
+                <div class="icone-opcao">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <h3>Retirada de Livros</h3>
+                <p>Realize a retirada de exemplares no totem</p>
+
+                <a class="botao-opcao">
+                    Acessar <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="card-opcao">
+                <div class="icone-opcao">
+                    <i class="fa-solid fa-book-open"></i>         
+                </div>
+                <h3>Devolução de Livros</h3>
+                <p>Efetue a devolução dos livros emprestados</p>
+
+                <a class="botao-opcao">
+                    Acessar <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
         </div>
-    <div id="hometoten">
-        <h1>Totem biblioteca digital</h1>
-        <div id="opcoestoten">
-                    <button id="botaoRetirada">Retirada de livros</button>
-                    <button id="botaoDevolucao">Devolução de livros</button>
     </div>
-    </div>
+
 </body>
 </html>
