@@ -77,7 +77,7 @@ class Livro {
     }
 
     static async deletar(id) {
-        await connection.execute('START TRANSACTION');
+        await connection.query('START TRANSACTION');
         
         try {
             const [exemplares] = await connection.execute(
@@ -106,11 +106,11 @@ class Livro {
                 [id]
             );
             
-            await connection.execute('COMMIT');
+            await connection.query('COMMIT');
             return result;
             
         } catch (error) {
-            await connection.execute('ROLLBACK');
+            await connection.query('ROLLBACK');
             throw error;
         }
     }

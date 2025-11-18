@@ -43,28 +43,74 @@ async function pesquisar() {
 
 
 //Formulário de devolução
-async function formulario() {
-  try {
-    const ra = document.getElementById("ra").value;
-    const codigo = document.getElementById("codigoLivro").value;
+document.addEventListener("DOMContentLoaded", function () {
+  const formDevolucao = document.getElementById("formDevolucao");
 
-    const resposta = await fetch("http://localhost:3000/emprestimos/ativos", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ ra, codigoLivro: codigo })
-    });
+  formDevolucao.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    console.log("Interceptando envio do formulário de devolução");
 
-    const resultado = await resposta.json();
+    try {
+      const raInput = document.getElementById("ra");
+      const codigoInput = document.getElementById("codigoLivro");
 
-    if (resposta.ok) {
-      alert("Livro devolvido com sucesso!");
-    } else {
-      alert("Erro: " + resultado.mensagem);
+      if (!raInput || !codigoInput) {
+        mostrarPopupErro("Campos de entrada não encontrados no HTML.");
+        return;
+      }
+
+      const ra = raInput.value.trim();
+      const codigo = codigoInput.value.trim();
+
+      if (!/^\d{8}$/.test(ra)) {
+        mostrarPopupErro("RA inválido. Deve conter exatamente 8 números.");
+        return;
+      }
+
+      if (!/^\d+$/.test(codigo)) {
+        mostrarPopupErro("Código do livro inválido. Deve ser um número.");
+        return;
+      }
+
+      const resposta = await fetch("http://localhost:3000/emprestimos/devolucao", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ ra, codigoLivro: codigo })
+      });
+
+      const resultado = await resposta.json();
+
+      if (resposta.ok) {
+        mostrarPopupSucesso("Livro devolvido com sucesso!");
+      } else {
+        const mensagem = resultado.mensagem || "Erro ao processar devolução.";
+        mostrarPopupErro("Erro: " + mensagem);
+        console.error("Detalhes do erro:", mensagem);
+      }
+    } catch (erro) {
+      console.error("Erro ao enviar dados:", erro);
+      mostrarPopupErro("Erro de conexão com o servidor.");
     }
-  } catch (erro) {
-    console.error("Erro:", erro);
-    alert("Erro ao enviar dados.");
-  }
+  });
+});
+function mostrarPopupErro(mensagem) {
+  const popup = document.getElementById("popupErro");
+  const texto = document.getElementById("mensagemErro");
+  texto.textContent = mensagem;
+  popup.style.display = "flex";
+}
+
+function fecharPopup() {
+  document.getElementById("popupErro").style.display = "none";
+}
+
+function mostrarPopupSucesso(mensagem) {
+  document.getElementById('mensagemSucesso').innerText = mensagem;
+  document.getElementById('popupSucesso').style.display = 'block';
+}
+
+function fecharPopupSucesso() {
+  document.getElementById('popupSucesso').style.display = 'none';
 }

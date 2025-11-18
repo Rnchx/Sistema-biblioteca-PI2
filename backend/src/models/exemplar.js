@@ -85,7 +85,7 @@ static async listarDisponiveis() {
     }
 
     static async deletarExemplar(id) {
-        await connection.execute('START TRANSACTION');
+        await connection.query('START TRANSACTION');
 
         try {
 
@@ -117,11 +117,11 @@ static async listarDisponiveis() {
                 [id]
             );
 
-            await connection.execute('COMMIT');
+            await connection.query('COMMIT');
             return result;
 
         } catch (error) {
-            await connection.execute('ROLLBACK');
+            await connection.query('ROLLBACK');
             throw error;
         }
     }

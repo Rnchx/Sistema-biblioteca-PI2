@@ -40,54 +40,91 @@ async function pesquisar() {
 }
 
 // Formulário de retirada
-async function formulario() {
-  try {
-    const ra = document.getElementById("ra").value.trim();
-    const codigo = document.getElementById("codigolivro").value.trim();
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("formEmprestimo");
 
-    // Validação do RA: deve ter exatamente 8 dígitos numéricos
-    const raValido = /^\d{8}$/.test(ra);
-    if (!raValido) {
-      alert("RA inválido. Deve conter exatamente 8 números.");
-      return;
-    }
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    console.log("Interceptando envio do formulário");
+    console.log("Formulário enviado");
 
-    // Validação do código do livro: deve ser um número positivo
-    const codigoValido = /^\d+$/.test(codigo);
-    if (!codigoValido) {
-      alert("Código do livro inválido. Deve ser um número.");
-      return;
-    }
+    try {
+      const raInput = document.getElementById("ra");
+      const codigoInput = document.getElementById("codigoLivro");
 
-    const resposta = await fetch("http://localhost:3000/emprestimos", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ ra: ra, codigolivro: codigo })
-    });
-
-    if (resposta.ok) {
-      const resultado = await resposta.json();
-      alert("Livro alugado com sucesso!");
-    } else {
-      let mensagemErro = `Erro ${resposta.status}: Falha no empréstimo.`;
-
-      try {
-        const erroApi = await resposta.json();
-        if (erroApi.error) {
-          mensagemErro = erroApi.error;
-        }
-      } catch (jsonError) {
-        console.error('Falha ao ler o JSON de erro do servidor:', jsonError);
+      if (!raInput || !codigoInput) {
+        mostrarPopupErro("Campos de entrada não encontrados no HTML.");
+        return;
       }
 
-      alert("Erro: " + mensagemErro);
-      console.error("Detalhes do erro:", mensagemErro);
-    }
+      const ra = raInput.value.trim();
+      const codigo = codigoInput.value.trim();
 
-  } catch (erro) {
-    console.error("Erro ao enviar dados:", erro);
-    alert('Erro ao enviar dados. Verifique a conexão ou o console do navegador.');
-  }
+      if (!/^\d{8}$/.test(ra)) {
+        mostrarPopupErro("RA inválido. Deve conter exatamente 8 números.");
+        return;
+      }
+
+      if (!/^\d+$/.test(codigo)) {
+        mostrarPopupErro("Código do livro inválido. Deve ser um número.");
+        return;
+      }
+
+      const resposta = await fetch("http://localhost:3000/emprestimos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ raAluno: ra, idExemplar: codigo })
+      });
+
+      console.log("Status da resposta:", resposta.status);
+      console.log("Headers da resposta:", resposta.headers);
+
+      if (resposta.ok) {
+        mostrarPopupSucesso("Livro alugado com sucesso!");
+      } else {
+        let mensagemErro = `Erro ${resposta.status}: Falha no empréstimo.`;
+
+        try {
+          const contentType = resposta.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const erroApi = await resposta.json();
+            if (erroApi && (erroApi.error || erroApi.message)) {
+              mensagemErro = erroApi.error || erroApi.message;
+            }
+          } else {
+            console.warn("Resposta não está em formato JSON.");
+          }
+        } catch (jsonError) {
+          console.error("Falha ao ler JSON de erro:", jsonError);
+        }
+
+        mostrarPopupErro("Erro: " + (mensagemErro || "Erro desconhecido."));
+        console.error("Detalhes do erro:", mensagemErro);
+      }
+    } catch (erro) {
+      console.error("Erro ao enviar dados:", erro);
+      mostrarPopupErro("Erro de conexão com o servidor.");
+    }
+  }); 
+}); 
+function mostrarPopupErro(mensagem) {
+  const popup = document.getElementById("popupErro");
+  const texto = document.getElementById("mensagemErro");
+  texto.textContent = mensagem;
+  popup.style.display = "flex";
+}
+
+function fecharPopup() {
+  document.getElementById("popupErro").style.display = "none";
+}
+
+function mostrarPopupSucesso(mensagem) {
+  document.getElementById('mensagemSucesso').innerText = mensagem;
+  document.getElementById('popupSucesso').style.display = 'block';
+}
+
+function fecharPopupSucesso() {
+  document.getElementById('popupSucesso').style.display = 'none';
 }

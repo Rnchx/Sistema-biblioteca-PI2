@@ -1,5 +1,5 @@
 const Classificacao = require('../models/classificacao');
-const Aluno = require('../models/aluno');
+const Aluno = require('../models/Aluno');
 const { connection } = require('../database/connection');
 
 exports.obterClassificacaoPorAluno = async (req, res) => {

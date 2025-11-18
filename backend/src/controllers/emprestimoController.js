@@ -1,7 +1,7 @@
 const Emprestimo = require('../models/emprestimo');
-const Aluno = require('../models/aluno');
-const Exemplar = require('../models/exemplar');
+const Aluno = require('../models/Aluno');
 const Classificacao = require('../models/classificacao');
+const Exemplar = require('../models/exemplar');
 
 exports.realizarEmprestimo = async (req, res) => {
     try {
@@ -59,53 +59,87 @@ exports.realizarEmprestimo = async (req, res) => {
 };
 
 exports.registrarDevolucao = async (req, res) => {
-    try {
-        const { idEmprestimo } = req.body;
+  try {
+    const { ra, codigoLivro } = req.body;
 
-        const emprestimo = await Emprestimo.buscarPorId(idEmprestimo);
-        if (!emprestimo) {
-            return res.status(404).json({
-                success: false,
-                error: 'Empréstimo não encontrado'
-            });
-        }
-
-        if (emprestimo.exemplar_status === 'Disponível') {
-            return res.status(400).json({
-                success: false,
-                error: 'Exemplar já devolvido'
-            });
-        }
-
-        await Emprestimo.registrarDevolucao(idEmprestimo);
-
-        const classificacao = await Classificacao.classificarEAtualizarAluno(emprestimo.id_aluno);
-
-        res.json({
-            success: true,
-            message: 'Devolução registrada com sucesso',
-            data: {
-                emprestimo: idEmprestimo,
-                aluno: {
-                    id: emprestimo.id_aluno,
-                    nome: emprestimo.aluno_nome,
-                    ra: emprestimo.ra
-                },
-                classificacao: {
-                    codigo: classificacao.codigo,
-                    descricao: classificacao.descricao,
-                    totalLivros: classificacao.totalLivros
-                }
-            }
-        });
-
-    } catch (error) {
-        console.error('Erro ao registrar devolução:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Erro interno do servidor: ' + error.message
-        });
+    // Validação dos campos
+    if (!ra || !codigoLivro) {
+      return res.status(400).json({
+        success: false,
+        mensagem: 'RA e código do livro são obrigatórios.'
+      });
     }
+
+    // Buscar aluno pelo RA
+    const aluno = await Aluno.buscarPorRa(ra);
+    if (!aluno) {
+      return res.status(404).json({
+        success: false,
+        mensagem: 'Aluno não encontrado.'
+      });
+    }
+
+    // Buscar exemplar pelo código
+    const exemplar = await Exemplar.listarExemplarPorId(codigoLivro);
+    if (!exemplar) {
+      return res.status(404).json({
+        success: false,
+        mensagem: 'Exemplar não encontrado.'
+      });
+    }
+
+    // Buscar empréstimo ativo
+    const emprestimo = await Emprestimo.listarEmprestimosAtivos(aluno.id, exemplar.id);
+    if (!emprestimo) {
+      return res.status(404).json({
+        success: false,
+        mensagem: 'Nenhum empréstimo ativo encontrado para este aluno e exemplar.'
+      });
+    }
+
+    // Verificar se já foi devolvido
+    if (emprestimo.exemplar_status === 'Disponível') {
+      return res.status(400).json({
+        success: false,
+        mensagem: 'Exemplar já devolvido.'
+      });
+    }
+
+    // Registrar devolução
+    await Emprestimo.registrarDevolucao(emprestimo.id);
+
+    // Atualizar classificação do aluno
+    const classificacao = await Classificacao.classificarEAtualizarAluno(aluno.id);
+
+    // Resposta de sucesso
+    res.json({
+      success: true,
+      message: 'Devolução registrada com sucesso',
+      data: {
+        emprestimo: emprestimo.id,
+        aluno: {
+          id: aluno.id,
+          nome: aluno.nome,
+          ra: aluno.ra
+        },
+        livro: {
+          titulo: exemplar.titulo,
+          autor: exemplar.autor
+        },
+        classificacao: {
+          codigo: classificacao.codigo,
+          descricao: classificacao.descricao,
+          totalLivros: classificacao.totalLivros
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Erro ao registrar devolução:', error);
+    res.status(500).json({
+      success: false,
+      mensagem: 'Erro interno do servidor: ' + error.message
+    });
+  }
 };
 
 exports.listarEmprestimosAtivosPorAluno = async (req, res) => {

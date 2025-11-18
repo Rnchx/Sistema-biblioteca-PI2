@@ -1,4 +1,4 @@
-const Aluno = require('../models/aluno');
+const Aluno = require('../models/Aluno');
 
 exports.cadastrarAluno = async (req, res) => {
     try {

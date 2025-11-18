@@ -251,6 +251,102 @@
     margin-right: 8px;
 }
 
+/* POPUP STYLES */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.popup-container {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+    border: 1px solid #e9ecef;
+    position: relative;
+}
+
+.popup-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.popup-icon {
+    font-size: 4.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.popup-success .popup-icon {
+    color: var(--success-green);
+}
+
+.popup-error .popup-icon {
+    color: var(--danger-red);
+}
+
+.popup-title {
+    font-family: "Public Sans", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.popup-message {
+    font-family: "Public Sans", sans-serif;
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+.popup-button {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-hover) 100%);
+    color: var(--white);
+    border: none;
+    padding: 16px 40px;
+    border-radius: 8px;
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 6px 20px rgba(28, 76, 255, 0.3);
+}
+
+.popup-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(28, 76, 255, 0.4);
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 2rem;
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
