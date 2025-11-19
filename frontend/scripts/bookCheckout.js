@@ -1,46 +1,55 @@
 /// Pesquisa de livros para retirar
 async function pesquisar() {
-  const termo = document.getElementById('pesquisa').value.trim().toLowerCase();
+  const input = document.getElementById('pesquisa');
+  const termo = input.value.trim().toLowerCase();
+
+  if (!termo) {
+    mostrarPopupErro('Por favor, preencha o campo de pesquisa.');
+    input.focus();
+    return;
+  }
 
   try {
     const resposta = await fetch('http://localhost:3000/exemplares/disponiveis');
     const resultado = await resposta.json();
 
-    if (resultado.success) {
-      const tbody = document.querySelector('#tabelaLivros tbody');
-      tbody.innerHTML = '';
-
-      const filtrados = termo
-        ? resultado.data.filter(ex => ex.titulo.toLowerCase().includes(termo))
-        : resultado.data;
-
-      if (filtrados.length === 0) {
-        const linha = document.createElement('tr');
-        linha.innerHTML = `<td colspan="4">Nenhum livro encontrado.</td>`;
-        tbody.appendChild(linha);
-        return;
-      }
-
-      filtrados.forEach(ex => {
-        const linha = document.createElement('tr');
-        linha.innerHTML = `
-          <td>${ex.exemplar_id}</td>
-          <td>${ex.titulo}</td>
-          <td>${ex.autor}</td>
-          <td>${ex.exemplar_status}</td>
-        `;
-        tbody.appendChild(linha);
-      });
-    } else {
-      console.error('Erro na resposta da API:', resultado.error);
+    if (!resultado.success) {
+      console.error("Erro da API:", resultado.error);
+      return;
     }
+
+    const tbody = document.querySelector('#tabelaLivros tbody');
+    tbody.innerHTML = '';
+
+    const filtrados = resultado.data.filter(ex =>
+      ex.titulo.toLowerCase().includes(termo)
+    );
+
+    if (filtrados.length === 0) {
+      const linha = document.createElement('tr');
+      linha.innerHTML = `<td colspan="4">Nenhum livro encontrado.</td>`;
+      tbody.appendChild(linha);
+      return;
+    }
+
+    filtrados.forEach(ex => {
+      const linha = document.createElement('tr');
+      linha.innerHTML = `
+        <td>${ex.exemplar_id}</td>
+        <td>${ex.titulo}</td>
+        <td>${ex.autor}</td>
+        <td>${ex.exemplar_status}</td>
+      `;
+      tbody.appendChild(linha);
+    });
+
   } catch (erro) {
     console.error('Erro ao buscar exemplares:', erro);
   }
 }
-
 // Formulário de retirada
 document.addEventListener("DOMContentLoaded", function () {
+
   const form = document.getElementById("formEmprestimo");
 
   form.addEventListener("submit", async function (event) {

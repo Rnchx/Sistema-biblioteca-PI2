@@ -95,7 +95,7 @@ static async criar(emprestimo) {
      WHERE emp.id_aluno = ? AND emp.id_exemplar = ? AND emp.data_devolucao IS NULL`,
     [idAluno, idExemplar]
   );
-  return rows[0]; s
+  return rows[0]; ss
 }
 
 static async registrarDevolucao(idEmprestimo) {

@@ -1,61 +1,52 @@
 const Emprestimo = require('../models/emprestimo');
 const Aluno = require('../models/Aluno');
-const Classificacao = require('../models/classificacao');
 const Exemplar = require('../models/exemplar');
 
 exports.realizarEmprestimo = async (req, res) => {
-    try {
-        const { raAluno, idExemplar } = req.body;
+  try {
+    const { raAluno, idExemplar } = req.body;
 
-        // Verificar se aluno existe
-        const aluno = await Aluno.buscarPorRa(raAluno);
-        if (!aluno) {
-            return res.status(404).json({
-                success: false,
-                error: 'Aluno não encontrado'
-            });
-        }
-
-        const exemplarDisponivel = await Emprestimo.verificarExemplarDisponivel(idExemplar);
-        if (!exemplarDisponivel) {
-            return res.status(400).json({
-                success: false,
-                error: 'Exemplar não disponível para empréstimo'
-            });
-        }
-
-        const exemplar = await Exemplar.buscarPorId(idExemplar);
-
-        const result = await Emprestimo.criar({
-            idExemplar: idExemplar,
-            idAluno: aluno.id
-        });
-
-        res.status(201).json({
-            success: true,
-            message: 'Empréstimo realizado com sucesso',
-            data: {
-                id: result.insertId,
-                aluno: {
-                    id: aluno.id,
-                    nome: aluno.nome,
-                    ra: aluno.ra
-                },
-                exemplar: {
-                    id: exemplar.id,
-                    livro_titulo: exemplar.titulo,
-                    livro_autor: exemplar.autor
-                }
-            }
-        });
-
-    } catch (error) {
-        console.error('Erro ao realizar empréstimo:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Erro interno do servidor: ' + error.message
-        });
+    const aluno = await Aluno.buscarPorRa(raAluno);
+    if (!aluno) {
+      return res.status(404).json({ success: false, error: 'Aluno não encontrado' });
     }
+
+    const exemplarDisponivel = await Exemplar.verificarDisponibilidade(idExemplar);
+    if (!exemplarDisponivel) {
+      return res.status(400).json({ success: false, error: 'Exemplar não disponível para empréstimo' });
+    }
+
+    const exemplar = await Exemplar.listarExemplarPorId(idExemplar);
+    if (!exemplar) {
+      return res.status(404).json({ success: false, error: 'Exemplar não encontrado' });
+    }
+
+    const result = await Emprestimo.criar({ idExemplar, idAluno: aluno.id });
+
+    await Exemplar.atualizarStatus(idExemplar, 'Emprestado');
+
+    res.status(201).json({
+      success: true,
+      message: 'Empréstimo realizado com sucesso',
+      data: {
+        id: result.insertId,
+        aluno: {
+          id: aluno.id,
+          nome: aluno.nome,
+          ra: aluno.ra
+        },
+        exemplar: {
+          id: exemplar.id,
+          livro_titulo: exemplar.titulo,
+          livro_autor: exemplar.autor
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Erro ao realizar empréstimo:', error);
+    res.status(500).json({ success: false, error: 'Erro interno do servidor: ' + error.message });
+  }
 };
 
 exports.registrarDevolucao = async (req, res) => {

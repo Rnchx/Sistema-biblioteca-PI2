@@ -33,7 +33,7 @@
       <div id="PesquisaDeLivros">
         <form onsubmit="pesquisar(); return false;">
           <input type="text" id="pesquisa" name="busca" placeholder="Digite o nome" required>
-          <button type="submit">Pesquisar</button>
+          <button id="botaoFormulario" type="submit">Pesquisar</button>
         </form>
 
         <!-- Tabela de resultados da pesquisa -->
@@ -85,8 +85,16 @@
     </div>
   </div>
 </div>
+<div class="popup-overlay" id="popupSucesso" style="display: none;">
+  <div class="popup-container popup-success">
+    <div class="popup-icon"><i class="fas fa-check-circle"></i></div>
+    <div class="popup-title">Sucesso</div>
+    <div class="popup-message" id="mensagemSucesso">Mensagem de sucesso aqui</div>
+    <div class="popup-buttons">
+      <button class="popup-button" onclick="fecharPopupSucesso()">Fechar</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
-</body>
 
-</html>

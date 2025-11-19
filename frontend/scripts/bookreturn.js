@@ -1,52 +1,50 @@
-
-document.addEventListener("DOMContentLoaded", () => {
-    pesquisar();
-});
-
-// PESQUISA DE LIVROS ALUGADOS
 async function pesquisar() {
-    const termo = document.getElementById("pesquisa").value.trim().toLowerCase();
+  const input = document.getElementById('pesquisa');
+  const termo = input.value.trim().toLowerCase();
 
-    try {
-        const resposta = await fetch('http://localhost:3000/emprestimos/ativos');
-        const resultado = await resposta.json();
+  if (!termo) {
+    mostrarPopupErro('Por favor, preencha o campo de pesquisa.');
+    input.focus();
+    return;
+  }
 
-        if (!resultado.success) {
-            console.error("Erro da API:", resultado.error);
-            return;
-        }
+  try {
+    const resposta = await fetch('http://localhost:3000/emprestimos/ativos');
+    const resultado = await resposta.json();
 
-        const tbody = document.querySelector('#tabelaLivros tbody');
-        tbody.innerHTML = '';
-
-        const filtrados = resultado.data.filter(item =>
-            !termo || item.livro_titulo.toLowerCase().includes(termo)
-        );
-
-        if (filtrados.length === 0) {
-            const linha = document.createElement('tr');
-            linha.innerHTML = `
-                <td colspan="4" style="text-align:center; padding:12px;">
-                    Nenhum exemplar alugado encontrado.
-                </td>`;
-            tbody.appendChild(linha);
-            return;
-        }
-
-        filtrados.forEach(ex => {
-            const linha = document.createElement('tr');
-            linha.innerHTML = `
-                <td>${ex.exemplar_id}</td>
-                <td>${ex.livro_titulo}</td>
-                <td>${ex.autor}</td>
-                <td>Alugado</td>
-            `;
-            tbody.appendChild(linha);
-        });
-
-    } catch (erro) {
-        console.error("Erro ao buscar exemplares:", erro);
+    if (!resultado.success) {
+      console.error("Erro da API:", resultado.error);
+      return;
     }
+
+    const tbody = document.querySelector('#tabelaLivros tbody');
+    tbody.innerHTML = '';
+
+    const filtrados = resultado.data.filter(item =>
+      item.livro_titulo && item.livro_titulo.toLowerCase().includes(termo)
+    );
+
+    if (filtrados.length === 0) {
+      const linha = document.createElement('tr');
+      linha.innerHTML = `<td colspan="4">Nenhum exemplar alugado encontrado.</td>`;
+      tbody.appendChild(linha);
+      return;
+    }
+
+    filtrados.forEach(ex => {
+      const linha = document.createElement('tr');
+      linha.innerHTML = `
+        <td>${ex.exemplar_id}</td>
+        <td>${ex.livro_titulo}</td>
+        <td>${ex.autor}</td>
+        <td>Alugado</td>
+      `;
+      tbody.appendChild(linha);
+    });
+
+  } catch (erro) {
+    console.error("Erro ao buscar exemplares:", erro);
+  }
 }
 
 //Formulário de devolução
@@ -101,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
       mostrarPopupErro("Erro de conexão com o servidor.");
     }
   });
+  console.log("Resposta da API:", resultado);
 });
 function mostrarPopupErro(mensagem) {
   const popup = document.getElementById("popupErro");
