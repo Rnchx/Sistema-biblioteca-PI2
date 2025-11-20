@@ -72,20 +72,22 @@ static async criar(emprestimo) {
         return rows;
     }
 
-    static async listarEmprestimosAtivos() {
-        const [rows] = await connection.execute(
-            `SELECT emp.*, 
-                    a.nome as aluno_nome, a.ra, 
-                    l.titulo as livro_titulo, l.autor,
-                    ex.id as exemplar_id
-             FROM emprestimo emp
-             JOIN aluno a ON emp.id_aluno = a.id
-             JOIN exemplar ex ON emp.id_exemplar = ex.id
-             JOIN livro l ON ex.id_livro = l.id
-             WHERE ex.status = "Emprestado"`
-        );
-        return rows;
-    }
+    static async listarEmprestimosAtivos(idAluno, idExemplar) {
+  const [rows] = await connection.execute(
+    `SELECT emp.*, 
+            a.nome as aluno_nome, a.ra, 
+            l.titulo as livro_titulo, l.autor,
+            ex.id as exemplar_id
+     FROM emprestimo emp
+     JOIN aluno a ON emp.id_aluno = a.id
+     JOIN exemplar ex ON emp.id_exemplar = ex.id
+     JOIN livro l ON ex.id_livro = l.id
+     WHERE emp.id_aluno = ? AND emp.id_exemplar = ? AND ex.status = "Emprestado"`,
+    [idAluno, idExemplar]
+  );
+
+  return rows.length > 0 ? rows[0] : null;
+}
 
     static async buscarEmprestimoAtivo(idAluno, idExemplar) {
   const [rows] = await connection.execute(

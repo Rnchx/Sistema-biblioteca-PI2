@@ -99,7 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
       mostrarPopupErro("Erro de conexão com o servidor.");
     }
   });
-  console.log("Resposta da API:", resultado);
 });
 function mostrarPopupErro(mensagem) {
   const popup = document.getElementById("popupErro");
