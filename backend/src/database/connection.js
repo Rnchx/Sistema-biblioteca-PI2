@@ -31,10 +31,24 @@ require('dotenv').config();
 
 //conexao Emely
 
+// const connection = mysql.createPool({
+//     host: process.env.DB_HOST || 'localhost',
+//     user: process.env.DB_USER || 'root', 
+//     password: process.env.DB_PASSWORD || 'Family10!',
+//     database: process.env.DB_NAME || 'pi2',
+//     port: process.env.DB_PORT || 3306,
+//     waitForConnections: true,
+//     connectionLimit: 10,
+//     queueLimit: 0
+// });
+
+
+//conexao Guillermo
+
 const connection = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root', 
-    password: process.env.DB_PASSWORD || 'Family10!',
+    password: process.env.DB_PASSWORD || '#@Guigo1267',
     database: process.env.DB_NAME || 'pi2',
     port: process.env.DB_PORT || 3306,
     waitForConnections: true,
