@@ -28,7 +28,6 @@ require('dotenv').config();
 //     queueLimit: 0
 // });
 
-
 //conexao Emely
 
 const connection = mysql.createPool({
