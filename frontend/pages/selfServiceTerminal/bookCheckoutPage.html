@@ -32,7 +32,7 @@
       <!-- Pesquisa de livros -->
 
 <div id="PesquisaDeLivros">
-  <form onsubmit="pesquisar(); return false;">
+  <form onsubmit="realizarBusca(); return false;">
     <input type="text" id="pesquisa" placeholder="Digite o título do livro" />
     <button type="submit">Pesquisar</button>
   </form>
@@ -47,10 +47,11 @@
         <th>Status</th>
       </tr>
     </thead>
-    <tbody>
-      <!-- Linhas da tabela -->
-    </tbody>
+    <tbody></tbody>
   </table>
+
+  <!-- Container para o botão "Carregar mais" -->
+  <div id="botaoCarregarMaisContainer"></div>
 </div>
 
       <!-- Formulário de retirada -->

@@ -1,7 +1,14 @@
 /// Pesquisa de livros para retirar
-async function pesquisar() {
+let resultadosFiltrados = [];
+let offset = 0;
+const limite = 6;
+
+async function realizarBusca() {
   const input = document.getElementById('pesquisa');
   const termo = input.value.trim().toLowerCase();
+
+  const tbody = document.querySelector('#tabelaLivros tbody');
+  tbody.innerHTML = ''; // limpa resultados anteriores
 
   if (!termo) {
     mostrarPopupErro('Por favor, preencha o campo de pesquisa.');
@@ -18,36 +25,120 @@ async function pesquisar() {
       return;
     }
 
-    const tbody = document.querySelector('#tabelaLivros tbody');
-    tbody.innerHTML = '';
+    // Filtra os resultados
+    function normalizar(str) {
+  return str
+    .toLowerCase()
+    .normalize("NFD") 
+    .replace(/[\u0300-\u036f]/g, ""); 
+}
 
-    const filtrados = resultado.data.filter(ex =>
-      ex.titulo.toLowerCase().includes(termo)
-    );
+  resultadosFiltrados = resultado.data.filter(ex =>
+    normalizar(ex.titulo).startsWith(normalizar(termo))
+  );
 
-    if (filtrados.length === 0) {
-      const linha = document.createElement('tr');
-      linha.innerHTML = `<td colspan="4">Nenhum livro encontrado.</td>`;
-      tbody.appendChild(linha);
-      return;
-    }
-
-    filtrados.forEach(ex => {
-      const linha = document.createElement('tr');
-      linha.innerHTML = `
-        <td>${ex.exemplar_id}</td>
-        <td>${ex.titulo}</td>
-        <td>${ex.autor}</td>
-        <td>${ex.exemplar_status}</td>
-      `;
-      tbody.appendChild(linha);
-    });
-
+    offset = 0; // reinicia a paginação
+    renderizarResultados();
   } catch (erro) {
     console.error('Erro ao buscar exemplares:', erro);
   }
 }
+
+function renderizarResultados() {
+  const tbody = document.querySelector('#tabelaLivros tbody');
+  tbody.innerHTML = '';
+
+  const slice = resultadosFiltrados.slice(offset, offset + limite);
+
+  if (slice.length === 0) {
+    const linha = document.createElement('tr');
+    linha.innerHTML = `<td colspan="4">Nenhum livro encontrado.</td>`;
+    tbody.appendChild(linha);
+    return;
+  }
+
+  slice.forEach(ex => {
+    const linha = document.createElement('tr');
+    linha.innerHTML = `
+      <td>${ex.exemplar_id}</td>
+      <td>${ex.titulo}</td>
+      <td>${ex.autor}</td>
+      <td>${ex.exemplar_status}</td>
+    `;
+    tbody.appendChild(linha);
+  });
+
+  // Botão "Carregar mais"
+  const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
+  botaoContainer.innerHTML = ''; // limpa antes
+
+  if (offset + limite < resultadosFiltrados.length) {
+    const botao = document.createElement('button');
+    botao.textContent = 'Carregar mais';
+    botao.addEventListener('click', carregarMaisDisponiveis);
+    botaoContainer.appendChild(botao);
+  }
+}
+
+function carregarMaisDisponiveis() {
+  // Mostra todos os resultados de uma vez
+  offset = 0;
+  const tbody = document.querySelector('#tabelaLivros tbody');
+  tbody.innerHTML = '';
+
+  resultadosFiltrados.forEach(ex => {
+    const linha = document.createElement('tr');
+    linha.innerHTML = `
+      <td>${ex.exemplar_id}</td>
+      <td>${ex.titulo}</td>
+      <td>${ex.autor}</td>
+      <td>${ex.exemplar_status}</td>
+    `;
+    tbody.appendChild(linha);
+  });
+
+  // Esconde o botão depois de carregar tudo
+  const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
+  botaoContainer.innerHTML = '';
+}
+
+// Configuração dos eventos
+function configurarEventos() {
+  const campoBusca = document.getElementById('pesquisa');
+campoBusca.addEventListener('focus', function() {
+  const tbody = document.querySelector('#tabelaLivros tbody');
+  tbody.innerHTML = ''; // limpa os resultados anteriores
+  campoBusca.value = '';
+});
+  const botaoBusca = document.querySelector('#PesquisaDeLivros button');
+
+  let timeoutBusca;
+
+  if (botaoBusca) {
+    botaoBusca.addEventListener('click', function() {
+      realizarBusca();
+    });
+  }
+
+  if (campoBusca) {
+    campoBusca.addEventListener('input', function() {
+      clearTimeout(timeoutBusca);
+      timeoutBusca = setTimeout(function() {
+        realizarBusca();
+      }, 500); 
+    });
+
+    campoBusca.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        clearTimeout(timeoutBusca);
+        realizarBusca();
+      }
+    });
+  }
+}
+
 // Formulário de retirada
+document.addEventListener("DOMContentLoaded", configurarEventos);
 document.addEventListener("DOMContentLoaded", function () {
 
   const form = document.getElementById("formEmprestimo");
@@ -89,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (resposta.ok) {
         mostrarPopupSucesso("Livro alugado com sucesso!");
+        form.reset();
       } else {
         let mensagemErro = `Erro ${resposta.status}: Falha no empréstimo.`;
 
