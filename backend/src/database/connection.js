@@ -4,29 +4,29 @@ require('dotenv').config();
 
 // conexão jp
 
-// const connection = mysql.createPool({
-//     host: process.env.DB_HOST || 'localhost',
-//     user: process.env.DB_USER || 'root', 
-//     password: process.env.DB_PASSWORD || 'SeltR150610',
-//     database: process.env.DB_NAME || 'pi2',
-//     port: process.env.DB_PORT || 3306,
-//     waitForConnections: true,
-//     connectionLimit: 10,
-//     queueLimit: 0
-// });
-
-// conexao puc jp
-
 const connection = mysql.createPool({
-    host: process.env.DB_HOST || '172.16.12.14',
-    user: process.env.DB_USER || 'BD240225246', 
-    password: process.env.DB_PASSWORD || 'Gcgts5',
-    database: process.env.DB_NAME || 'BD240225246',
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root', 
+    password: process.env.DB_PASSWORD || 'SeltR150610',
+    database: process.env.DB_NAME || 'pi2',
     port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
+
+// conexao puc jp
+
+// const connection = mysql.createPool({
+//     host: process.env.DB_HOST || '172.16.12.14',
+//     user: process.env.DB_USER || 'BD240225246', 
+//     password: process.env.DB_PASSWORD || 'Gcgts5',
+//     database: process.env.DB_NAME || 'BD240225246',
+//     port: process.env.DB_PORT || 3306,
+//     waitForConnections: true,
+//     connectionLimit: 10,
+//     queueLimit: 0
+// });
 
 
 //conexao Emely
