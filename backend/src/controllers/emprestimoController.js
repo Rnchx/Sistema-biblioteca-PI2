@@ -164,22 +164,23 @@ exports.listarEmprestimosAtivosPorAluno = async (req, res) => {
 };
 
 exports.listarTodosEmprestimosAtivos = async (req, res) => {
-    try {
-        const emprestimos = await Emprestimo.listarEmprestimosAtivos();
+  try {
+      // Use o método correto que criamos anteriormente
+      const emprestimos = await Emprestimo.listarTodosEmprestimosAtivos();
 
-        res.json({
-            success: true,
-            data: emprestimos,
-            total: emprestimos.length
-        });
+      res.json({
+          success: true,
+          data: emprestimos,
+          total: emprestimos.length
+      });
 
-    } catch (error) {
-        console.error('Erro ao listar todos os empréstimos ativos:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Erro interno do servidor'
-        });
-    }
+  } catch (error) {
+      console.error('Erro ao listar todos os empréstimos ativos:', error);
+      res.status(500).json({
+          success: false,
+          error: 'Erro interno do servidor: ' + error.message
+      });
+  }
 };
 
 exports.listarHistoricoPorAluno = async (req, res) => {
