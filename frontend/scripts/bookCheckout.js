@@ -87,9 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
         body: JSON.stringify({ raAluno: ra, idExemplar: codigo })
       });
 
-      console.log("Status da resposta:", resposta.status);
-      console.log("Headers da resposta:", resposta.headers);
-
       if (resposta.ok) {
         mostrarPopupSucesso("Livro alugado com sucesso!");
       } else {
@@ -118,6 +115,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }); 
 }); 
+
+//Popups de ERRO e SUCESSO
 function mostrarPopupErro(mensagem) {
   const popup = document.getElementById("popupErro");
   const texto = document.getElementById("mensagemErro");
@@ -131,7 +130,7 @@ function fecharPopup() {
 
 function mostrarPopupSucesso(mensagem) {
   document.getElementById('mensagemSucesso').innerText = mensagem;
-  document.getElementById('popupSucesso').style.display = 'block';
+  document.getElementById('popupSucesso').style.display = 'flex';
 }
 
 function fecharPopupSucesso() {
