@@ -330,6 +330,40 @@ h4 {
     line-height: 1.6;
 }
 
+.popup-button {
+    background: linear-gradient(135deg, #1c4cff 0%, #3863ff 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+
+.popup-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(28, 76, 255, 0.3);
+}
+
+.popup-button-secondary {
+    background: #6c757d;
+}
+
+.popup-button-secondary:hover {
+    background: #5a6268;
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
 /* Animações */
 @keyframes fadeIn {
     from { opacity: 0; }
