@@ -30,71 +30,69 @@
       <h1>Empréstimo de livros</h1>
 
       <!-- Pesquisa de livros -->
+      <div id="PesquisaDeLivros">
+        <input type="text" id="pesquisa" placeholder="Digite o nome do livro/código" />
+        
+        <!-- Tabela de resultados da pesquisa -->
+        <table id="tabelaLivros">
+          <thead>
+            <tr>
+              <th>Nº</th>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
 
-<div id="PesquisaDeLivros">
-  <form onsubmit="realizarBusca(); return false;">
-    <input type="text" id="pesquisa" placeholder="Digite o título do livro" />
-    <button type="submit">Pesquisar</button>
-  </form>
-
-  <!-- Tabela de resultados da pesquisa -->
-  <table id="tabelaLivros">
-    <thead>
-      <tr>
-        <th>Nº</th>
-        <th>Título</th>
-        <th>Autor</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <!-- Container para o botão "Carregar mais" -->
-  <div id="botaoCarregarMaisContainer"></div>
-</div>
+        <!-- Container para o botão "Carregar mais" -->
+        <div id="botaoCarregarMaisContainer"></div>
+      </div>
 
       <!-- Formulário de retirada -->
       <div class="containerLabelsInputs">
-      <div id="formulario">
-        <h2>Formulário de Empréstimo</h2>
-       <form id="formEmprestimo">
-          <div class="campoFormulario">
-            <label class="labelsFormulario" for="ra">RA</label>
-            <input class="inputsFormulario" type="text" name="ra" id="ra" placeholder="25111111 (exemplo)" required>
-          </div>
-
-          <div class="campoFormulario">
-            <label class="labelsFormulario" for="codigoLivro">Nº DO EXEMPLAR</label>
-            <input class="inputsFormulario" type="text" name="codigoLivro" id="codigoLivro" placeholder="[nº]" required>
-          </div>
-          <div id="containerBotao">
-            <button id="botaoFormulario" type="submit">ENVIAR</button>
+        <div id="formulario">
+          <h2>Formulário de Empréstimo</h2>
+          <form id="formEmprestimo">
+            <div class="campoFormulario">
+              <label class="labelsFormulario" for="ra">RA</label>
+              <input class="inputsFormulario" type="text" name="ra" id="ra" placeholder="25111111 (exemplo)" maxlength="8">
             </div>
-          </div>
-        </form>
+
+            <div class="campoFormulario">
+              <label class="labelsFormulario" for="codigoLivro">Nº DO EXEMPLAR</label>
+              <input class="inputsFormulario" type="text" name="codigoLivro" id="codigoLivro" placeholder="[nº]">
+            </div>
+            <div id="containerBotao">
+              <button id="botaoFormulario" type="submit">ENVIAR</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-<div class="popup-overlay" id="popupErro">
-  <div class="popup-container popup-error">
-    <div class="popup-icon"><i class="fas fa-exclamation-circle"></i></div>
-    <div class="popup-title">Erro</div>
-    <div class="popup-message" id="mensagemErro">Mensagem de erro aqui</div>
-    <div class="popup-buttons">
-      <button class="popup-button" onclick="fecharPopup()">Fechar</button>
+
+  <div class="popup-overlay" id="popupErro">
+    <div class="popup-container popup-error">
+      <div class="popup-icon"><i class="fas fa-exclamation-circle"></i></div>
+      <div class="popup-title">Erro</div>
+      <div class="popup-message" id="mensagemErro">Mensagem de erro aqui</div>
+      <div class="popup-buttons">
+        <button class="popup-button" onclick="fecharPopup()">Fechar</button>
+      </div>
     </div>
   </div>
-</div>
-<div class="popup-overlay" id="popupSucesso">
-  <div class="popup-container popup-success">
-    <div class="popup-icon"><i class="fas fa-check-circle"></i></div>
-    <div class="popup-title">Sucesso</div>
-    <div class="popup-message" id="mensagemSucesso">Mensagem de sucesso aqui</div>
-    <div class="popup-buttons">
-      <button class="popup-button" id="botaoPesquisar" onclick="fecharPopupSucesso()">Fechar</button>
+
+  <div class="popup-overlay" id="popupSucesso">
+    <div class="popup-container popup-success">
+      <div class="popup-icon"><i class="fas fa-check-circle"></i></div>
+      <div class="popup-title">Sucesso</div>
+      <div class="popup-message" id="mensagemSucesso">Mensagem de sucesso aqui</div>
+      <div class="popup-buttons">
+        <button class="popup-button" id="botaoPesquisar" onclick="fecharPopupSucesso()">Fechar</button>
+      </div>
     </div>
   </div>
-</div>
 </body>
 </html>
