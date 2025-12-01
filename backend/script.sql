@@ -257,13 +257,13 @@ CREATE TABLE IF NOT EXISTS classificacao (
 
 -- INSERIR DADOS DE TESTE
 INSERT INTO aluno (nome, ra, cpf, email, telefone, endereco) VALUES
-('João Pedro Rocha', 25003959, '12345678901', 'joao.pedro@puc.com', '11999999999', 'Rua A, 100'),
-('Maria Silva', 25000000, '23456789012', 'maria.silva@puc.com', '11988888888', 'Rua B, 200'),
-('Lucas Oliveira', 25003595, '34567890123', 'lucas.oliveira@puc.com', '11977777777', 'Rua C, 300');
+('João Pedro Rocha', 25003959, '12345678901', 'joao.pedro@puccampinas.edu.br', '11999999999', 'Rua A, 100'),
+('Maria Silva', 25000000, '23456789012', 'maria.silva@puccampinas.edu.br', '11988888888', 'Rua B, 200'),
+('Lucas Oliveira', 25003595, '34567890123', 'lucas.oliveira@puccampinas.edu.br', '11977777777', 'Rua C, 300');
 
 -- INSERIR LIVROS
 INSERT INTO livro (titulo, isbn, autor, editora) VALUES
-('Livro Teste', '978-85-12345-99-9', 'Guilhermo', 'Editora de Guilhermo'),
+('Livro Teste', '978-85-12345-99-9', 'Jp Rocha', 'Grander Mentes'),
 ('Fundamentos de Programação', '978-85-12345-01-1', 'José da Silva', 'Tecnologia Press'),
 ('O Senhor dos Anéis', '561-76-31835-01-1', 'J.R.R. Tolkien', 'Data Books');
 
@@ -282,16 +282,17 @@ INSERT INTO emprestimo (id_exemplar, id_aluno, devolvido) VALUES
 (4, 1, TRUE),   -- Já devolvido
 (1, 1, FALSE);  -- Ativo (não devolvido)
 
--- Maria: 5 livros já devolvidos
+-- Maria: 6 livros já devolvidos
 INSERT INTO emprestimo (id_exemplar, id_aluno, devolvido) VALUES
 (2, 2, TRUE),
 (3, 2, TRUE),
 (4, 2, TRUE),
 (1, 2, TRUE),
-(2, 2, TRUE);
+(2, 2, TRUE),
+(3, 2, TRUE);
 
--- Lucas: nenhum empréstimo ainda
--- (vai ficar com 0 livros lidos)
+-- Lucas: NÃO LEU NENHUM
+
 
 -- CLASSIFICAÇÕES INICIAIS
 INSERT INTO classificacao (tipo, descricao, idAluno) VALUES 

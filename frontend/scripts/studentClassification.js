@@ -52,8 +52,8 @@ async function inicializarPagina() {
         // Atualizar nome do aluno
         document.getElementById('nomeAlunoTexto').textContent = alunoLogado.nome;
         
-        // Carregar classificação do leitor
-        await carregarClassificacaoLeitor();
+        // Carregar dados da classificação
+        await carregarDadosClassificacao();
         
     } catch (error) {
         console.error('❌ Erro na inicialização:', error);
@@ -83,113 +83,116 @@ function adicionarInfoAlunoHeader(aluno) {
     }
 }
 
-// Carregar classificação do leitor da API
-async function carregarClassificacaoLeitor() {
+// Carregar dados da classificação
+async function carregarDadosClassificacao() {
     try {
-        console.log('📊 Iniciando carregamento da classificação...');
+        console.log('📊 Carregando dados da classificação...');
         
         // Mostrar estado de carregamento
         document.getElementById('tituloClassificacao').textContent = 'CARREGANDO...';
-        document.getElementById('descricaoClassificacao').textContent = 'Aguarde enquanto buscamos sua classificação';
+        document.getElementById('descricaoClassificacao').textContent = 'Aguarde enquanto buscamos seus dados';
         
-        console.log('🔍 Buscando classificação para RA:', alunoLogado.ra);
+        console.log('🔍 Buscando dados para RA:', alunoLogado.ra);
         
-        // Buscar classificação na API
+        // Chamar a API de classificação que já calcula tudo
         const response = await fetch(`${API_BASE_URL}/classificacao/aluno/${alunoLogado.ra}`);
         
         if (!response.ok) {
             throw new Error(`Erro HTTP: ${response.status}`);
         }
         
-        const data = await response.json();
-        console.log('📨 Resposta da API:', data);
+        const result = await response.json();
+        console.log('📨 Resposta da API:', result);
         
-        if (data.success && data.data) {
-            console.log('✅ Dados recebidos da API');
-            const classificacaoData = data.data.classificacao;
+        if (result.success && result.data) {
+            const dados = result.data;
+            
+            // Extrair informações
+            const classificacao = dados.classificacao;
+            const estatisticas = dados.estatisticas;
+            const totalLivrosLidos = estatisticas.totalLivrosLidos;
+            
+            console.log(`📚 Livros lidos (devolvidos): ${totalLivrosLidos}`);
+            console.log(`📖 Livros ativos (não devolvidos): ${estatisticas.livrosAtivos}`);
+            
+            // Preparar dados para exibição
+            const classificacaoData = {
+                tipo: classificacao.tipo || 'INICIANTE',
+                descricao: classificacao.descricao || 'Leitor Iniciante - até 5 livros',
+                totalLivros: totalLivrosLidos
+            };
+            
+            // Exibir na interface
             exibirClassificacao(classificacaoData);
+            
         } else {
-            console.log('⚠️ Nenhum dado da API, calculando localmente...');
-            // Se não tiver classificação, calcular baseada nos empréstimos
-            await calcularEExibirClassificacao();
+            throw new Error('Dados não retornados pela API');
         }
         
     } catch (error) {
         console.error('❌ Erro ao carregar classificação:', error);
-        // Tentar calcular localmente em caso de erro
-        await calcularEExibirClassificacao();
+        // Tentar fallback
+        await carregarDadosFallback();
     }
 }
 
-// Calcular classificação baseada nos empréstimos dos últimos 6 meses
-async function calcularEExibirClassificacao() {
+// Fallback se a API principal falhar
+async function carregarDadosFallback() {
     try {
-        console.log('🧮 Calculando classificação localmente...');
+        console.log('🔄 Usando fallback para carregar dados...');
         
-        // Buscar histórico de empréstimos dos últimos 6 meses
-        const emprestimos = await buscarHistoricoEmprestimos();
-        const totalLivros = emprestimos.length;
-        
-        console.log(`📚 Total de livros lidos nos últimos 6 meses: ${totalLivros}`);
-        
-        // Determinar classificação baseada nos critérios corretos
-        const classificacao = determinarClassificacao(totalLivros);
-        
-        exibirClassificacao(classificacao);
-        
-    } catch (error) {
-        console.error('❌ Erro ao calcular classificação:', error);
-        mostrarErroClassificacao();
-    }
-}
-
-// Buscar histórico de empréstimos dos últimos 6 meses
-async function buscarHistoricoEmprestimos() {
-    try {
-        console.log('🔍 Buscando histórico de empréstimos...');
+        // Buscar diretamente os empréstimos do aluno
         const response = await fetch(`${API_BASE_URL}/emprestimos/aluno/${alunoLogado.ra}/historico`);
         
         if (!response.ok) {
             throw new Error(`Erro HTTP: ${response.status}`);
         }
         
-        const data = await response.json();
-        console.log('📨 Histórico recebido:', data);
-        return data.success ? data.data : [];
+        const result = await response.json();
+        console.log('📨 Histórico de empréstimos:', result);
+        
+        if (result.success && result.data) {
+            const emprestimos = result.data;
+            
+            // Contar empréstimos DEVOLVIDOS (devolvido = TRUE)
+            const livrosLidos = emprestimos.filter(emp => emp.devolvido === true || emp.devolvido === 1);
+            const totalLivrosLidos = livrosLidos.length;
+            
+            console.log(`📚 Total de livros lidos (devolvidos): ${totalLivrosLidos}`);
+            
+            // Determinar classificação
+            let tipo, descricao;
+            
+            if (totalLivrosLidos <= 5) {
+                tipo = 'INICIANTE';
+                descricao = 'Leitor Iniciante - até 5 livros';
+            } else if (totalLivrosLidos <= 10) {
+                tipo = 'REGULAR';
+                descricao = 'Leitor Regular - 6 a 10 livros';
+            } else if (totalLivrosLidos <= 20) {
+                tipo = 'ATIVO';
+                descricao = 'Leitor Ativo - 11 a 20 livros';
+            } else {
+                tipo = 'EXTREMO';
+                descricao = 'Leitor Extremo - mais de 20 livros';
+            }
+            
+            const classificacaoData = {
+                tipo,
+                descricao,
+                totalLivros: totalLivrosLidos
+            };
+            
+            exibirClassificacao(classificacaoData);
+            
+        } else {
+            throw new Error('Nenhum dado de histórico encontrado');
+        }
         
     } catch (error) {
-        console.error('❌ Erro ao buscar histórico:', error);
-        return [];
+        console.error('❌ Erro no fallback:', error);
+        mostrarErroClassificacao();
     }
-}
-
-// Determinar classificação baseada nos critérios corretos
-function determinarClassificacao(totalLivros) {
-    console.log(`🎯 Determinando classificação para ${totalLivros} livros...`);
-    
-    let tipo, descricao;
-    
-    if (totalLivros > 20) {
-        tipo = 'EXTREMO';
-        descricao = 'MAIS DE 20 LIVROS';
-    } else if (totalLivros >= 11 && totalLivros <= 20) {
-        tipo = 'ATIVO';
-        descricao = '11 A 20 LIVROS';
-    } else if (totalLivros >= 6 && totalLivros <= 10) {
-        tipo = 'REGULAR';
-        descricao = '6 A 10 LIVROS';
-    } else {
-        tipo = 'INICIANTE';
-        descricao = totalLivros > 0 ? `ATÉ 5 LIVROS` : 'NENHUM LIVRO AINDA';
-    }
-    
-    console.log(`🏷️ Classificação determinada: ${tipo} - ${descricao}`);
-    
-    return {
-        tipo,
-        descricao,
-        totalLivros
-    };
 }
 
 // Exibir classificação na interface
@@ -203,14 +206,13 @@ function exibirClassificacao(classificacaoData) {
     
     // Extrair dados da classificação
     const tipo = classificacaoData.tipo || 'INICIANTE';
-    const descricao = classificacaoData.descricao || 'NENHUM LIVRO AINDA';
     const totalLivros = classificacaoData.totalLivros || 0;
     
-    console.log(`📝 Tipo: "${tipo}", Descrição: "${descricao}", Livros: ${totalLivros}`);
+    console.log(`📝 Tipo: "${tipo}", Livros LIDOS: ${totalLivros}`);
     
-    // Formatar o texto para exibição (adicionar "LEITOR" se necessário)
-    const tipoFormatado = tipo.includes('LEITOR') ? tipo : `LEITOR ${tipo}`;
-    tituloElement.textContent = tipoFormatado;
+    // Formatar título (adicionar "LEITOR" se necessário)
+    const tituloFormatado = tipo.includes('LEITOR') ? tipo : `${tipo}`;
+    tituloElement.textContent = tituloFormatado;
     
     // DESCRIÇÃO PERSONALIZADA COM NOME E QUANTIDADE
     let descricaoPersonalizada = '';
@@ -218,15 +220,13 @@ function exibirClassificacao(classificacaoData) {
     if (totalLivros === 0) {
         descricaoPersonalizada = `${alunoLogado.nome} ainda não leu nenhum livro nos últimos 6 meses`;
     } else if (totalLivros === 1) {
-        descricaoPersonalizada = `${alunoLogado.nome} leu ${totalLivros} livro nos últimos 6 meses`;
+        descricaoPersonalizada = `${alunoLogado.nome} leu ${totalLivros} livro`;
     } else {
-        descricaoPersonalizada = `${alunoLogado.nome} leu ${totalLivros} livros nos últimos 6 meses`;
+        descricaoPersonalizada = `${alunoLogado.nome} leu ${totalLivros} livros`;
     }
     
-    // // Adicionar a faixa de classificação se houver livros
-    // if (totalLivros > 0) {
-    //     descricaoPersonalizada += ` | ${descricao}`;
-    // }
+    // Adicionar informação de período
+    descricaoPersonalizada += ' (histórico completo)';
     
     descricaoElement.textContent = descricaoPersonalizada;
     
@@ -243,7 +243,38 @@ function exibirClassificacao(classificacaoData) {
         badgeElement.style.transform = 'translateY(0)';
     }, 100);
     
+    // Adicionar contador de livros lidos
+    adicionarContadorLivros(totalLivros);
+    
     console.log('✅ Classificação exibida com sucesso!');
+}
+
+// Função para adicionar contador de livros lidos
+function adicionarContadorLivros(totalLivros) {
+    const container = document.querySelector('.container-classificacao');
+    if (!container) return;
+    
+    // Remover contador anterior se existir
+    const contadorAnterior = document.getElementById('contadorLivrosLidos');
+    if (contadorAnterior) {
+        contadorAnterior.remove();
+    }
+    
+    if (totalLivros > 0) {
+        const contadorElement = document.createElement('div');
+        contadorElement.id = 'contadorLivrosLidos';
+        contadorElement.className = 'contador-livros-lidos';
+        contadorElement.innerHTML = `
+            <div class="badge-contador">
+                <i class="fas fa-book-reader"></i>
+                <span>${totalLivros} livro${totalLivros !== 1 ? 's' : ''} lido${totalLivros !== 1 ? 's' : ''} no total</span>
+            </div>
+        `;
+        
+        // Inserir após a descrição
+        const descricaoElement = document.getElementById('descricaoClassificacao');
+        descricaoElement.parentNode.insertBefore(contadorElement, descricaoElement.nextSibling);
+    }
 }
 
 // Aplicar classe CSS baseada no tipo de classificação
@@ -263,13 +294,13 @@ function aplicarClasseClassificacao(element, tipo) {
     const tipoUpper = tipo.toUpperCase().trim();
     let classeAplicada = 'classificacao-iniciante';
     
-    if (tipoUpper === 'LEITOR EXTREMO' || tipoUpper === 'EXTREMO') {
+    if (tipoUpper === 'EXTREMO') {
         classeAplicada = 'classificacao-extremo';
-    } else if (tipoUpper === 'LEITOR ATIVO' || tipoUpper === 'ATIVO') {
+    } else if (tipoUpper === 'ATIVO') {
         classeAplicada = 'classificacao-ativo';
-    } else if (tipoUpper === 'LEITOR REGULAR' || tipoUpper === 'REGULAR') {
+    } else if (tipoUpper === 'REGULAR') {
         classeAplicada = 'classificacao-regular';
-    } else if (tipoUpper === 'LEITOR INICIANTE' || tipoUpper === 'INICIANTE') {
+    } else if (tipoUpper === 'INICIANTE') {
         classeAplicada = 'classificacao-iniciante';
     } else {
         classeAplicada = 'classificacao-iniciante';
@@ -290,7 +321,13 @@ function mostrarErroClassificacao() {
     descricaoElement.textContent = 'Não foi possível carregar sua classificação';
     
     // Aplicar estilo de erro
-    aplicarClasseClassificacao(badgeElement, 'ERRO');
+    badgeElement.classList.remove(
+        'classificacao-extremo',
+        'classificacao-ativo', 
+        'classificacao-regular',
+        'classificacao-iniciante'
+    );
+    badgeElement.classList.add('classificacao-erro');
 }
 
 // Atualizar classificação periodicamente (opcional)
@@ -299,7 +336,7 @@ function iniciarAtualizacaoAutomatica() {
     setInterval(() => {
         if (alunoLogado) {
             console.log('🔄 Atualização automática da classificação');
-            carregarClassificacaoLeitor();
+            carregarDadosClassificacao();
         }
     }, 120000);
 }
