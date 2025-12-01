@@ -6,13 +6,13 @@ const limite = 6;
 async function realizarBusca() {
   const input = document.getElementById('pesquisa');
   const termo = input.value.trim().toLowerCase();
-  
+
   const tbody = document.querySelector('#tabelaLivros tbody');
   const thead = document.querySelector('#tabelaLivros thead');
   const tabela = document.getElementById('tabelaLivros');
-  
+
   tbody.innerHTML = '';
-  
+
   const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
   botaoContainer.innerHTML = '';
   botaoContainer.style.display = 'none';
@@ -50,24 +50,97 @@ async function realizarBusca() {
       return;
     }
 
-    function normalizar(str) {
-      return str
+    // Função auxiliar para normalizar texto
+    function normalizarTexto(texto) {
+      if (!texto) return '';
+      return texto
         .toLowerCase()
-        .normalize("NFD") 
-        .replace(/[\u0300-\u036f]/g, ""); 
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
     }
 
-    resultadosFiltrados = resultado.data.filter(ex =>
-      normalizar(ex.titulo).startsWith(normalizar(termo))
-    );
+    const termoNormalizado = normalizarTexto(termo);
+    
+    // Função para calcular relevância da busca
+    function calcularRelevancia(livro) {
+      const tituloNormalizado = normalizarTexto(livro.titulo);
+      const autorNormalizado = normalizarTexto(livro.autor);
+      
+      let pontuacao = 0;
+      
+      // 1. Título começa exatamente com o termo (maior relevância)
+      if (tituloNormalizado.startsWith(termoNormalizado)) {
+        pontuacao += 100;
+      }
+      
+      // 2. Título contém o termo em qualquer posição
+      if (tituloNormalizado.includes(termoNormalizado)) {
+        pontuacao += 50;
+      }
+      
+      // 3. Autor começa com o termo
+      if (autorNormalizado.startsWith(termoNormalizado)) {
+        pontuacao += 40;
+      }
+      
+      // 4. Autor contém o termo
+      if (autorNormalizado.includes(termoNormalizado)) {
+        pontuacao += 20;
+      }
+      
+      // 5. Busca por palavras individuais no título
+      const palavrasTermo = termoNormalizado.split(/\s+/).filter(p => p.length > 2);
+      const palavrasTitulo = tituloNormalizado.split(/\s+/);
+      
+      palavrasTermo.forEach(palavra => {
+        if (palavrasTitulo.some(tituloPalavra => tituloPalavra.includes(palavra))) {
+          pontuacao += 30;
+        }
+      });
+      
+      // 6. Busca por palavras individuais no autor
+      const palavrasAutor = autorNormalizado.split(/\s+/);
+      palavrasTermo.forEach(palavra => {
+        if (palavrasAutor.some(autorPalavra => autorPalavra.includes(palavra))) {
+          pontuacao += 15;
+        }
+      });
+      
+      return pontuacao;
+    }
+
+    // Filtrar e classificar resultados por relevância
+    resultadosFiltrados = resultado.data
+      .filter(livro => {
+        const tituloNormalizado = normalizarTexto(livro.titulo);
+        const autorNormalizado = normalizarTexto(livro.autor);
+        
+        // Aceita se encontrou em qualquer um desses campos
+        return (
+          tituloNormalizado.includes(termoNormalizado) ||
+          autorNormalizado.includes(termoNormalizado) ||
+          // Busca por múltiplas palavras
+          termoNormalizado.split(/\s+/).some(palavra => 
+            palavra.length > 2 && (
+              tituloNormalizado.includes(palavra) ||
+              autorNormalizado.includes(palavra)
+            )
+          )
+        );
+      })
+      .map(livro => ({
+        ...livro,
+        relevancia: calcularRelevancia(livro)
+      }))
+      .sort((a, b) => b.relevancia - a.relevancia); // Ordenar por relevância decrescente
 
     offset = 0;
-    
-    // Pequeno delay para melhor UX
+
     setTimeout(() => {
       renderizarResultados();
     }, 300);
-    
+
   } catch (erro) {
     console.error('Erro ao buscar exemplares:', erro);
     botaoContainer.innerHTML = '<div class="sem-resultados"><i class="fas fa-exclamation-triangle"></i> Erro na conexão com o servidor</div>';
@@ -78,6 +151,7 @@ function renderizarResultados() {
   const tbody = document.querySelector('#tabelaLivros tbody');
   const tabela = document.getElementById('tabelaLivros');
   const thead = document.querySelector('#tabelaLivros thead');
+  const termoPesquisa = document.getElementById('pesquisa').value.trim();
   
   tbody.innerHTML = '';
 
@@ -85,7 +159,7 @@ function renderizarResultados() {
 
   if (slice.length === 0 && document.getElementById('pesquisa').value.trim() !== '') {
     const linha = document.createElement('tr');
-    linha.innerHTML = `<td colspan="4">Nenhum livro encontrado.</td>`;
+    linha.innerHTML = `<td colspan="4">Nenhum livro encontrado para "${termoPesquisa}".</td>`;
     tbody.appendChild(linha);
     
     // Garantir que a tabela esteja visível
@@ -98,7 +172,7 @@ function renderizarResultados() {
     
     // Mostrar mensagem no container do botão
     const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
-    botaoContainer.innerHTML = '<div class="sem-resultados">Nenhum resultado encontrado para sua pesquisa</div>';
+    botaoContainer.innerHTML = `<div class="sem-resultados">Nenhum resultado encontrado para "<strong>${termoPesquisa}</strong>"</div>`;
     botaoContainer.style.display = 'flex';
     return;
   }
@@ -113,18 +187,37 @@ function renderizarResultados() {
     }
   }
 
+  // Função para destacar o termo encontrado
+  function destacarTermo(texto, termo) {
+    if (!termo || !texto) return texto;
+    
+    try {
+      const regex = new RegExp(`(${termo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      return texto.replace(regex, '<span class="termo-destacado">$1</span>');
+    } catch (e) {
+      console.warn('Erro ao criar regex para destaque:', e);
+      return texto;
+    }
+  }
+
   slice.forEach((ex, index) => {
     const linha = document.createElement('tr');
-    linha.style.animationDelay = `${index * 0.05}s`; // Animação escalonada
+    linha.style.animationDelay = `${index * 0.05}s`;
+    
+    // Destacar o termo encontrado no título e autor
+    const tituloDestacado = destacarTermo(ex.titulo, termoPesquisa);
+    const autorDestacado = destacarTermo(ex.autor, termoPesquisa);
+    
     linha.innerHTML = `
       <td>${ex.exemplar_id}</td>
-      <td>${ex.titulo}</td>
-      <td>${ex.autor}</td>
+      <td>${tituloDestacado}</td>
+      <td>${autorDestacado}</td>
       <td><span class="status-disponivel">${ex.exemplar_status}</span></td>
     `;
     tbody.appendChild(linha);
   });
 
+  // Resto da função permanece igual...
   const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
   botaoContainer.innerHTML = '';
   botaoContainer.style.display = 'none';
@@ -134,17 +227,14 @@ function renderizarResultados() {
     botao.innerHTML = '<i class="fas fa-book"></i> Carregar mais livros';
     botao.setAttribute('title', `Mostrar mais ${resultadosFiltrados.length - (offset + limite)} livros`);
     
-    // Adicionar evento com efeito de loading
     botao.addEventListener('click', async function() {
       botao.classList.add('loading');
       botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
       
-      // Pequeno delay para efeito visual
       await new Promise(resolve => setTimeout(resolve, 300));
       
       carregarMaisDisponiveis();
       
-      // Remover efeito de loading
       setTimeout(() => {
         botao.classList.remove('loading');
         botao.innerHTML = '<i class="fas fa-book"></i> Carregar mais livros';
@@ -154,20 +244,11 @@ function renderizarResultados() {
     botaoContainer.appendChild(botao);
     botaoContainer.style.display = 'flex';
     
-    // Adicionar contador de resultados
     const contador = document.createElement('div');
     contador.className = 'contador-resultados';
     contador.innerHTML = `Mostrando ${Math.min(offset + limite, resultadosFiltrados.length)} de ${resultadosFiltrados.length} resultados`;
-    contador.style.cssText = `
-      text-align: center;
-      color: var(--text-light);
-      font-size: 0.9rem;
-      margin-top: 8px;
-      font-style: italic;
-    `;
     botaoContainer.appendChild(contador);
   } else if (resultadosFiltrados.length > 0) {
-    // Mostrar mensagem quando todos os resultados já foram carregados
     const mensagem = document.createElement('div');
     mensagem.className = 'sem-resultados';
     mensagem.innerHTML = `<i class="fas fa-check-circle"></i> Todos os ${resultadosFiltrados.length} resultados foram carregados`;
@@ -179,10 +260,10 @@ function renderizarResultados() {
 function carregarMaisDisponiveis() {
   offset += limite;
   const tbody = document.querySelector('#tabelaLivros tbody');
-  
+
   // Manter os resultados anteriores e adicionar novos
   const novosResultados = resultadosFiltrados.slice(offset, offset + limite);
-  
+
   novosResultados.forEach((ex, index) => {
     const linha = document.createElement('tr');
     linha.style.animationDelay = `${index * 0.05}s`;
@@ -205,24 +286,24 @@ function carregarMaisDisponiveis() {
     const botao = document.createElement('button');
     botao.innerHTML = '<i class="fas fa-book"></i> Carregar mais livros';
     botao.setAttribute('title', `Mostrar mais ${resultadosFiltrados.length - (offset + limite)} livros`);
-    
-    botao.addEventListener('click', async function() {
+
+    botao.addEventListener('click', async function () {
       botao.classList.add('loading');
       botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
-      
+
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       carregarMaisDisponiveis();
-      
+
       setTimeout(() => {
         botao.classList.remove('loading');
         botao.innerHTML = '<i class="fas fa-book"></i> Carregar mais livros';
       }, 500);
     });
-    
+
     botaoContainer.appendChild(botao);
     botaoContainer.style.display = 'flex';
-    
+
     // Atualizar contador
     const contador = document.createElement('div');
     contador.className = 'contador-resultados';
@@ -243,14 +324,14 @@ function carregarMaisDisponiveis() {
     botaoContainer.appendChild(mensagem);
     botaoContainer.style.display = 'flex';
   }
-  
+
   // Rolagem suave para os novos resultados
   setTimeout(() => {
     const novasLinhas = tbody.querySelectorAll('tr.highlight-new');
     if (novasLinhas.length > 0) {
       const ultimaLinha = novasLinhas[novasLinhas.length - 1];
       ultimaLinha.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      
+
       // Remover classe de highlight após animação
       setTimeout(() => {
         novasLinhas.forEach(linha => linha.classList.remove('highlight-new'));
@@ -262,20 +343,20 @@ function carregarMaisDisponiveis() {
 // Configuração dos eventos
 function configurarEventos() {
   const campoBusca = document.getElementById('pesquisa');
-  
+
   let timeoutBusca;
 
   if (campoBusca) {
-    campoBusca.addEventListener('input', function() {
+    campoBusca.addEventListener('input', function () {
       clearTimeout(timeoutBusca);
-      
+
       // Se o campo estiver vazio, limpar tudo imediatamente
       if (!this.value.trim()) {
         const tbody = document.querySelector('#tabelaLivros tbody');
         const thead = document.querySelector('#tabelaLivros thead');
         const tabela = document.getElementById('tabelaLivros');
         const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
-        
+
         if (tbody) {
           tbody.innerHTML = '';
         }
@@ -289,19 +370,19 @@ function configurarEventos() {
           botaoContainer.innerHTML = '';
           botaoContainer.style.display = 'none';
         }
-        
+
         // Limpar resultados filtrados
         resultadosFiltrados = [];
         offset = 0;
         return;
       }
-      
-      timeoutBusca = setTimeout(function() {
+
+      timeoutBusca = setTimeout(function () {
         realizarBusca();
-      }, 500); 
+      }, 500);
     });
 
-    campoBusca.addEventListener('keypress', function(e) {
+    campoBusca.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         clearTimeout(timeoutBusca);
         realizarBusca();
@@ -356,7 +437,7 @@ function configurarEventos() {
           mostrarPopupErro("Erro ao verificar RA. Tente novamente.");
           return;
         }
-        
+
         if (!verificaRA.ok) {
           if (verificaRA.status === 404) {
             mostrarPopupErro("RA não encontrado. Verifique se o número está correto.");
@@ -374,7 +455,7 @@ function configurarEventos() {
           mostrarPopupErro("Erro ao processar dados do RA.");
           return;
         }
-        
+
         if (!alunoData || (!alunoData.success && !alunoData.data)) {
           mostrarPopupErro("RA não encontrado no sistema.");
           return;
@@ -390,7 +471,7 @@ function configurarEventos() {
           mostrarPopupErro("Erro ao verificar exemplar. Tente novamente.");
           return;
         }
-        
+
         if (!verificaExemplar.ok) {
           if (verificaExemplar.status === 404) {
             mostrarPopupErro("Exemplar não encontrado. Verifique o código do livro.");
@@ -420,7 +501,7 @@ function configurarEventos() {
 
         if (exemplarData.data && exemplarData.data.exemplar_status) {
           statusExemplar = exemplarData.data.exemplar_status;
-        } 
+        }
         else if (exemplarData.data && exemplarData.data.status) {
           statusExemplar = exemplarData.data.status;
         }
@@ -448,14 +529,14 @@ function configurarEventos() {
         console.log("Verificando empréstimos do aluno...");
         try {
           const emprestimosAluno = await fetch(`http://localhost:3000/emprestimos/aluno/${ra}/ativos`);
-          
+
           if (emprestimosAluno.ok) {
             const emprestimosData = await emprestimosAluno.json();
             if (emprestimosData && emprestimosData.success && emprestimosData.data) {
-              const emprestimosAtraso = emprestimosData.data.filter(emp => 
+              const emprestimosAtraso = emprestimosData.data.filter(emp =>
                 new Date(emp.data_devolucao) < new Date() && emp.status === 'Ativo'
               );
-              
+
               if (emprestimosAtraso.length > 0) {
                 mostrarPopupErro("Aluno possui empréstimos em atraso. Regularize a situação antes de novo empréstimo.");
                 return;
@@ -473,43 +554,43 @@ function configurarEventos() {
         let livroInfo = { titulo: 'Informação não disponível' };
 
         try {
-            // Se o exemplar já tem o título, usa ele
-            if (exemplarData.data && exemplarData.data.titulo) {
-                livroInfo.titulo = exemplarData.data.titulo;
-            } 
-            // Se não, busca as informações do livro pelo ID do exemplar
-            else if (exemplarData.data && exemplarData.data.livro_id) {
-                console.log("Buscando informações do livro...");
-                const livroResponse = await fetch(`http://localhost:3000/livros/${exemplarData.data.livro_id}`);
-                if (livroResponse.ok) {
-                    const livroData = await livroResponse.json();
-                    if (livroData.success && livroData.data) {
-                        livroInfo.titulo = livroData.data.titulo || 'Título não encontrado';
-                        console.log("Título do livro encontrado:", livroInfo.titulo);
-                    }
-                }
+          // Se o exemplar já tem o título, usa ele
+          if (exemplarData.data && exemplarData.data.titulo) {
+            livroInfo.titulo = exemplarData.data.titulo;
+          }
+          // Se não, busca as informações do livro pelo ID do exemplar
+          else if (exemplarData.data && exemplarData.data.livro_id) {
+            console.log("Buscando informações do livro...");
+            const livroResponse = await fetch(`http://localhost:3000/livros/${exemplarData.data.livro_id}`);
+            if (livroResponse.ok) {
+              const livroData = await livroResponse.json();
+              if (livroData.success && livroData.data) {
+                livroInfo.titulo = livroData.data.titulo || 'Título não encontrado';
+                console.log("Título do livro encontrado:", livroInfo.titulo);
+              }
             }
-            // Se ainda não encontrou, tenta buscar pelo ID do exemplar na rota de livros
-            else {
-                console.log("Tentando buscar livro pelo ID do exemplar...");
-                const livroResponse = await fetch(`http://localhost:3000/livros`);
-                if (livroResponse.ok) {
-                    const livrosData = await livroResponse.json();
-                    if (livrosData.success && livrosData.data) {
-                        // Encontra o livro que tem este exemplar
-                        const livroEncontrado = livrosData.data.find(livro => 
-                            livro.exemplares && livro.exemplares.some(ex => ex.exemplar_id == codigo)
-                        );
-                        if (livroEncontrado) {
-                            livroInfo.titulo = livroEncontrado.titulo;
-                            console.log("Título do livro encontrado via lista:", livroInfo.titulo);
-                        }
-                    }
+          }
+          // Se ainda não encontrou, tenta buscar pelo ID do exemplar na rota de livros
+          else {
+            console.log("Tentando buscar livro pelo ID do exemplar...");
+            const livroResponse = await fetch(`http://localhost:3000/livros`);
+            if (livroResponse.ok) {
+              const livrosData = await livroResponse.json();
+              if (livrosData.success && livrosData.data) {
+                // Encontra o livro que tem este exemplar
+                const livroEncontrado = livrosData.data.find(livro =>
+                  livro.exemplares && livro.exemplares.some(ex => ex.exemplar_id == codigo)
+                );
+                if (livroEncontrado) {
+                  livroInfo.titulo = livroEncontrado.titulo;
+                  console.log("Título do livro encontrado via lista:", livroInfo.titulo);
                 }
+              }
             }
+          }
         } catch (erro) {
-            console.warn('Erro ao buscar informações do livro:', erro);
-            livroInfo.titulo = 'Erro ao buscar título';
+          console.warn('Erro ao buscar informações do livro:', erro);
+          livroInfo.titulo = 'Erro ao buscar título';
         }
 
         const resposta = await fetch("http://localhost:3000/emprestimos", {
@@ -564,7 +645,7 @@ function configurarEventos() {
 }
 
 // Inicializar eventos quando o DOM estiver carregado
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   configurarEventos();
   console.log("✅ Sistema de empréstimo inicializado!");
 });
@@ -592,7 +673,7 @@ function fecharPopupSucesso() {
 
 // Funções auxiliares para debug
 window.recarregarBusca = realizarBusca;
-window.mostrarResultados = function() {
+window.mostrarResultados = function () {
   console.log('Resultados filtrados:', resultadosFiltrados);
   console.log('Offset atual:', offset);
   console.log('Total de resultados:', resultadosFiltrados.length);

@@ -726,6 +726,58 @@ h2 {
   margin-top: 2rem;
 }
 
+/* ========== NOVOS ESTILOS PARA BUSCA AVANÇADA ========== */
+
+/* Estilo para destacar termos encontrados */
+.termo-destacado {
+  background-color: #FFF9C4;
+  color: #333;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  transition: background-color 0.2s ease;
+}
+
+/* Feedback visual para resultados encontrados */
+.resultado-encontrado {
+  background-color: rgba(40, 167, 69, 0.05) !important;
+}
+
+/* Animação para resultados novos */
+@keyframes pulse-highlight {
+  0% { background-color: rgba(255, 249, 196, 0.5); }
+  100% { background-color: transparent; }
+}
+
+.resultado-destaque {
+  animation: pulse-highlight 2s ease-out;
+}
+
+/* Estilo para informações da pesquisa */
+.info-pesquisa {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+/* Ícone de busca */
+.icon-busca {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  pointer-events: none;
+  transition: var(--transition);
+}
+
+#pesquisa:focus + .icon-busca {
+  color: var(--primary-blue);
+}
+
 /* Animações */
 @keyframes fadeIn {
   from {
@@ -840,6 +892,11 @@ h2 {
     padding: 5px 8px;
     font-size: 0.85rem;
   }
+
+  .termo-destacado {
+    padding: 1px 2px;
+    font-size: 0.9em;
+  }
 }
 
 @media (max-width: 480px) {
@@ -877,5 +934,10 @@ h2 {
   #botaoCarregarMaisContainer button {
     width: 100%;
     justify-content: center;
+  }
+
+  .termo-destacado {
+    padding: 1px 2px;
+    font-size: 0.85em;
   }
 }
