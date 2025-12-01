@@ -1,6 +1,5 @@
 const { connection } = require('../database/connection');
 
-
 class Exemplar {
 
     static async listarExemplares() {
@@ -10,7 +9,10 @@ class Exemplar {
 
     static async listarExemplarPorId(id) {
         const [rows] = await connection.execute(
-            'SELECT * FROM exemplar WHERE id = ?',
+            `SELECT e.*, l.titulo, l.autor 
+             FROM exemplar e 
+             LEFT JOIN livro l ON e.id_livro = l.id 
+             WHERE e.id = ?`,
             [id]
         );
         return rows[0];
@@ -30,25 +32,25 @@ class Exemplar {
         return rows[0];
     }
 
-static async listarDisponiveis() {
-    try {
-        const [rows] = await connection.execute(`
-            SELECT 
-                ex.id as exemplar_id,
-                ex.status as exemplar_status,
-                l.id as livro_id,
-                l.titulo,
-                l.autor
-            FROM exemplar ex
-            INNER JOIN livro l ON ex.id_livro = l.id
-            WHERE ex.status = 'Disponível'
-        `);
-        return rows;
-    } catch (error) {
-        console.error('Erro no listarDisponiveis:', error);
-        throw error;
+    static async listarDisponiveis() {
+        try {
+            const [rows] = await connection.execute(`
+                SELECT 
+                    ex.id as exemplar_id,
+                    ex.status as exemplar_status,
+                    l.id as livro_id,
+                    l.titulo,
+                    l.autor
+                FROM exemplar ex
+                INNER JOIN livro l ON ex.id_livro = l.id
+                WHERE ex.status = 'Disponível'
+            `);
+            return rows;
+        } catch (error) {
+            console.error('Erro no listarDisponiveis:', error);
+            throw error;
+        }
     }
-}
 
     static async adicionarExemplar(idLivro) {
         const [result] = await connection.execute(
@@ -58,32 +60,31 @@ static async listarDisponiveis() {
         return result;
     }
 
-   static async atualizarStatus(id, novoStatus) {
-    const statusValidos = ['Disponível', 'Emprestado', 'Extraviado'];
-    if (!statusValidos.includes(novoStatus)) {
-        throw new Error('Status inválido. Use: Disponível, Emprestado ou Extraviado');
+    static async atualizarStatus(id, novoStatus) {
+        const statusValidos = ['Disponível', 'Emprestado', 'Extraviado'];
+        if (!statusValidos.includes(novoStatus)) {
+            throw new Error('Status inválido. Use: Disponível, Emprestado ou Extraviado');
+        }
+
+        const [result] = await connection.execute(
+            'UPDATE exemplar SET status = ? WHERE id = ?',
+            [novoStatus, id]
+        );
+        return result;
     }
 
-    const [result] = await connection.execute(
-        'UPDATE exemplar SET status = ? WHERE id = ?',
-        [novoStatus, id]
-    );
-    return result;
-}
-
-static async verificarDisponibilidade(id) {
-    const [rows] = await connection.execute(
-        'SELECT status FROM exemplar WHERE id = ?',
-        [id]
-    );
-    return rows.length > 0 && rows[0].status === 'Disponível';
-}
+    static async verificarDisponibilidade(id) {
+        const [rows] = await connection.execute(
+            'SELECT status FROM exemplar WHERE id = ?',
+            [id]
+        );
+        return rows.length > 0 && rows[0].status === 'Disponível';
+    }
 
     static async deletarExemplar(id) {
         await connection.query('START TRANSACTION');
 
         try {
-
             // verifica primeiro se o exemplar está emprestado
             const [exemplar] = await connection.execute(
                 'SELECT status FROM exemplar WHERE id = ?',

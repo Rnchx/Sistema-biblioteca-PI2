@@ -42,37 +42,48 @@ body {
   letter-spacing: 2px;
 }
 
-/* Layout Principal */
 #containerPrincipal {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: 0 auto;
+  min-height: calc(100vh - 60px); /* Ajusta a altura subtraindo a altura da faixa azul */
 }
 
 /* Sidebar - Logo e Botão Voltar */
 #containerLogoEBotaoVoltar {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   padding: 2.5rem 2rem;
   background: var(--white);
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
   min-width: 320px;
   border-right: 1px solid #eaeaea;
   gap: 3rem;
+  justify-content: flex-start;
+  height: 100%;
+  min-height: calc(100vh - 60px);
 }
 
-/* Container do Formulário */
+/* Ajuste para a imagem da logo */
+#img {
+  width: 234px;
+  height: 111px;
+  object-fit: contain;
+}
+
+/* Container do Formulário - também precisa ocupar toda altura */
 #containerFormulario {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Altera para começar do topo */
   padding: 3rem 2rem;
   background: transparent;
   min-width: 320px;
+  min-height: calc(100vh - 60px); /* Mesma altura do container principal */
 }
 
 /* Título principal */
@@ -146,23 +157,48 @@ h1 {
   color: var(--primary-blue);
 }
 
-/* Pesquisa de livros */
+/* ========== PESQUISA DE LIVROS - Altura mínima apenas para o campo ========== */
 #PesquisaDeLivros {
-  margin-bottom: 30px;
-  margin-top: 20px;
-  padding: 20px;
+  margin-bottom: 20px;
+  margin-top: 15px;
+  padding: 10px;
   border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 70px;
+  background-color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Quando a tabela estiver visível, expande a div */
+#PesquisaDeLivros:has(#tabelaLivros:has(tbody tr)) {
+  min-height: 400px;
+  padding: 15px;
+}
+
+/* Quando não há pesquisa ou está vazia, manter altura mínima */
+#PesquisaDeLivros:has(#pesquisa:placeholder-shown),
+#PesquisaDeLivros:has(#pesquisa[value=""]) {
+  min-height: 70px;
+  padding: 10px;
+}
+
+/* Efeito visual para quando estiver com foco/expandido */
+#PesquisaDeLivros:has(#pesquisa:focus) {
+  box-shadow: 0 0 0 2px rgba(28, 76, 255, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 #pesquisa {
   width: 100%;
-  height: 48px;
-  padding: 12px 16px;
+  height: 45px;
+  padding: 10px 14px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-family: "Public Sans", sans-serif;
@@ -181,29 +217,64 @@ h1 {
   outline: none;
   border-color: var(--primary-blue);
   background: var(--white);
-  box-shadow: 0 0 0 4px rgba(28, 76, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(28, 76, 255, 0.2);
   transform: translateY(-1px);
 }
 
-/* Tabela de livros */
+/* ========== TABELA DE LIVROS - Ocultar quando vazia ========== */
 #tabelaLivros {
   width: 100%;
   border-collapse: collapse;
+  font-family: "Public Sans", sans-serif;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: none;
+  table-layout: auto;
+  margin-top: 0;
+  transition: all 0.4s ease;
+}
+
+/* Mostrar tabela quando tiver conteúdo no tbody */
+#tabelaLivros:has(tbody tr:not([colspan="4"])) {
+  display: table;
+  /* Mostrar como table quando tiver conteúdo */
+  opacity: 1;
+  max-height: 1000px;
   margin-top: 20px;
-  font-family: Arial, sans-serif;
+}
+
+/* Tabela com mensagem "Nenhum livro encontrado" */
+#tabelaLivros:has(tbody tr[colspan="4"]) {
+  display: table;
+  /* Mostrar como table quando tiver mensagem */
+  opacity: 1;
+  max-height: 200px;
+  margin-top: 20px;
+}
+
+#tabelaLivros thead {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+  z-index: 10;
 }
 
 #tabelaLivros th {
-  background-color: #1c4cff;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
   text-align: left;
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 12px 15px;
+  border: none;
   color: white;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 #tabelaLivros td {
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 12px 15px;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  vertical-align: middle;
 }
 
 #tabelaLivros td[colspan="4"] {
@@ -211,7 +282,215 @@ h1 {
   padding: 12px;
   font-style: italic;
   color: #666;
-  margin-top: 10px;
+}
+
+/* Ajustar largura das colunas */
+#tabelaLivros th:nth-child(1),
+#tabelaLivros td:nth-child(1) {
+  width: 10%;
+  min-width: 40px;
+  text-align: center;
+}
+
+#tabelaLivros th:nth-child(2),
+#tabelaLivros td:nth-child(2) {
+  width: 30%;
+  min-width: 120px;
+}
+
+#tabelaLivros th:nth-child(3),
+#tabelaLivros td:nth-child(3) {
+  width: 35%;
+  min-width: 140px;
+}
+
+#tabelaLivros th:nth-child(4),
+#tabelaLivros td:nth-child(4) {
+  width: 25%;
+  min-width: 120px;
+  text-align: center;
+  overflow: visible !important;
+  white-space: nowrap;
+}
+
+#tabelaLivros tbody tr:last-child td {
+  border-bottom: none;
+}
+
+#tabelaLivros tbody tr:hover {
+  background-color: rgba(28, 76, 255, 0.04);
+}
+
+/* Estilos para status dos livros na tabela */
+.status-disponivel {
+  color: var(--success-green);
+  background-color: rgba(40, 167, 69, 0.1);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  display: inline-block;
+  min-width: 100px;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.1);
+  font-weight: 600;
+}
+
+.status-indisponivel {
+  color: var(--danger-red);
+  background-color: rgba(220, 53, 69, 0.1);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  display: inline-block;
+  min-width: 100px;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.1);
+  font-weight: 600;
+}
+
+/* ========== BOTÃO CARREGAR MAIS ========== */
+#botaoCarregarMaisContainer {
+  display: none;
+  /* Ocultar por padrão */
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Mostrar container do botão quando houver botão ou mensagem */
+#botaoCarregarMaisContainer:has(button),
+#botaoCarregarMaisContainer:has(.sem-resultados) {
+  display: flex;
+  opacity: 1;
+  max-height: 200px;
+  margin-top: 20px;
+}
+
+#botaoCarregarMaisContainer::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(28, 76, 255, 0.3), transparent);
+  margin-bottom: 15px;
+}
+
+#botaoCarregarMaisContainer button {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-hover) 100%);
+  color: var(--white);
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  font-family: "Public Sans", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px rgba(28, 76, 255, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+#botaoCarregarMaisContainer button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(28, 76, 255, 0.35);
+}
+
+#botaoCarregarMaisContainer button:active {
+  transform: translateY(-1px);
+}
+
+#botaoCarregarMaisContainer button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+#botaoCarregarMaisContainer button:hover::before {
+  left: 100%;
+}
+
+#botaoCarregarMaisContainer button i {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+#botaoCarregarMaisContainer button:hover i {
+  transform: translateY(2px);
+}
+
+/* Efeito de loading para o botão */
+#botaoCarregarMaisContainer button.loading {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#botaoCarregarMaisContainer button.loading i {
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Contador de resultados */
+.contador-resultados {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin-top: 8px;
+  font-style: italic;
+  opacity: 0.8;
+  width: 100%;
+}
+
+/* Estilo para quando não há mais resultados */
+#botaoCarregarMaisContainer .sem-resultados {
+  text-align: center;
+  color: var(--text-light);
+  font-style: italic;
+  padding: 10px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+/* Animar a entrada dos novos itens */
+#tabelaLivros tbody tr {
+  animation: fadeInRow 0.3s ease-out;
+}
+
+@keyframes fadeInRow {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Formulário */
@@ -230,29 +509,31 @@ h1 {
 }
 
 .containerLabelsInputs {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 550px;
-    background: var(--white);
-    padding: 0.9rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    border: 1px solid #eaeaea;
-    position: relative;
-    margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 550px;
+  background: var(--white);
+  padding: 0.9rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 1px solid #eaeaea;
+  position: relative;
+  margin-top: 40px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .containerLabelsInputs::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .campoFormulario {
@@ -280,201 +561,321 @@ h1 {
 }
 
 .inputsFormulario:focus {
-    outline: none;
-    border-color: var(--primary-blue);
-    background: var(--white);
-    box-shadow: 0 0 0 4px rgba(28, 76, 255, 0.15);
-    transform: translateY(-1px);
+  outline: none;
+  border-color: var(--primary-blue);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(28, 76, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 h2 {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 /* Botão do Formulário */
 #containerBotao {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2rem;
 }
 
 #botaoFormulario {
-    width: 100%;
-    height: 40px;
-    border-radius: 8px;
-    border: none;
-    color: var(--white);
-    font-weight: 700;
-    font-family: "Public Sans", sans-serif;
-    font-size: 1.1rem;
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-hover) 100%);
-    transition: var(--transition);
-    cursor: pointer;
-    box-shadow: 0 6px 20px rgba(28, 76, 255, 0.3);
-    position: relative;
-    overflow: hidden;
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  color: var(--white);
+  font-weight: 700;
+  font-family: "Public Sans", sans-serif;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-hover) 100%);
+  transition: var(--transition);
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(28, 76, 255, 0.3);
+  position: relative;
+  overflow: hidden;
 }
 
 #botaoFormulario::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
 }
 
 #botaoFormulario:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(28, 76, 255, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(28, 76, 255, 0.4);
 }
 
 #botaoFormulario:hover::before {
-    left: 100%;
+  left: 100%;
 }
 
 #botaoFormulario:active {
-    transform: translateY(-1px);
+  transform: translateY(-1px);
 }
 
 #botaoFormulario:disabled {
-    background: #6c757d;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* POPUP STYLES */
 .popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
-    backdrop-filter: blur(4px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(4px);
 }
 
 .popup-container {
-    background: var(--white);
-    border-radius: var(--border-radius);
-    padding: 3rem;
-    max-width: 480px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-    animation: slideIn 0.3s ease;
-    border: 1px solid #e9ecef;
-    position: relative;
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 3rem;
+  max-width: 480px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+  border: 1px solid #e9ecef;
+  position: relative;
 }
 
 .popup-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0a36e6 100%);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .popup-icon {
-    font-size: 4.5rem;
-    margin-bottom: 1.5rem;
+  font-size: 4.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .popup-success .popup-icon {
-    color: var(--success-green);
+  color: var(--success-green);
 }
 
 .popup-error .popup-icon {
-    color: var(--danger-red);
+  color: var(--danger-red);
 }
 
 .popup-title {
-    font-family: "Public Sans", sans-serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: var(--text-dark);
+  font-family: "Public Sans", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
 }
 
 .popup-message {
-    font-family: "Public Sans", sans-serif;
-    font-size: 1.1rem;
-    color: var(--text-light);
-    margin-bottom: 2.5rem;
-    line-height: 1.6;
-    white-space: pre-line;
+  font-family: "Public Sans", sans-serif;
+  font-size: 1.1rem;
+  color: var(--text-light);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  white-space: pre-line;
 }
 
 .popup-button {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-hover) 100%);
-    color: var(--white);
-    border: none;
-    padding: 16px 40px;
-    border-radius: 8px;
-    font-family: "Public Sans", sans-serif;
-    font-weight: 600;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: 0 6px 20px rgba(28, 76, 255, 0.3);
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-hover) 100%);
+  color: var(--white);
+  border: none;
+  padding: 16px 40px;
+  border-radius: 8px;
+  font-family: "Public Sans", sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 6px 20px rgba(28, 76, 255, 0.3);
 }
 
 .popup-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(28, 76, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(28, 76, 255, 0.4);
 }
 
 .popup-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 2rem;
 }
 
 /* Animações */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideIn {
-    from { 
-        opacity: 0;
-        transform: translateY(-30px) scale(0.95);
-    }
-    to { 
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Animar a linha quando um novo resultado é adicionado */
+@keyframes highlightNew {
+  0% {
+    background-color: rgba(28, 76, 255, 0.1);
+  }
+
+  100% {
+    background-color: transparent;
+  }
+}
+
+.highlight-new {
+  animation: highlightNew 1.5s ease;
 }
 
 /* Loading spinner */
 .loading-spinner {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid var(--primary-blue);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-right: 10px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--primary-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  #botaoCarregarMaisContainer button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  #PesquisaDeLivros {
+    padding: 12px;
+    min-height: 85px;
+    /* Um pouco menor em tablets */
+  }
+
+  #PesquisaDeLivros:has(#tabelaLivros tbody tr:not([colspan])) {
+    min-height: 350px;
+    padding: 15px;
+  }
+
+  #tabelaLivros {
+    font-size: 0.9rem;
+  }
+
+  #tabelaLivros th,
+  #tabelaLivros td {
+    padding: 10px 8px;
+  }
+
+  #tabelaLivros th:nth-child(1),
+  #tabelaLivros td:nth-child(1) {
+    width: 15%;
+  }
+
+  #tabelaLivros th:nth-child(2),
+  #tabelaLivros td:nth-child(2) {
+    width: 30%;
+  }
+
+  #tabelaLivros th:nth-child(3),
+  #tabelaLivros td:nth-child(3) {
+    width: 30%;
+  }
+
+  #tabelaLivros th:nth-child(4),
+  #tabelaLivros td:nth-child(4) {
+    width: 25%;
+    min-width: 100px;
+  }
+
+  .status-disponivel,
+  .status-indisponivel {
+    min-width: 90px;
+    padding: 5px 8px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #PesquisaDeLivros {
+    min-height: 80px;
+    /* Mínimo absoluto em celulares */
+    padding: 10px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+  }
+
+  #PesquisaDeLivros:has(#tabelaLivros tbody tr:not([colspan])) {
+    min-height: 300px;
+    padding: 12px;
+  }
+
+  #tabelaLivros {
+    font-size: 0.85rem;
+    display: block;
+    overflow-x: auto;
+  }
+
+  #tabelaLivros th,
+  #tabelaLivros td {
+    padding: 8px 6px;
+  }
+
+  .status-disponivel,
+  .status-indisponivel {
+    font-size: 0.8rem;
+    padding: 4px 6px;
+    min-width: 80px;
+  }
+
+  #botaoCarregarMaisContainer button {
+    width: 100%;
+    justify-content: center;
+  }
 }

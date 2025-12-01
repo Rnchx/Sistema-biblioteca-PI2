@@ -3,229 +3,355 @@ const Aluno = require('../models/Aluno');
 const { connection } = require('../database/connection');
 
 exports.obterClassificacaoPorAluno = async (req, res) => {
-    try {
-        const { ra } = req.params;
+  try {
+    const { ra } = req.params;
 
-        const aluno = await Aluno.buscarPorRa(ra);
-        if (!aluno) {
-            return res.status(404).json({
-                success: false,
-                error: 'Aluno não encontrado'
-            });
-        }
-
-        const classificacao = await Classificacao.classificarEAtualizarAluno(aluno.id);
-
-        res.json({
-            success: true,
-            data: {
-                aluno: {
-                    id: aluno.id,
-                    nome: aluno.nome,
-                    ra: aluno.ra
-                },
-                classificacao: {
-                    tipo: classificacao.tipo,
-                    descricao: classificacao.descricao,
-                    totalLivros: classificacao.totalLivros
-                }
-            }
-        });
-
-    } catch (error) {
-        console.error('Erro ao obter classificação:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Erro interno do servidor'
-        });
+    // Buscar aluno
+    const [alunoRows] = await connection.execute(
+      'SELECT * FROM aluno WHERE ra = ?',
+      [ra]
+    );
+    
+    if (alunoRows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Aluno não encontrado'
+      });
     }
-};
-
-
-exports.listarClassificacaoGeral = async (req, res) => {
-    try {
-        console.log('🔍🔍🔍 DEBUG COMPLETO DA QUERY 🔍🔍🔍');
-        
-        // TESTE 1: Contagem total de empréstimos
-        console.log('🧪 TESTE 1: Contagem TOTAL de empréstimos...');
-        const [totalGeral] = await connection.execute('SELECT COUNT(*) as total FROM emprestimo');
-        console.log('📊 TOTAL de empréstimos no sistema:', totalGeral[0].total);
-        
-        // TESTE 2: Ver alguns empréstimos
-        console.log('🧪 TESTE 2: Ver alguns empréstimos...');
-        const [algunsEmprestimos] = await connection.execute('SELECT * FROM emprestimo LIMIT 5');
-        console.log('📊 Primeiros empréstimos:', algunsEmprestimos);
-        
-        // TESTE 3: Ver estrutura da tabela emprestimo
-        console.log('🧪 TESTE 3: Estrutura da tabela emprestimo...');
-        const [estrutura] = await connection.execute('DESCRIBE emprestimo');
-        console.log('📊 Estrutura:', estrutura);
-        
-        // TESTE 4: Contagem por aluno específico (João ID 1)
-        console.log('🧪 TESTE 4: Contagem para João (ID 1)...');
-        const [joaoCount] = await connection.execute('SELECT COUNT(*) as total FROM emprestimo WHERE id_aluno = 1');
-        console.log('📊 João (ID 1) tem:', joaoCount[0].total, 'empréstimos');
-        
-        // TESTE 5: Ver empréstimos do João
-        console.log('🧪 TESTE 5: Empréstimos do João (ID 1)...');
-        const [joaoEmprestimos] = await connection.execute('SELECT * FROM emprestimo WHERE id_aluno = 1');
-        console.log('📊 Empréstimos do João:', joaoEmprestimos);
-        
-        // TESTE 6: Ver todos os alunos e seus IDs
-        console.log('🧪 TESTE 6: Todos os alunos...');
-        const [todosAlunos] = await connection.execute('SELECT id, nome, ra FROM aluno');
-        console.log('📊 Alunos:', todosAlunos);
-        
-        // AGORA testar a query problemática
-        console.log('\n🧪🧪�️️ TESTANDO A QUERY PROBLEMÁTICA 🧪🧪🧪');
-        for (let aluno of todosAlunos) {
-            const [result] = await connection.execute(
-                'SELECT COUNT(*) as total_livros FROM emprestimo WHERE id_aluno = ?',
-                [aluno.id]
-            );
-            console.log(`📊 ${aluno.nome} (ID: ${aluno.id}): ${result[0].total_livros} empréstimos`);
-        }
-        
-        // Continuar com o processamento normal...
-        const classificacoesComAlunos = await Classificacao.listarClassificacoesComAlunos();
-        
-        const classificacoesAtualizadas = await Promise.all(
-            classificacoesComAlunos.map(async (classificacao) => {
-                try {
-                    const [rows] = await connection.execute(
-                        'SELECT COUNT(*) as total_livros FROM emprestimo WHERE id_aluno = ?',
-                        [classificacao.idAluno]
-                    );
-                    
-                    const totalLivrosReal = rows[0].total_livros;
-                    
-                    let tipoCorreto, descricaoCorreta;
-                    if (totalLivrosReal <= 5) {
-                        tipoCorreto = 'INICIANTE';
-                        descricaoCorreta = 'Leitor Iniciante - até 5 livros';
-                    } else if (totalLivrosReal <= 10) {
-                        tipoCorreto = 'REGULAR';
-                        descricaoCorreta = 'Leitor Regular - 6 a 10 livros';
-                    } else if (totalLivrosReal <= 20) {
-                        tipoCorreto = 'ATIVO';
-                        descricaoCorreta = 'Leitor Ativo - 11 a 20 livros';
-                    } else {
-                        tipoCorreto = 'EXTREMO';
-                        descricaoCorreta = 'Leitor Extremo - mais de 20 livros';
-                    }
-                    
-                    return {
-                        aluno: {
-                            id: classificacao.idAluno,
-                            nome: classificacao.aluno_nome,
-                            ra: classificacao.ra
-                        },
-                        classificacao: {
-                            tipo: tipoCorreto,
-                            descricao: descricaoCorreta,
-                            totalLivros: totalLivrosReal
-                        }
-                    };
-                    
-                } catch (error) {
-                    console.error(`❌ Erro:`, error);
-                    return {
-                        aluno: {
-                            id: classificacao.idAluno,
-                            nome: classificacao.aluno_nome,
-                            ra: classificacao.ra
-                        },
-                        classificacao: {
-                            tipo: 'INICIANTE',
-                            descricao: 'Leitor Iniciante - até 5 livros',
-                            totalLivros: 0
-                        }
-                    };
-                }
-            })
-        );
-        
-        res.json({
-            success: true,
-            data: classificacoesAtualizadas,
-            total: classificacoesAtualizadas.length
-        });
-
-    } catch (error) {
-        console.error('❌ ERRO GRAVE:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Erro interno: ' + error.message
-        });
+    
+    const aluno = alunoRows[0];
+    
+    // Contar livros lidos (devolvidos = TRUE)
+    const [livrosLidosResult] = await connection.execute(
+      'SELECT COUNT(*) as total FROM emprestimo WHERE id_aluno = ? AND devolvido = TRUE',
+      [aluno.id]
+    );
+    
+    const totalLivrosLidos = livrosLidosResult[0].total;
+    
+    // Contar livros ativos (devolvidos = FALSE)
+    const [livrosAtivosResult] = await connection.execute(
+      'SELECT COUNT(*) as total FROM emprestimo WHERE id_aluno = ? AND devolvido = FALSE',
+      [aluno.id]
+    );
+    
+    const livrosAtivos = livrosAtivosResult[0].total;
+    
+    // Buscar classificação atual
+    const [classificacaoRows] = await connection.execute(
+      'SELECT * FROM classificacao WHERE idAluno = ?',
+      [aluno.id]
+    );
+    
+    // Se não tiver classificação, criar uma
+    let classificacao;
+    if (classificacaoRows.length > 0) {
+      classificacao = classificacaoRows[0];
+    } else {
+      // Determinar classificação baseada no total
+      let tipo, descricao;
+      
+      if (totalLivrosLidos <= 5) {
+        tipo = 'INICIANTE';
+        descricao = 'Leitor Iniciante - até 5 livros';
+      } else if (totalLivrosLidos <= 10) {
+        tipo = 'REGULAR';
+        descricao = 'Leitor Regular - 6 a 10 livros';
+      } else if (totalLivrosLidos <= 20) {
+        tipo = 'ATIVO';
+        descricao = 'Leitor Ativo - 11 a 20 livros';
+      } else {
+        tipo = 'EXTREMO';
+        descricao = 'Leitor Extremo - mais de 20 livros';
+      }
+      
+      // Inserir nova classificação
+      const [result] = await connection.execute(
+        'INSERT INTO classificacao (tipo, descricao, idAluno) VALUES (?, ?, ?)',
+        [tipo, descricao, aluno.id]
+      );
+      
+      classificacao = {
+        id: result.insertId,
+        tipo,
+        descricao,
+        idAluno: aluno.id
+      };
     }
+    
+    res.json({
+      success: true,
+      data: {
+        aluno: {
+          id: aluno.id,
+          nome: aluno.nome,
+          ra: aluno.ra
+        },
+        estatisticas: {
+          totalLivrosLidos,
+          livrosAtivos
+        },
+        classificacao
+      }
+    });
+    
+  } catch (error) {
+    console.error('Erro ao obter classificação:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro interno do servidor'
+    });
+  }
 };
 
 exports.recalcularClassificacao = async (req, res) => {
-    try {
-        const { ra } = req.params;
-
-        const aluno = await Aluno.buscarPorRa(ra);
-        if (!aluno) {
-            return res.status(404).json({
-                success: false,
-                error: 'Aluno não encontrado'
-            });
-        }
-
-        const classificacao = await Classificacao.classificarEAtualizarAluno(aluno.id);
-
-        res.json({
-            success: true,
-            message: 'Classificação recalculada com sucesso',
-            data: {
-                aluno: {
-                    id: aluno.id,
-                    nome: aluno.nome,
-                    ra: aluno.ra
-                },
-                classificacao: {
-                    tipo: classificacao.tipo,
-                    descricao: classificacao.descricao,
-                    totalLivros: classificacao.totalLivros
-                }
-            }
-        });
-
-    } catch (error) {
-        console.error('Erro ao recalcular classificação:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Erro interno do servidor'
-        });
+  try {
+    const { ra } = req.params;
+    
+    // Buscar aluno
+    const [alunoRows] = await connection.execute(
+      'SELECT * FROM aluno WHERE ra = ?',
+      [ra]
+    );
+    
+    if (alunoRows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Aluno não encontrado'
+      });
     }
+    
+    const aluno = alunoRows[0];
+    
+    // Recalcular classificação
+    const classificacao = await atualizarClassificacaoAluno(aluno.id);
+    
+    res.json({
+      success: true,
+      message: 'Classificação recalculada com sucesso',
+      data: classificacao
+    });
+    
+  } catch (error) {
+    console.error('Erro ao recalcular classificação:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro interno do servidor'
+    });
+  }
+};
+
+async function atualizarClassificacaoAluno(idAluno) {
+  // Contar todos os empréstimos DEVOLVIDOS do aluno
+  const [result] = await connection.execute(
+    `SELECT COUNT(*) as total_lidos 
+     FROM emprestimo 
+     WHERE id_aluno = ? AND devolvido = TRUE`,
+    [idAluno]
+  );
+  
+  const totalLivrosLidos = result[0].total_lidos;
+  
+  // Determinar classificação baseada no total
+  let tipo, descricao;
+  
+  if (totalLivrosLidos <= 5) {
+    tipo = 'INICIANTE';
+    descricao = 'Leitor Iniciante - até 5 livros';
+  } else if (totalLivrosLidos <= 10) {
+    tipo = 'REGULAR';
+    descricao = 'Leitor Regular - 6 a 10 livros';
+  } else if (totalLivrosLidos <= 20) {
+    tipo = 'ATIVO';
+    descricao = 'Leitor Ativo - 11 a 20 livros';
+  } else {
+    tipo = 'EXTREMO';
+    descricao = 'Leitor Extremo - mais de 20 livros';
+  }
+  
+  // Verificar se já existe classificação para este aluno
+  const [classificacaoExistente] = await connection.execute(
+    'SELECT * FROM classificacao WHERE idAluno = ?',
+    [idAluno]
+  );
+  
+  if (classificacaoExistente.length > 0) {
+    // Atualizar classificação existente
+    await connection.execute(
+      `UPDATE classificacao 
+       SET tipo = ?, descricao = ? 
+       WHERE idAluno = ?`,
+      [tipo, descricao, idAluno]
+    );
+  } else {
+    // Criar nova classificação
+    await connection.execute(
+      `INSERT INTO classificacao (tipo, descricao, idAluno) 
+       VALUES (?, ?, ?)`,
+      [tipo, descricao, idAluno]
+    );
+  }
+  
+  return {
+    tipo,
+    descricao,
+    totalLivrosLidos
+  };
+}
+
+exports.listarClassificacaoGeral = async (req, res) => {
+  try {
+    const [classificacoes] = await connection.execute(`
+      SELECT 
+        a.id as aluno_id,
+        a.nome,
+        a.ra,
+        COALESCE(c.tipo, 'INICIANTE') as tipo,
+        COALESCE(c.descricao, 'Leitor Iniciante - até 5 livros') as descricao,
+        COALESCE(
+          (SELECT COUNT(*) FROM emprestimo WHERE id_aluno = a.id AND devolvido = TRUE), 
+          0
+        ) as livros_lidos,
+        COALESCE(
+          (SELECT COUNT(*) FROM emprestimo WHERE id_aluno = a.id AND devolvido = FALSE), 
+          0
+        ) as livros_ativos
+      FROM aluno a
+      LEFT JOIN classificacao c ON a.id = c.idAluno
+      ORDER BY livros_lidos DESC, a.nome
+    `);
+    
+    // Garantir que todos os alunos apareçam
+    res.json({
+      success: true,
+      data: classificacoes,
+      total: classificacoes.length
+    });
+    
+  } catch (error) {
+    console.error('Erro ao listar classificação geral:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro interno do servidor'
+    });
+  }
 };
 
 exports.listarPorNivel = async (req, res) => {
-    try {
-        const { nivel } = req.params;
-
-        const classificacoes = await Classificacao.listarClassificacoesComAlunos();
-        const alunosFiltrados = classificacoes.filter(c => c.tipo === nivel.toUpperCase());
-
-        const resultado = alunosFiltrados.map(classificacao => ({
-            id: classificacao.idAluno,
-            nome: classificacao.aluno_nome,
-            ra: classificacao.ra,
-            tipo: classificacao.tipo,
-            descricao: classificacao.descricao
-        }));
-
-        res.json({
-            success: true,
-            data: resultado,
-            total: resultado.length
-        });
-
-    } catch (error) {
-        console.error('Erro ao listar por nível:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Erro interno do servidor'
-        });
+  try {
+    const { nivel } = req.params;
+    
+    const niveisValidos = ['INICIANTE', 'REGULAR', 'ATIVO', 'EXTREMO'];
+    
+    if (!niveisValidos.includes(nivel.toUpperCase())) {
+      return res.status(400).json({
+        success: false,
+        error: 'Nível inválido. Use: INICIANTE, REGULAR, ATIVO ou EXTREMO'
+      });
     }
+    
+    const [alunos] = await connection.execute(`
+      SELECT 
+        a.id,
+        a.nome,
+        a.ra,
+        c.tipo,
+        c.descricao,
+        (SELECT COUNT(*) FROM emprestimo WHERE id_aluno = a.id AND devolvido = TRUE) as livros_lidos
+      FROM aluno a
+      JOIN classificacao c ON a.id = c.idAluno
+      WHERE c.tipo = ?
+      ORDER BY livros_lidos DESC, a.nome
+    `, [nivel.toUpperCase()]);
+    
+    res.json({
+      success: true,
+      data: alunos,
+      total: alunos.length,
+      nivel: nivel.toUpperCase()
+    });
+    
+  } catch (error) {
+    console.error('Erro ao listar por nível:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro interno do servidor'
+    });
+  }
+};
+
+exports.sincronizarClassificacoes = async (req, res) => {
+  try {
+    // Buscar todos os alunos
+    const [alunos] = await connection.execute('SELECT * FROM aluno');
+    
+    let atualizados = 0;
+    let criados = 0;
+    
+    for (const aluno of alunos) {
+      // Contar livros lidos do aluno
+      const [result] = await connection.execute(
+        'SELECT COUNT(*) as total FROM emprestimo WHERE id_aluno = ? AND devolvido = TRUE',
+        [aluno.id]
+      );
+      
+      const totalLivrosLidos = result[0].total;
+      
+      // Determinar classificação
+      let tipo, descricao;
+      
+      if (totalLivrosLidos <= 5) {
+        tipo = 'INICIANTE';
+        descricao = 'Leitor Iniciante - até 5 livros';
+      } else if (totalLivrosLidos <= 10) {
+        tipo = 'REGULAR';
+        descricao = 'Leitor Regular - 6 a 10 livros';
+      } else if (totalLivrosLidos <= 20) {
+        tipo = 'ATIVO';
+        descricao = 'Leitor Ativo - 11 a 20 livros';
+      } else {
+        tipo = 'EXTREMO';
+        descricao = 'Leitor Extremo - mais de 20 livros';
+      }
+      
+      // Verificar se já existe classificação
+      const [classificacaoExistente] = await connection.execute(
+        'SELECT * FROM classificacao WHERE idAluno = ?',
+        [aluno.id]
+      );
+      
+      if (classificacaoExistente.length > 0) {
+        // Atualizar
+        await connection.execute(
+          'UPDATE classificacao SET tipo = ?, descricao = ? WHERE idAluno = ?',
+          [tipo, descricao, aluno.id]
+        );
+        atualizados++;
+      } else {
+        // Criar nova
+        await connection.execute(
+          'INSERT INTO classificacao (tipo, descricao, idAluno) VALUES (?, ?, ?)',
+          [tipo, descricao, aluno.id]
+        );
+        criados++;
+      }
+    }
+    
+    res.json({
+      success: true,
+      message: `Classificações sincronizadas com sucesso!`,
+      detalhes: {
+        totalAlunos: alunos.length,
+        classificacoesAtualizadas: atualizados,
+        classificacoesCriadas: criados
+      }
+    });
+    
+  } catch (error) {
+    console.error('Erro ao sincronizar classificações:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro interno do servidor'
+    });
+  }
 };

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema Biblioteca - TOTEM</title>
+  <title>Sistema Biblioteca - TOTEM - Devolução</title>
   <link rel="stylesheet" href="../../styles/selfServiceTerminal/bookCheckout&Return.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="../../scripts/bookreturn.js" defer></script>
 </head>
 
@@ -26,75 +26,73 @@
       </a>
     </div>
 
-        <div id="containerFormulario">
-      <h1>Meus livros alugados</h1>
+    <div id="containerFormulario">
+      <h1>Devolução de livros</h1>
 
       <!-- Pesquisa de livros -->
       <div id="PesquisaDeLivros">
-        <form onsubmit="pesquisar(); return false;">
-          <input type="text" id="pesquisa" name="busca" placeholder="Digite o nome" required>
-          <button id="botaoFormulario" type="submit">Pesquisar</button>
-        </form>
-
+        <input type="text" id="pesquisa" placeholder="Digite o nome do livro" />
+        
         <!-- Tabela de resultados da pesquisa -->
-    <table id="tabelaLivros">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Título</th>
-        <th>Autor</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Linhas da tabela -->
-    </tbody>
-  </table>
-</div>
+        <table id="tabelaLivros">
+          <thead>
+            <tr>
+              <th>Nº Exemplar</th>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
 
-        <!-- Formulário de devolução-->
-        <div class="containerLabelsInputs">
+        <!-- Container para o botão "Carregar mais" -->
+        <div id="botaoCarregarMaisContainer"></div>
+      </div>
+
+      <!-- Formulário de devolução -->
+      <div class="containerLabelsInputs">
         <div id="formulario">
-        <h2>Formulário de Devolução</h2>
-        <form id="formDevolucao">
-          <div class="campoFormulario">
-            <label class="labelsFormulario" for="ra">RA</label>
-            <input class="inputsFormulario" type="text" name="ra" id="ra" placeholder="25111111 (exemplo)" required>
-          </div>
-
-          <div class="campoFormulario">
-            <label class="labelsFormulario" for="codigoLivro">CÓDIGO DO LIVRO</label>
-            <input class="inputsFormulario" type="text" name="codigoLivro" id="codigoLivro" placeholder="[nº]" required>
-          </div>
-
-          <div id="containerBotao">
-            <button id="botaoFormulario" type="submit">ENVIAR</button>
-                </div>
-            </form>
+          <h2>Formulário de Devolução</h2>
+          <form id="formDevolucao">
+            <div class="campoFormulario">
+              <label class="labelsFormulario" for="ra">RA</label>
+              <input class="inputsFormulario" type="text" name="ra" id="ra" placeholder="25111111 (exemplo)" maxlength="8" required>
             </div>
-        </div>
 
-    </div>
-<div class="popup-overlay" id="popupErro">
-  <div class="popup-container popup-error">
-    <div class="popup-icon"><i class="fas fa-exclamation-circle"></i></div>
-    <div class="popup-title">Erro</div>
-    <div class="popup-message" id="mensagemErro">Mensagem de erro aqui</div>
-    <div class="popup-buttons">
-      <button class="popup-button" onclick="fecharPopup()">Fechar</button>
-    </div>
-  </div>
-</div>
-<div class="popup-overlay" id="popupSucesso" style="display: none;">
-  <div class="popup-container popup-success">
-    <div class="popup-icon"><i class="fas fa-check-circle"></i></div>
-    <div class="popup-title">Sucesso</div>
-    <div class="popup-message" id="mensagemSucesso">Mensagem de sucesso aqui</div>
-    <div class="popup-buttons">
-      <button class="popup-button" onclick="fecharPopupSucesso()">Fechar</button>
+            <div class="campoFormulario">
+              <label class="labelsFormulario" for="codigoLivro">CÓDIGO DO EXEMPLAR</label>
+              <input class="inputsFormulario" type="text" name="codigoLivro" id="codigoLivro" placeholder="[nº]" required>
+            </div>
+            <div id="containerBotao">
+              <button id="botaoFormulario" type="submit">DEVOLVER</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+
+  <div class="popup-overlay" id="popupErro">
+    <div class="popup-container popup-error">
+      <div class="popup-icon"><i class="fas fa-exclamation-circle"></i></div>
+      <div class="popup-title">Erro</div>
+      <div class="popup-message" id="mensagemErro">Mensagem de erro aqui</div>
+      <div class="popup-buttons">
+        <button class="popup-button" onclick="fecharPopup()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="popupSucesso">
+    <div class="popup-container popup-success">
+      <div class="popup-icon"><i class="fas fa-check-circle"></i></div>
+      <div class="popup-title">Sucesso</div>
+      <div class="popup-message" id="mensagemSucesso">Mensagem de sucesso aqui</div>
+      <div class="popup-buttons">
+        <button class="popup-button" onclick="fecharPopupSucesso()">Fechar</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
-

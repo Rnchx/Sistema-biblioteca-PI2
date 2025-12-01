@@ -9,8 +9,9 @@ class Emprestimo {
     try {
       await conn.query('START TRANSACTION');
 
+      // Inserir com devolvido = FALSE
       const [result] = await conn.query(
-        'INSERT INTO emprestimo (id_exemplar, id_aluno) VALUES (?, ?)',
+        'INSERT INTO emprestimo (id_exemplar, id_aluno, devolvido) VALUES (?, ?, FALSE)',
         [idExemplar, idAluno]
       );
 
@@ -28,6 +29,7 @@ class Emprestimo {
       conn.release();
     }
   }
+
   static async buscarPorId(id) {
     const [rows] = await connection.execute(
       `SELECT emp.*, 
@@ -52,7 +54,7 @@ class Emprestimo {
              FROM emprestimo emp
              JOIN exemplar ex ON emp.id_exemplar = ex.id
              JOIN livro l ON ex.id_livro = l.id
-             WHERE emp.id_aluno = ? AND ex.status = "Emprestado"`,
+             WHERE emp.id_aluno = ? AND emp.devolvido = FALSE AND ex.status = "Emprestado"`,
       [idAluno]
     );
     return rows;
@@ -74,7 +76,7 @@ class Emprestimo {
 
   static async listarTodosEmprestimosAtivos() {
     const [rows] = await connection.execute(
-        `SELECT emp.*, 
+      `SELECT emp.*, 
                 a.nome as aluno_nome, a.ra, 
                 l.titulo as livro_titulo, l.autor,
                 ex.id as exemplar_id, ex.status as exemplar_status
@@ -82,10 +84,10 @@ class Emprestimo {
          JOIN aluno a ON emp.id_aluno = a.id
          JOIN exemplar ex ON emp.id_exemplar = ex.id
          JOIN livro l ON ex.id_livro = l.id
-         WHERE ex.status = "Emprestado"`
+         WHERE emp.devolvido = FALSE AND ex.status = "Emprestado"`
     );
     return rows;
-}
+  }
 
   static async listarEmprestimosAtivos(idAluno, idExemplar) {
     const [rows] = await connection.execute(
@@ -97,7 +99,7 @@ class Emprestimo {
      JOIN aluno a ON emp.id_aluno = a.id
      JOIN exemplar ex ON emp.id_exemplar = ex.id
      JOIN livro l ON ex.id_livro = l.id
-     WHERE emp.id_aluno = ? AND emp.id_exemplar = ? AND ex.status = "Emprestado"`,
+     WHERE emp.id_aluno = ? AND emp.id_exemplar = ? AND emp.devolvido = FALSE AND ex.status = "Emprestado"`,
       [idAluno, idExemplar]
     );
 
@@ -106,46 +108,29 @@ class Emprestimo {
 
   static async buscarEmprestimoAtivo(idAluno, idExemplar) {
     const [rows] = await connection.execute(
-      `SELECT emp.*, ex.status as exemplar_status
-       FROM emprestimo emp
-       JOIN exemplar ex ON emp.id_exemplar = ex.id
-       WHERE emp.id_aluno = ? AND emp.id_exemplar = ? AND ex.status = "Emprestado"`,
+      `SELECT * FROM emprestimo 
+       WHERE id_aluno = ? 
+       AND id_exemplar = ? 
+       AND devolvido = FALSE`, // Apenas empréstimos não devolvidos
       [idAluno, idExemplar]
     );
     return rows[0];
   }
 
-  static async registrarDevolucao(idEmprestimo) {
-    const conn = await connection.getConnection();
-  
-    try {
-      await conn.query('START TRANSACTION');
-  
-      const [rows] = await conn.query(
-        'SELECT id_exemplar FROM emprestimo WHERE id = ?',
-        [idEmprestimo]
-      );
-  
-      if (rows.length === 0) {
-        throw new Error('Empréstimo não encontrado');
-      }
-  
-      const idExemplar = rows[0].id_exemplar;
-  
-      // Atualiza apenas o status do exemplar
-      await conn.query(
-        'UPDATE exemplar SET status = "Disponível" WHERE id = ?',
-        [idExemplar]
-      );
-  
-      await conn.query('COMMIT');
-      return { success: true, message: 'Devolução registrada com sucesso' };
-    } catch (error) {
-      await conn.query('ROLLBACK');
-      throw error;
-    } finally {
-      conn.release();
-    }
+  static async contarLivrosLidos(idAluno) {
+    const [rows] = await connection.execute(
+      'SELECT COUNT(*) as total FROM emprestimo WHERE id_aluno = ? AND devolvido = TRUE',
+      [idAluno]
+    );
+    return rows[0].total;
+  }
+
+  static async contarLivrosAtivos(idAluno) {
+    const [rows] = await connection.execute(
+      'SELECT COUNT(*) as total FROM emprestimo WHERE id_aluno = ? AND devolvido = FALSE',
+      [idAluno]
+    );
+    return rows[0].total;
   }
 
   static async verificarExemplarDisponivel(idExemplar) {
@@ -169,6 +154,18 @@ class Emprestimo {
              WHERE ex.status = "Disponível"`
     );
     return rows;
+  }
+
+  static async buscarEmprestimoAtivoPorAlunoExemplar(idAluno, idExemplar) {
+    const [rows] = await connection.execute(
+      `SELECT emp.*, ex.status as exemplar_status
+       FROM emprestimo emp
+       JOIN exemplar ex ON emp.id_exemplar = ex.id
+       WHERE emp.id_aluno = ? 
+       AND emp.id_exemplar = ? 
+       AND ex.status = "Emprestado"`
+    );
+    return rows[0];
   }
 
   static async contarEmprestimosPorAluno(idAluno) {

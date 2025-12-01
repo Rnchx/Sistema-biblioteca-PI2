@@ -6,15 +6,39 @@ const limite = 6;
 async function realizarBusca() {
   const input = document.getElementById('pesquisa');
   const termo = input.value.trim().toLowerCase();
-
+  
   const tbody = document.querySelector('#tabelaLivros tbody');
-  tbody.innerHTML = ''; // limpa resultados anteriores
+  const thead = document.querySelector('#tabelaLivros thead');
+  const tabela = document.getElementById('tabelaLivros');
+  
+  tbody.innerHTML = '';
+  
+  const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
+  botaoContainer.innerHTML = '';
+  botaoContainer.style.display = 'none';
 
   if (!termo) {
-    const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
-    botaoContainer.innerHTML = '';
+    // Se o campo estiver vazio, esconder a tabela completamente
+    if (tabela) {
+      tabela.style.display = 'none';
+    }
+    if (thead) {
+      thead.style.display = 'none';
+    }
     return;
   }
+
+  // Mostrar a tabela quando houver pesquisa
+  if (tabela) {
+    tabela.style.display = 'table';
+  }
+  if (thead) {
+    thead.style.display = '';
+  }
+
+  // Mostrar loading durante a busca
+  botaoContainer.style.display = 'flex';
+  botaoContainer.innerHTML = '<div class="sem-resultados"><i class="fas fa-spinner fa-spin"></i> Buscando livros...</div>';
 
   try {
     const resposta = await fetch('http://localhost:3000/exemplares/disponiveis');
@@ -22,6 +46,7 @@ async function realizarBusca() {
 
     if (!resultado.success) {
       console.error("Erro da API:", resultado.error);
+      botaoContainer.innerHTML = '<div class="sem-resultados">Erro ao buscar livros. Tente novamente.</div>';
       return;
     }
 
@@ -37,14 +62,23 @@ async function realizarBusca() {
     );
 
     offset = 0;
-    renderizarResultados();
+    
+    // Pequeno delay para melhor UX
+    setTimeout(() => {
+      renderizarResultados();
+    }, 300);
+    
   } catch (erro) {
     console.error('Erro ao buscar exemplares:', erro);
+    botaoContainer.innerHTML = '<div class="sem-resultados"><i class="fas fa-exclamation-triangle"></i> Erro na conexão com o servidor</div>';
   }
 }
 
 function renderizarResultados() {
   const tbody = document.querySelector('#tabelaLivros tbody');
+  const tabela = document.getElementById('tabelaLivros');
+  const thead = document.querySelector('#tabelaLivros thead');
+  
   tbody.innerHTML = '';
 
   const slice = resultadosFiltrados.slice(offset, offset + limite);
@@ -53,49 +87,176 @@ function renderizarResultados() {
     const linha = document.createElement('tr');
     linha.innerHTML = `<td colspan="4">Nenhum livro encontrado.</td>`;
     tbody.appendChild(linha);
+    
+    // Garantir que a tabela esteja visível
+    if (tabela) {
+      tabela.style.display = 'table';
+    }
+    if (thead) {
+      thead.style.display = '';
+    }
+    
+    // Mostrar mensagem no container do botão
+    const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
+    botaoContainer.innerHTML = '<div class="sem-resultados">Nenhum resultado encontrado para sua pesquisa</div>';
+    botaoContainer.style.display = 'flex';
     return;
   }
 
-  slice.forEach(ex => {
+  // Garantir que a tabela esteja visível quando houver resultados
+  if (slice.length > 0) {
+    if (tabela) {
+      tabela.style.display = 'table';
+    }
+    if (thead) {
+      thead.style.display = '';
+    }
+  }
+
+  slice.forEach((ex, index) => {
     const linha = document.createElement('tr');
+    linha.style.animationDelay = `${index * 0.05}s`; // Animação escalonada
     linha.innerHTML = `
       <td>${ex.exemplar_id}</td>
       <td>${ex.titulo}</td>
       <td>${ex.autor}</td>
-      <td>${ex.exemplar_status}</td>
+      <td><span class="status-disponivel">${ex.exemplar_status}</span></td>
     `;
     tbody.appendChild(linha);
   });
 
   const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
   botaoContainer.innerHTML = '';
+  botaoContainer.style.display = 'none';
 
   if (offset + limite < resultadosFiltrados.length) {
     const botao = document.createElement('button');
-    botao.textContent = 'Carregar mais';
-    botao.addEventListener('click', carregarMaisDisponiveis);
+    botao.innerHTML = '<i class="fas fa-book"></i> Carregar mais livros';
+    botao.setAttribute('title', `Mostrar mais ${resultadosFiltrados.length - (offset + limite)} livros`);
+    
+    // Adicionar evento com efeito de loading
+    botao.addEventListener('click', async function() {
+      botao.classList.add('loading');
+      botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
+      
+      // Pequeno delay para efeito visual
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      carregarMaisDisponiveis();
+      
+      // Remover efeito de loading
+      setTimeout(() => {
+        botao.classList.remove('loading');
+        botao.innerHTML = '<i class="fas fa-book"></i> Carregar mais livros';
+      }, 500);
+    });
+    
     botaoContainer.appendChild(botao);
+    botaoContainer.style.display = 'flex';
+    
+    // Adicionar contador de resultados
+    const contador = document.createElement('div');
+    contador.className = 'contador-resultados';
+    contador.innerHTML = `Mostrando ${Math.min(offset + limite, resultadosFiltrados.length)} de ${resultadosFiltrados.length} resultados`;
+    contador.style.cssText = `
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 8px;
+      font-style: italic;
+    `;
+    botaoContainer.appendChild(contador);
+  } else if (resultadosFiltrados.length > 0) {
+    // Mostrar mensagem quando todos os resultados já foram carregados
+    const mensagem = document.createElement('div');
+    mensagem.className = 'sem-resultados';
+    mensagem.innerHTML = `<i class="fas fa-check-circle"></i> Todos os ${resultadosFiltrados.length} resultados foram carregados`;
+    botaoContainer.appendChild(mensagem);
+    botaoContainer.style.display = 'flex';
   }
 }
 
 function carregarMaisDisponiveis() {
-  offset = 0;
+  offset += limite;
   const tbody = document.querySelector('#tabelaLivros tbody');
-  tbody.innerHTML = '';
-
-  resultadosFiltrados.forEach(ex => {
+  
+  // Manter os resultados anteriores e adicionar novos
+  const novosResultados = resultadosFiltrados.slice(offset, offset + limite);
+  
+  novosResultados.forEach((ex, index) => {
     const linha = document.createElement('tr');
+    linha.style.animationDelay = `${index * 0.05}s`;
+    linha.classList.add('highlight-new'); // Adicionar classe para highlight
     linha.innerHTML = `
       <td>${ex.exemplar_id}</td>
       <td>${ex.titulo}</td>
       <td>${ex.autor}</td>
-      <td>${ex.exemplar_status}</td>
+      <td><span class="status-disponivel">${ex.exemplar_status}</span></td>
     `;
     tbody.appendChild(linha);
   });
 
+  // Atualizar botão e contador
   const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
   botaoContainer.innerHTML = '';
+  botaoContainer.style.display = 'none';
+
+  if (offset + limite < resultadosFiltrados.length) {
+    const botao = document.createElement('button');
+    botao.innerHTML = '<i class="fas fa-book"></i> Carregar mais livros';
+    botao.setAttribute('title', `Mostrar mais ${resultadosFiltrados.length - (offset + limite)} livros`);
+    
+    botao.addEventListener('click', async function() {
+      botao.classList.add('loading');
+      botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
+      
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      carregarMaisDisponiveis();
+      
+      setTimeout(() => {
+        botao.classList.remove('loading');
+        botao.innerHTML = '<i class="fas fa-book"></i> Carregar mais livros';
+      }, 500);
+    });
+    
+    botaoContainer.appendChild(botao);
+    botaoContainer.style.display = 'flex';
+    
+    // Atualizar contador
+    const contador = document.createElement('div');
+    contador.className = 'contador-resultados';
+    contador.innerHTML = `Mostrando ${Math.min(offset + limite, resultadosFiltrados.length)} de ${resultadosFiltrados.length} resultados`;
+    contador.style.cssText = `
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 8px;
+      font-style: italic;
+    `;
+    botaoContainer.appendChild(contador);
+  } else {
+    // Todos os resultados foram carregados
+    const mensagem = document.createElement('div');
+    mensagem.className = 'sem-resultados';
+    mensagem.innerHTML = `<i class="fas fa-check-circle"></i> Todos os ${resultadosFiltrados.length} resultados foram carregados`;
+    botaoContainer.appendChild(mensagem);
+    botaoContainer.style.display = 'flex';
+  }
+  
+  // Rolagem suave para os novos resultados
+  setTimeout(() => {
+    const novasLinhas = tbody.querySelectorAll('tr.highlight-new');
+    if (novasLinhas.length > 0) {
+      const ultimaLinha = novasLinhas[novasLinhas.length - 1];
+      ultimaLinha.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      
+      // Remover classe de highlight após animação
+      setTimeout(() => {
+        novasLinhas.forEach(linha => linha.classList.remove('highlight-new'));
+      }, 1500);
+    }
+  }, 100);
 }
 
 // Configuração dos eventos
@@ -107,6 +268,34 @@ function configurarEventos() {
   if (campoBusca) {
     campoBusca.addEventListener('input', function() {
       clearTimeout(timeoutBusca);
+      
+      // Se o campo estiver vazio, limpar tudo imediatamente
+      if (!this.value.trim()) {
+        const tbody = document.querySelector('#tabelaLivros tbody');
+        const thead = document.querySelector('#tabelaLivros thead');
+        const tabela = document.getElementById('tabelaLivros');
+        const botaoContainer = document.getElementById('botaoCarregarMaisContainer');
+        
+        if (tbody) {
+          tbody.innerHTML = '';
+        }
+        if (tabela) {
+          tabela.style.display = 'none';
+        }
+        if (thead) {
+          thead.style.display = 'none';
+        }
+        if (botaoContainer) {
+          botaoContainer.innerHTML = '';
+          botaoContainer.style.display = 'none';
+        }
+        
+        // Limpar resultados filtrados
+        resultadosFiltrados = [];
+        offset = 0;
+        return;
+      }
+      
       timeoutBusca = setTimeout(function() {
         realizarBusca();
       }, 500); 
@@ -377,7 +566,7 @@ function configurarEventos() {
 // Inicializar eventos quando o DOM estiver carregado
 document.addEventListener("DOMContentLoaded", function() {
   configurarEventos();
-  console.log("Sistema de empréstimo inicializado!");
+  console.log("✅ Sistema de empréstimo inicializado!");
 });
 
 //Popups de ERRO e SUCESSO
@@ -400,3 +589,11 @@ function mostrarPopupSucesso(mensagem) {
 function fecharPopupSucesso() {
   document.getElementById('popupSucesso').style.display = 'none';
 }
+
+// Funções auxiliares para debug
+window.recarregarBusca = realizarBusca;
+window.mostrarResultados = function() {
+  console.log('Resultados filtrados:', resultadosFiltrados);
+  console.log('Offset atual:', offset);
+  console.log('Total de resultados:', resultadosFiltrados.length);
+};

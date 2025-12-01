@@ -8,6 +8,10 @@ const PORT = process.env.PORT || 3000;
 // Middlewares
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`, req.body);
+  next();
+});
 
 // Importar controllers
 const alunoController = require('./controllers/alunoController');
@@ -64,8 +68,10 @@ app.get('/emprestimos/:id', emprestimoController.buscarEmprestimoPorId);
 // Rotas de Classificação
 app.get('/classificacao/aluno/:ra', classificacaoController.obterClassificacaoPorAluno);
 app.get('/classificacao/geral', classificacaoController.listarClassificacaoGeral);
-app.post('/classificacao/recalcular/:ra', classificacaoController.recalcularClassificacao);
 app.get('/classificacao/nivel/:nivel', classificacaoController.listarPorNivel);
+app.post('/classificacao/recalcular/:ra', classificacaoController.recalcularClassificacao);
+app.post('/classificacao/sincronizar', classificacaoController.sincronizarClassificacoes);
+
 
 // Rota de health check
 app.get('/health', (req, res) => {
